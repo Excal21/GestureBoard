@@ -1,0 +1,20 @@
+# Használjunk egy Python alapú image-et
+FROM python:3.11-slim
+
+# Állítsuk be a munkakönyvtárat
+WORKDIR /app
+
+# Indítsuk el a Flask alkalmazást
+#CMD ["python", "train.py"]
+
+COPY requirements.txt /app/
+RUN pip install -r requirements.txt
+
+#OpenCV függőségei miatt kell
+RUN apt-get update\
+    && apt-get install ffmpeg libsm6 libxext6  -y --no-install-recommends \
+    && apt-get clean
+# Másoljuk be a szükséges fájlokat
+COPY . /app
+
+CMD ["python", "server.py"]

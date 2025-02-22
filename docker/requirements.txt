@@ -1,0 +1,4 @@
+flask
+mediapipe-model-maker[gesture-recognizer]
+matplotlib
+numpy
