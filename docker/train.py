@@ -14,7 +14,7 @@ import os
 
 def train():
 
-    dataset_path = "Samples"
+    dataset_path = 'Samples'
 
     print(dataset_path)
     labels = []
@@ -40,7 +40,7 @@ def train():
     )
 
     #Hiperparaméterek
-    hparams = gesture_recognizer.HParams(batch_size=2, epochs=10, shuffle= True ,export_dir="exported_model")
+    hparams = gesture_recognizer.HParams(batch_size=2, epochs=1, shuffle= True ,export_dir='exported_model')
     options = gesture_recognizer.GestureRecognizerOptions(hparams=hparams, model_options=model_options)
 
 
@@ -53,7 +53,7 @@ def train():
 
     #Model kiértékelése
     loss, acc = model.evaluate(test_data, batch_size=2)
-    print(f"Test loss: {loss}, Test accuracy: {acc}")
+    print(f'Test loss: {loss}, Test accuracy: {acc}')
 
     #Model mentése
     if(os.path.exists('gesture_recognizer.task')):
