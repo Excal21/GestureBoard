@@ -1,3 +1,4 @@
+import os
 from shutil import make_archive
 from time import sleep
 import requests
@@ -13,6 +14,10 @@ with open(filename, 'rb') as file:
     response = requests.post(url, headers={'X-API-KEY' : 'secret'}, files=files)
     if(response.status_code == 200):
         print('File uploaded successfully')
+        os.remove(filename)
+        response = requests.get('http://localhost:5000/status', headers={'X-API-KEY': 'secret'})
+        if response.json()['status'] == 'busy':
+            print('Training started')
     
     trained = False
     while not trained:
