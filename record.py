@@ -6,8 +6,8 @@ import os
 url = 'http://192.168.1.12:8080/video'
 cap = cv2.VideoCapture(0)
 
-width = 250
-height = 250
+width = 500
+height = 500
 
 img_counter = 0
 

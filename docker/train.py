@@ -15,6 +15,7 @@ import os
 def train():
 
     dataset_path = 'Samples'
+    shutil.copytree('NONE', 'Samples/NONE')
 
     print(dataset_path)
     labels = []
@@ -35,12 +36,12 @@ def train():
 
     #Model létrehozása
     model_options = gesture_recognizer.ModelOptions(
-    dropout_rate = 0.05,
-    layer_widths = [128, 128, 64]
+        dropout_rate = 0.05,
+        layer_widths = [256, 128, 64]
     )
 
     #Hiperparaméterek
-    hparams = gesture_recognizer.HParams(batch_size=2, epochs=1, shuffle= True ,export_dir='exported_model')
+    hparams = gesture_recognizer.HParams(batch_size=2, epochs=8, shuffle= True ,export_dir='exported_model')
     options = gesture_recognizer.GestureRecognizerOptions(hparams=hparams, model_options=model_options)
 
 
@@ -63,3 +64,4 @@ def train():
 
     shutil.move('exported_model/gesture_recognizer.task', './')
     shutil.rmtree('exported_model')
+    shutil.rmtree('Samples')
