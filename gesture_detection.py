@@ -303,7 +303,7 @@ if __name__ == '__main__':
   #print(recognizer.camera)
   #print(recognizer.labels)
   print(recognizer.labels_with_alias)
-  recognizer.confidence = 0.4
+  recognizer.confidence = 0.6
   recognizer.camera = 0
   recognizer.camerafeed = True
   recognizer.Run()

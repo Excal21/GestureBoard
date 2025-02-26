@@ -36,7 +36,7 @@ def train():
 
     #Model létrehozása
     model_options = gesture_recognizer.ModelOptions(
-        dropout_rate = 0.05,
+        dropout_rate = 0.1,
         layer_widths = [256, 128, 64]
     )
 
