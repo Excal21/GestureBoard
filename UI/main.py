@@ -7,27 +7,12 @@ from PySide6.QtCore import Qt, QThread, Signal
 import Views.MainMenu
 import Views.OptionsMenu
 import Views.Loading
+from Model.RecognizerHandler import *
+from Model.MediaPipeHandler import MediapipeLoader
+
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "Views")))
-
-class MediapipeLoader(QThread):
-    finished = Signal()  # Jelzés, amikor a betöltés kész
-
-    def run(self):
-        print("Mediapipe betöltése...")
-        import os
-        import cv2
-        from mediapipe import solutions, Image, ImageFormat
-        from mediapipe.framework.formats import landmark_pb2
-        from mediapipe.tasks import python
-        import numpy as np
-        from datetime import datetime
-        import shutil
-        import pyautogui
-        #time.sleep(10)
-
-        print("Mediapipe betöltve!")
-        self.finished.emit()  # Jelzés a fő UI szálnak
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "Model")))
 
 
 class MainWindow(QMainWindow):
@@ -51,6 +36,9 @@ class MainWindow(QMainWindow):
         self.stacked_widget.addWidget(self.main_menu)
         self.stacked_widget.addWidget(self.options_menu)
 
+    def closeEvent(self, event):
+        RecognizerHandler.stop()
+        event.accept()
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
@@ -62,8 +50,12 @@ if __name__ == "__main__":
 
 
     ml = MediapipeLoader()
-    ml.finished.connect(lambda: window.stacked_widget.setCurrentIndex(1))
+    rl = RecognizerHandler()
+
     ml.start()
+    ml.finished.connect(rl.load)
+    rl.finished.connect(lambda: window.stacked_widget.setCurrentIndex(1))
+    
 
 
     sys.exit(app.exec())

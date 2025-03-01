@@ -13,7 +13,7 @@ import shutil
 import pyautogui
 
 
-class Recognition:
+class Recognizer:
   def __init__(self, task_file_path: str):
       self.MARGIN = 10  # pixels
       self.FONT_SIZE = 1
@@ -235,6 +235,7 @@ class Recognition:
     return annotated_image
 
   def Run(self):
+    print("Minden fasza")
     self.__stop = False
     cap = cv2.VideoCapture()  # Próbálj meg csatlakozni a megadott IP-címhez
     cap.setExceptionMode(True)
@@ -299,7 +300,7 @@ class Recognition:
 
 if __name__ == '__main__':
   taskFile = "gesture_recognizer.task"
-  recognizer = Recognition("gesture_recognizer.task")
+  recognizer = Recognizer("gesture_recognizer.task")
   #print(recognizer.camera)
   #print(recognizer.labels)
   print(recognizer.labels_with_alias)

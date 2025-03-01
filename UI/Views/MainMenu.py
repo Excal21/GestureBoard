@@ -6,8 +6,10 @@ from PySide6.QtCore import Qt
 from PySide6.QtGui import QFontDatabase, QFont
 from styles import *
 from Forms.ui_mainMenuForm import Ui_MainWindow
+from Model.RecognizerHandler import *
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "Forms")))
+
 
 class MainMenu(QWidget):
     def __init__(self, stacked_widget):
@@ -37,6 +39,8 @@ class MainMenu(QWidget):
         layout.addStretch()
         self.ui.frameBlue.setStyleSheet(sidebar_style)
         self.ui.lblTitle.setStyleSheet(sidebar_title_style)
+
+        self.ui.btnStart.clicked.connect(lambda: self.start())
         
 
         #Gombok elrendezése
@@ -46,6 +50,7 @@ class MainMenu(QWidget):
         self.ui.btnStart.setFixedWidth(420)
         self.ui.btnStart.setFixedHeight(80)
         self.ui.btnStart.setStyleSheet(button_style)
+        
         
         self.ui.btnOptions.setFixedWidth(420)
         self.ui.btnOptions.setFixedHeight(80)
@@ -70,3 +75,9 @@ class MainMenu(QWidget):
     def show_options(self):
         """Váltás a Beállítások oldalra."""
         self.stacked_widget.setCurrentIndex(2)
+
+
+    def start(self):
+        global recognizer
+        RecognizerHandler.setCamera(0)
+        RecognizerHandler.start()
