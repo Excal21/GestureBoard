@@ -1,8 +1,13 @@
+import os
+import sys
+
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QFontDatabase, QFont
-from ui_mainMenuForm import Ui_MainWindow
 from styles import *
+from Forms.ui_mainMenuForm import Ui_MainWindow
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "Forms")))
 
 class MainMenu(QWidget):
     def __init__(self, stacked_widget):
@@ -64,4 +69,4 @@ class MainMenu(QWidget):
 
     def show_options(self):
         """Váltás a Beállítások oldalra."""
-        self.stacked_widget.setCurrentIndex(1)
+        self.stacked_widget.setCurrentIndex(2)

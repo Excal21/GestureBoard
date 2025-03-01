@@ -1,9 +1,14 @@
+import os
+import sys
+
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QMenu
 from PySide6.QtCore import Qt, QSize
 from PySide6.QtGui import QFontDatabase, QFont, QIcon
-from ui_optionsForm import Ui_OptionsForm
 from PySide6.QtWidgets import QApplication, QStackedWidget
 from styles import *
+from Forms.ui_optionsForm import Ui_OptionsForm
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "Forms")))
 
 class OptionsMenu(QWidget):
     def __init__(self, stacked_widget):
@@ -66,7 +71,7 @@ class OptionsMenu(QWidget):
             for line in file:
                 gesture_entry = QWidget()
                 gesture_entry_layout = QHBoxLayout(gesture_entry)
-                gesture_entry_layout.setSpacing(10) #Távolság a gomb és a hosszabb címke közt
+                gesture_entry_layout.setSpacing(0) #Távolság a gomb és a hosszabb címke közt
                 gesture_entry.setFixedHeight(70)
 
                 label = QLabel(line.strip())
