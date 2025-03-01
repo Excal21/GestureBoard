@@ -54,6 +54,13 @@ class MainMenu(QWidget):
 
         #Gombok eseménykezelése 
         self.ui.btnOptions.clicked.connect(self.show_options)
+        self.ui.btnStart.enterEvent = lambda event: self.ui.btnStart.setStyleSheet(button_hover_style)
+        self.ui.btnStart.leaveEvent = lambda event: self.ui.btnStart.setStyleSheet(button_style)
+
+        self.ui.btnOptions.enterEvent = lambda event: self.ui.btnOptions.setStyleSheet(button_hover_style)
+        self.ui.btnOptions.leaveEvent = lambda event: self.ui.btnOptions.setStyleSheet(button_style)
+
+
 
     def show_options(self):
         """Váltás a Beállítások oldalra."""

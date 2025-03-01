@@ -1,0 +1,7 @@
+Asztal megjelenítése
+Hangerő növelése
+Hangerő csökkentése
+Fényerő növelése
+Fényerő csökkentése
+Böngésző
+Számológép
