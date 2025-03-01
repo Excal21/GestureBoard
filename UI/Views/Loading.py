@@ -3,13 +3,11 @@ import sys
 
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton
-from PySide6.QtGui import QFontDatabase, QFont
-from PySide6.QtCore import QThread, Signal
-from styles import *
+from PySide6.QtGui import QFontDatabase, QFont, QMovie
+from PySide6.QtCore import QThread, Signal, QSize
 from time import sleep
+from styles import *
 from Forms.ui_loadingForm import Ui_Form
-
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "Forms")))
 
 class LoadingScreen(QWidget):
     def __init__(self, stacked_widget):
@@ -37,6 +35,22 @@ class LoadingScreen(QWidget):
         self.ui.frameBlue.setStyleSheet(sidebar_style)
         self.ui.lblTitle.setStyleSheet(sidebar_title_style)
         
-
+        #Töltőikon és szöveg elrendezése
+        layout = QVBoxLayout(self.ui.frameButtons)
+        layout.addWidget(self.ui.lblLoading, alignment=Qt.AlignCenter)
+        layout.setContentsMargins(0, 55, 0, 0)
+        layout.setSpacing(0)
+        
         self.ui.lblLoading.setFont(font)
-        self.ui.lblLoading.setStyleSheet(entry_label_style)
+        self.ui.lblLoading.setStyleSheet(info_label_style)
+        
+        self.movie = QMovie("Icons/loading.gif")  # Cseréld ki egy valódi GIF fájlra
+        self.ui.lblLoadingSpinner.setMovie(self.movie)
+        self.movie.setScaledSize(QSize(70,70))
+
+        self.ui.lblLoadingSpinner.setFixedHeight(100)
+        self.ui.lblLoadingSpinner.setFixedWidth(100)
+        layout.addWidget(self.ui.lblLoadingSpinner, alignment=Qt.AlignCenter)
+        self.movie.start()  # Animáció elindítása
+        
+        layout.addStretch()

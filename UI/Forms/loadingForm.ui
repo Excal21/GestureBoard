@@ -55,6 +55,35 @@
     <string>Betöltés folyamatban</string>
    </property>
   </widget>
+  <widget class="QFrame" name="frameButtons">
+   <property name="geometry">
+    <rect>
+     <x>280</x>
+     <y>0</y>
+     <width>520</width>
+     <height>410</height>
+    </rect>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::Shape::StyledPanel</enum>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Shadow::Raised</enum>
+   </property>
+   <widget class="QLabel" name="lblLoadingSpinner">
+    <property name="geometry">
+     <rect>
+      <x>188</x>
+      <y>190</y>
+      <width>141</width>
+      <height>71</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>TextLabel</string>
+    </property>
+   </widget>
+  </widget>
  </widget>
  <resources/>
  <connections/>

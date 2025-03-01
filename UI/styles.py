@@ -48,7 +48,7 @@ options_button_style = """
 """
 
 entry_label_style = """
-            color: black;
+            color: rgb(36, 41, 67);
             font-size: 20pt;
             margin: 0px;
 """
@@ -77,6 +77,12 @@ description_style = """
             color: white;
             font-size: 14pt;
 """
+
+info_label_style = """
+            color: rgb(36, 41, 67);
+            font-size: 24pt;
+            """
+
 
 scrollbar_style ="""
         QScrollBar:vertical {

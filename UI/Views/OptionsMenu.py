@@ -41,6 +41,8 @@ class OptionsMenu(QWidget):
         self.scroll_layout = QVBoxLayout(self.ui.scrollAreaWidgetContents)
         self.scroll_area.setWidget(self.ui.scrollAreaWidgetContents)
         self.scroll_area.verticalScrollBar().setStyleSheet(scrollbar_style)
+        self.ui.scrollArea.verticalScrollBar().setContextMenuPolicy(Qt.NoContextMenu)
+        self.ui.scrollArea.horizontalScrollBar().setContextMenuPolicy(Qt.NoContextMenu)
         self.clicked = None
 
         #Gombok
@@ -49,7 +51,7 @@ class OptionsMenu(QWidget):
         self.ui.btnReset.setStyleSheet(options_button_style)
         self.ui.btnSave.setStyleSheet(options_button_style)
 
-        self.ui.btnSave.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(0))
+        self.ui.btnSave.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(1))
         self.ui.btnSave.enterEvent = lambda event: self.ui.btnSave.setStyleSheet(options_button_hover_style)
         self.ui.btnSave.leaveEvent = lambda event: self.ui.btnSave.setStyleSheet(options_button_style)
 
@@ -59,6 +61,8 @@ class OptionsMenu(QWidget):
         #Előre definiált beállítások menüje
         self.ui.scrollCombo.hide()
         self.ui.scrollCombo.setStyleSheet(scrollbar_style)
+        self.ui.scrollCombo.verticalScrollBar().setContextMenuPolicy(Qt.NoContextMenu)
+        self.ui.scrollCombo.horizontalScrollBar().setContextMenuPolicy(Qt.NoContextMenu)
         self.predefined_clicked = None
 
         self.load_entries()

@@ -1,5 +1,6 @@
 import os
 import sys
+import time
 
 from PySide6.QtWidgets import QApplication, QMainWindow, QStackedWidget
 from PySide6.QtCore import Qt, QThread, Signal
@@ -23,6 +24,7 @@ class MediapipeLoader(QThread):
         from datetime import datetime
         import shutil
         import pyautogui
+        #time.sleep(10)
 
         print("Mediapipe betöltve!")
         self.finished.emit()  # Jelzés a fő UI szálnak
@@ -60,7 +62,8 @@ if __name__ == "__main__":
 
 
     ml = MediapipeLoader()
-    ml.run()
-    window.stacked_widget.setCurrentIndex(1)
+    ml.finished.connect(lambda: window.stacked_widget.setCurrentIndex(1))
+    ml.start()
+
 
     sys.exit(app.exec())

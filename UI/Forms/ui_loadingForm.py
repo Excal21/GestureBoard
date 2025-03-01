@@ -34,6 +34,14 @@ class Ui_Form(object):
         self.lblLoading = QLabel(Form)
         self.lblLoading.setObjectName(u"lblLoading")
         self.lblLoading.setGeometry(QRect(470, 150, 111, 21))
+        self.frameButtons = QFrame(Form)
+        self.frameButtons.setObjectName(u"frameButtons")
+        self.frameButtons.setGeometry(QRect(280, 0, 520, 410))
+        self.frameButtons.setFrameShape(QFrame.Shape.StyledPanel)
+        self.frameButtons.setFrameShadow(QFrame.Shadow.Raised)
+        self.lblLoadingSpinner = QLabel(self.frameButtons)
+        self.lblLoadingSpinner.setObjectName(u"lblLoadingSpinner")
+        self.lblLoadingSpinner.setGeometry(QRect(188, 190, 141, 71))
 
         self.retranslateUi(Form)
 
@@ -44,5 +52,6 @@ class Ui_Form(object):
         Form.setWindowTitle(QCoreApplication.translate("Form", u"Form", None))
         self.lblTitle.setText(QCoreApplication.translate("Form", u"GestureBoard", None))
         self.lblLoading.setText(QCoreApplication.translate("Form", u"Bet\u00f6lt\u00e9s folyamatban", None))
+        self.lblLoadingSpinner.setText(QCoreApplication.translate("Form", u"TextLabel", None))
     # retranslateUi
 
