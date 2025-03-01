@@ -2,6 +2,7 @@ from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QFontDatabase, QFont
 from ui_mainMenuForm import Ui_MainWindow
+from styles import *
 
 class MainMenu(QWidget):
     def __init__(self, stacked_widget):
@@ -29,15 +30,21 @@ class MainMenu(QWidget):
         layout.setSpacing(0)
         layout.addWidget(self.ui.lblTitle, alignment=Qt.AlignCenter)
         layout.addStretch()
+        self.ui.frameBlue.setStyleSheet(sidebar_style)
+        self.ui.lblTitle.setStyleSheet(sidebar_title_style)
         
+
         #Gombok elrendezése
         layout = QVBoxLayout(self.ui.frameButtons)
         layout.setContentsMargins(0, 45, 0, 0)
 
         self.ui.btnStart.setFixedWidth(420)
+        self.ui.btnStart.setFixedHeight(80)
+        self.ui.btnStart.setStyleSheet(button_style)
+        
         self.ui.btnOptions.setFixedWidth(420)
         self.ui.btnOptions.setFixedHeight(80)
-        self.ui.btnStart.setFixedHeight(80)
+        self.ui.btnOptions.setStyleSheet(button_style)
 
 
         layout.setSpacing(30)

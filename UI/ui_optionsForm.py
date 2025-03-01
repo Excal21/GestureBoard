@@ -15,8 +15,8 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QFrame, QLabel, QSizePolicy,
-    QWidget)
+from PySide6.QtWidgets import (QApplication, QFrame, QLabel, QPushButton,
+    QScrollArea, QSizePolicy, QWidget)
 
 class Ui_OptionsForm(object):
     def setupUi(self, OptionsForm):
@@ -26,20 +26,35 @@ class Ui_OptionsForm(object):
         self.frameBlue = QFrame(OptionsForm)
         self.frameBlue.setObjectName(u"frameBlue")
         self.frameBlue.setGeometry(QRect(0, 0, 280, 410))
-        self.frameBlue.setStyleSheet(u"background-color: rgb(36 , 41 , 67)")
+        self.frameBlue.setStyleSheet(u"")
         self.frameBlue.setFrameShape(QFrame.Shape.StyledPanel)
         self.frameBlue.setFrameShadow(QFrame.Shadow.Raised)
         self.lblTitle = QLabel(self.frameBlue)
         self.lblTitle.setObjectName(u"lblTitle")
         self.lblTitle.setGeometry(QRect(10, 20, 240, 50))
-        self.lblTitle.setStyleSheet(u"color: white;\n"
-"font-size: 26pt;\n"
-"")
+        self.lblTitle.setStyleSheet(u"")
+        self.lblDescription = QLabel(self.frameBlue)
+        self.lblDescription.setObjectName(u"lblDescription")
+        self.lblDescription.setGeometry(QRect(10, 130, 251, 16))
         self.frameButtons = QFrame(OptionsForm)
         self.frameButtons.setObjectName(u"frameButtons")
         self.frameButtons.setGeometry(QRect(280, 0, 520, 410))
         self.frameButtons.setFrameShape(QFrame.Shape.StyledPanel)
         self.frameButtons.setFrameShadow(QFrame.Shadow.Raised)
+        self.scrollArea = QScrollArea(self.frameButtons)
+        self.scrollArea.setObjectName(u"scrollArea")
+        self.scrollArea.setGeometry(QRect(20, 10, 491, 311))
+        self.scrollArea.setWidgetResizable(True)
+        self.scrollAreaWidgetContents = QWidget()
+        self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 489, 309))
+        self.scrollArea.setWidget(self.scrollAreaWidgetContents)
+        self.btnSave = QPushButton(self.frameButtons)
+        self.btnSave.setObjectName(u"btnSave")
+        self.btnSave.setGeometry(QRect(370, 340, 120, 40))
+        self.btnReset = QPushButton(self.frameButtons)
+        self.btnReset.setObjectName(u"btnReset")
+        self.btnReset.setGeometry(QRect(240, 340, 120, 40))
 
         self.retranslateUi(OptionsForm)
 
@@ -49,5 +64,8 @@ class Ui_OptionsForm(object):
     def retranslateUi(self, OptionsForm):
         OptionsForm.setWindowTitle(QCoreApplication.translate("OptionsForm", u"Form", None))
         self.lblTitle.setText(QCoreApplication.translate("OptionsForm", u"Be\u00e1ll\u00edt\u00e1sok", None))
+        self.lblDescription.setText(QCoreApplication.translate("OptionsForm", u"Le\u00edr\u00e1s", None))
+        self.btnSave.setText(QCoreApplication.translate("OptionsForm", u"Ment\u00e9s", None))
+        self.btnReset.setText(QCoreApplication.translate("OptionsForm", u"Alaphelyzet", None))
     # retranslateUi
 

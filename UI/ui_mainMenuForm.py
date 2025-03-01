@@ -26,15 +26,11 @@ class Ui_MainWindow(object):
         self.frameBlue = QFrame(MainWindow)
         self.frameBlue.setObjectName(u"frameBlue")
         self.frameBlue.setGeometry(QRect(0, 0, 280, 410))
-        self.frameBlue.setStyleSheet(u"background-color: rgb(36 , 41 , 67)")
         self.frameBlue.setFrameShape(QFrame.Shape.StyledPanel)
         self.frameBlue.setFrameShadow(QFrame.Shadow.Raised)
         self.lblTitle = QLabel(self.frameBlue)
         self.lblTitle.setObjectName(u"lblTitle")
         self.lblTitle.setGeometry(QRect(10, 20, 240, 50))
-        self.lblTitle.setStyleSheet(u"color: white;\n"
-"font-size: 26pt;\n"
-"")
         self.btnStart = QPushButton(MainWindow)
         self.btnStart.setObjectName(u"btnStart")
         self.btnStart.setGeometry(QRect(330, 30, 420, 80))
@@ -42,22 +38,12 @@ class Ui_MainWindow(object):
         font.setFamilies([u"Calibri"])
         font.setPointSize(20)
         self.btnStart.setFont(font)
-        self.btnStart.setStyleSheet(u"background-color: white;\n"
-"color:  black;\n"
-"border: 1px solid rgb(70, 70, 70);\n"
-"border-radius: 10px;\n"
-"font-size: 20pt;\n"
-"")
+        self.btnStart.setStyleSheet(u"")
         self.btnOptions = QPushButton(MainWindow)
         self.btnOptions.setObjectName(u"btnOptions")
         self.btnOptions.setGeometry(QRect(330, 150, 420, 80))
         self.btnOptions.setFont(font)
-        self.btnOptions.setStyleSheet(u"background-color: white;\n"
-"color:  black;\n"
-"border: 1px solid  rgb(70, 70, 70);;\n"
-"border-radius: 10px;\n"
-"font-size: 20pt;\n"
-"")
+        self.btnOptions.setStyleSheet(u"")
         self.frameButtons = QFrame(MainWindow)
         self.frameButtons.setObjectName(u"frameButtons")
         self.frameButtons.setGeometry(QRect(280, 0, 520, 410))

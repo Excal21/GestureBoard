@@ -6,7 +6,7 @@ from OptionsMenu import OptionsMenu
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("StackedWidget Példa")
+        self.setWindowTitle("GestureBoard")
         # self.setGeometry(100, 100, 800, 410)
         self.setFixedSize(800, 410)
         self.setStyleSheet("background-color: white;")  # Alap háttérszín

@@ -2,3 +2,16 @@ Első
 Második
 Harmadik
 Negyedik
+Ötödik
+Hatodik
+Hetedik
+Nyolcadik
+Kilencedik
+Tizedik
+Tizenegyedik
+Tizenkettedik
+Tizenharmadik
+Tizennegyedik
+Tizenötödik
+Tizenhatodik
+Tizenhetedik
