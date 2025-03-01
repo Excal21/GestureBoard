@@ -6,10 +6,10 @@ from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton
 from PySide6.QtGui import QFontDatabase, QFont, QMovie
 from PySide6.QtCore import QThread, Signal, QSize
 from time import sleep
-from styles import *
-from Forms.ui_loadingForm import Ui_Form
+from Resources.Stylesheets.styles import *
+from Views.ui_loadingForm import Ui_Form
 
-class LoadingScreen(QWidget):
+class LoadingScreenController(QWidget):
     def __init__(self, stacked_widget):
         super().__init__()
         self.stacked_widget = stacked_widget
@@ -17,7 +17,7 @@ class LoadingScreen(QWidget):
         self.ui = Ui_Form()
         self.ui.setupUi(self)
 
-        font_id = QFontDatabase.addApplicationFont("Ubuntu-R.ttf")
+        font_id = QFontDatabase.addApplicationFont("Resources\\Fonts\\Ubuntu-R.ttf")
         if font_id != -1:
             font_family = QFontDatabase.applicationFontFamilies(font_id)[0]
             font = QFont(font_family, 16)
@@ -44,7 +44,7 @@ class LoadingScreen(QWidget):
         self.ui.lblLoading.setFont(font)
         self.ui.lblLoading.setStyleSheet(info_label_style)
         
-        self.movie = QMovie("Icons/loading.gif")  # Cseréld ki egy valódi GIF fájlra
+        self.movie = QMovie("Resources\\Icons\\loading.gif")  # Cseréld ki egy valódi GIF fájlra
         self.ui.lblLoadingSpinner.setMovie(self.movie)
         self.movie.setScaledSize(QSize(70,70))
 

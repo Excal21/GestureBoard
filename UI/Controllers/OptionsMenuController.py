@@ -5,12 +5,13 @@ from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLa
 from PySide6.QtCore import Qt, QSize
 from PySide6.QtGui import QFontDatabase, QFont, QIcon
 from PySide6.QtWidgets import QApplication, QStackedWidget
-from styles import *
-from Forms.ui_optionsForm import Ui_OptionsForm
+from Resources.Stylesheets.styles import *
+from Views.ui_optionsForm import Ui_OptionsForm
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "Forms")))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "Views")))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "Resources", "Stylesheets")))
 
-class OptionsMenu(QWidget):
+class OptionsMenuController(QWidget):
     def __init__(self, stacked_widget):
         super().__init__()
         self.setAttribute(Qt.WA_TranslucentBackground)
@@ -87,13 +88,13 @@ class OptionsMenu(QWidget):
                 btnConsole = QPushButton()                
 
                 #Gombok ikonjainak beállítása
-                btnCombo.setIcon(QIcon("Icons\\widget.png"))
+                btnCombo.setIcon(QIcon("Resources\\Icons\\widget.png"))
                 btnCombo.setIconSize(QSize(40, 40))
 
-                btnConsole.setIcon(QIcon("Icons\\console.png"))
+                btnConsole.setIcon(QIcon("Resources\\Icons\\console.png"))
                 btnConsole.setIconSize(QSize(50, 45))
 
-                btnKey.setIcon(QIcon("Icons\\keyboard.png"))
+                btnKey.setIcon(QIcon("Resources\\Icons\\keyboard.png"))
                 btnKey.setIconSize(QSize(60, 60))
 
                 #Gombok helyének beállítása
@@ -161,7 +162,7 @@ class OptionsMenu(QWidget):
         self.stacked_widget.setCurrentIndex(1)
 
     def load_font(self):
-        font_id = QFontDatabase.addApplicationFont("Ubuntu-R.ttf")
+        font_id = QFontDatabase.addApplicationFont("Resources\\Fonts\\Ubuntu-R.ttf")
         if font_id != -1:
             font_family = QFontDatabase.applicationFontFamilies(font_id)[0]
             self.font = QFont(font_family, 16)

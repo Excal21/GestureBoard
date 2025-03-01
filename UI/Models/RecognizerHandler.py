@@ -9,13 +9,11 @@ class RecognizerHandler(QThread):
         super().__init__()
     
     def load(self):
-        from Model.Recognizer import Recognizer
         if not RecognizerHandler.recognizer:
-            RecognizerHandler.recognizer = Recognizer('Model/gesture_recognizer.task')
+            from Models.Recognizer import Recognizer
+            RecognizerHandler.recognizer = Recognizer('Models\\gesture_recognizer.task')
             print("Recognizer loaded")
         self.finished.emit()
-
-    
 
     @staticmethod
     def start():

@@ -4,14 +4,14 @@ import sys
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QFontDatabase, QFont
-from styles import *
-from Forms.ui_mainMenuForm import Ui_MainWindow
-from Model.RecognizerHandler import *
+from Resources.Stylesheets.styles import *
+from Views.ui_mainMenuForm import Ui_MainWindow
+from Models.RecognizerHandler import *
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "Forms")))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "Views")))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "Resources", "Stylesheets")))
 
-
-class MainMenu(QWidget):
+class MainMenuController(QWidget):
     def __init__(self, stacked_widget):
         super().__init__()
         self.setAttribute(Qt.WA_TranslucentBackground)
@@ -20,7 +20,9 @@ class MainMenu(QWidget):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
-        font_id = QFontDatabase.addApplicationFont("Ubuntu-R.ttf")
+        self.recognizer_active = False
+
+        font_id = QFontDatabase.addApplicationFont("Resources\\Fonts\\Ubuntu-R.ttf")
         if font_id != -1:
             font_family = QFontDatabase.applicationFontFamilies(font_id)[0]
             font = QFont(font_family, 16)
@@ -78,6 +80,14 @@ class MainMenu(QWidget):
 
 
     def start(self):
-        global recognizer
-        RecognizerHandler.setCamera(0)
-        RecognizerHandler.start()
+        if not self.recognizer_active:
+            self.recognizer_active = True
+            self.ui.btnStart.setText("Gesztusvezérlés kikapcsolása")
+            self.ui.btnOptions.setEnabled(False)
+            RecognizerHandler.setCamera(0)
+            RecognizerHandler.start()
+        else:
+            self.recognizer_active = False
+            RecognizerHandler.stop()
+            self.ui.btnStart.setText("Gesztusvezérlés indítása")
+            self.ui.btnOptions.setEnabled(True)

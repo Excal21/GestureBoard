@@ -4,15 +4,15 @@ import time
 
 from PySide6.QtWidgets import QApplication, QMainWindow, QStackedWidget
 from PySide6.QtCore import Qt, QThread, Signal
-import Views.MainMenu
-import Views.OptionsMenu
-import Views.Loading
-from Model.RecognizerHandler import *
-from Model.MediaPipeHandler import MediapipeLoader
+import Controllers.MainMenuController
+import Controllers.OptionsMenuController
+import Controllers.LoadingScreenController
+from Models.RecognizerHandler import *
+from Models.MediaPipeHandler import MediapipeLoader
 
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "Views")))
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "Model")))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "Controllers")))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "Models")))
 
 
 class MainWindow(QMainWindow):
@@ -28,9 +28,9 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(self.stacked_widget)
 
         # Nézetek létrehozása és hozzáadása
-        self.main_menu = Views.MainMenu.MainMenu(self.stacked_widget)
-        self.options_menu = Views.OptionsMenu.OptionsMenu(self.stacked_widget)
-        self.loading_screen = Views.Loading.LoadingScreen(self.stacked_widget)
+        self.main_menu = Controllers.MainMenuController.MainMenuController(self.stacked_widget)
+        self.options_menu = Controllers.OptionsMenuController.OptionsMenuController(self.stacked_widget)
+        self.loading_screen = Controllers.LoadingScreenController.LoadingScreenController(self.stacked_widget)
 
         self.stacked_widget.addWidget(self.loading_screen)
         self.stacked_widget.addWidget(self.main_menu)
