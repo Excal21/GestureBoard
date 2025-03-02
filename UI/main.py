@@ -37,7 +37,7 @@ class MainWindow(QMainWindow):
         self.stacked_widget.addWidget(self.options_menu)
 
     def closeEvent(self, event):
-        RecognizerHandler.stop()
+        rl.stop()
         event.accept()
 
 if __name__ == "__main__":
@@ -50,7 +50,7 @@ if __name__ == "__main__":
 
 
     ml = MediapipeLoader()
-    rl = RecognizerHandler()
+    rl = RecognizerHandler.getInstance()
 
     ml.start()
     ml.finished.connect(rl.load)

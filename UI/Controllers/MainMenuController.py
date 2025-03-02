@@ -16,6 +16,7 @@ class MainMenuController(QWidget):
         super().__init__()
         self.setAttribute(Qt.WA_TranslucentBackground)
         self.stacked_widget = stacked_widget
+        self.recognizer = RecognizerHandler.getInstance()
 
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
@@ -84,10 +85,10 @@ class MainMenuController(QWidget):
             self.recognizer_active = True
             self.ui.btnStart.setText("Gesztusvezérlés kikapcsolása")
             self.ui.btnOptions.setEnabled(False)
-            RecognizerHandler.setCamera(0)
-            RecognizerHandler.start()
+            self.recognizer.setCamera(0)
+            self.recognizer.start()
         else:
             self.recognizer_active = False
-            RecognizerHandler.stop()
+            self.recognizer.stop()
             self.ui.btnStart.setText("Gesztusvezérlés indítása")
             self.ui.btnOptions.setEnabled(True)

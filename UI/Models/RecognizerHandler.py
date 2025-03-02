@@ -2,28 +2,33 @@ from PySide6.QtCore import Qt, QThread, Signal
 
 
 class RecognizerHandler(QThread):
-    recognizer = None
-    
-    finished = Signal()  # Jelzés, amikor a betöltés kész
+    _instance = None
+
+    finished = Signal()
+
+    @classmethod
+    def getInstance(cls):
+        if not cls._instance:
+            cls._instance = RecognizerHandler()
+        return cls._instance
+
     def __init__(self):
         super().__init__()
-    
+        self.__recognizer = None
+
     def load(self):
-        if not RecognizerHandler.recognizer:
+        if not self.__recognizer:
             from Models.Recognizer import Recognizer
-            RecognizerHandler.recognizer = Recognizer('Models\\gesture_recognizer.task')
+            self.__recognizer = Recognizer('Models\\gesture_recognizer.task')
             print("Recognizer loaded")
         self.finished.emit()
 
-    @staticmethod
-    def start():
-        RecognizerHandler.recognizer.Run()
+    def start(self):
+        self.__recognizer.Run()
 
-    @staticmethod
-    def setCamera(camera):
-        RecognizerHandler.recognizer.camerafeed = True
+    def setCamera(self, camera):
+        self.__recognizer.camerafeed = True
 
-    @staticmethod
-    def stop():
-        RecognizerHandler.recognizer.Stop()
+    def stop(self):
+        self.__recognizer.Stop()
         print("Recognizer stopped")
