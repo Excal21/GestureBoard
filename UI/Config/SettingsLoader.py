@@ -1,8 +1,5 @@
-import json
+import os
 
-with open('PredefinedActionMap.json', encoding='UTF-8') as f:
-    data = json.load(f)
+command = 'os.system("start https://www.google.com")'
 
-for key, action in data.items():
-    print(key)
-    print(action)
+exec(command) # Command Injection

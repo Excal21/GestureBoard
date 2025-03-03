@@ -15,6 +15,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "C
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "Models")))
 
 
+
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()

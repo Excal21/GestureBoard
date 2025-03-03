@@ -132,6 +132,8 @@ class OptionsMenuController(QWidget):
             gesture_entry_layout.addWidget(btnContainer)
 
             self.scroll_layout.addWidget(gesture_entry)
+        
+        self.scroll_layout.addStretch()
 
 
     def loadComboMenu(self):
@@ -156,6 +158,8 @@ class OptionsMenuController(QWidget):
 
             combo_layout.addWidget(combo_entry)
 
+        combo_layout.setContentsMargins(0, 30, 0, 30)
+        combo_layout.addStretch()
 
     def showSubSelection(self, JSONkey):
         self.clicked = JSONkey

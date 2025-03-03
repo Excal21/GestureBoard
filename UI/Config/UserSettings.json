@@ -1,14 +1,26 @@
 {
     "0": {
         "gesture": "Első gesztus",
-        "action": "os.screenshot()"
+        "action": "os.start('calc')"
     },
     "1": {
         "gesture": "Második gesztus",
-        "action": null
+        "action": "os.screenshot()"
     },
     "2": {
         "gesture": "Harmadik gesztus",
-        "action": "os.start('calc')"
+        "action": "os.screenshot()"
+    },
+    "3": {
+        "gesture": "Valami",
+        "action": null
+    },
+    "4": {
+        "gesture": "jgjhgj",
+        "action": null
+    },
+    "5": {
+        "gesture": "hkjghjkg",
+        "action": null
     }
 }

@@ -17,11 +17,11 @@ def loadSettings():
         data = json.load(f)
     return data
 
-def record_batch(gesture_name, imgcnt):
+def record_batch(gesture_id, gesture_name, imgcnt):
     global img_counter
     gestrue_name = gesture_name
 
-    gesture_dir = os.path.join('Samples', gestrue_name)
+    gesture_dir = os.path.join('Samples', str(gesture_id))
     if not os.path.exists(gesture_dir):
         os.makedirs(gesture_dir)
 
@@ -53,12 +53,12 @@ def guide():
     print('Másik kezeddel nyomd meg az enter billentyűt és kövesd az utasításokat!')
     input()
 
-    record_batch(gesture_name, 20)
+    record_batch(gesture_id ,gesture_name, 20)
 
     print('Most tartsd a kezed ugyanilyen pozícióban, de kicsit fordítsd el! Másik kezeddel nyomd meg az enter billentyűt!')
     input()
     
-    record_batch(gesture_name, 20)
+    record_batch(gesture_id, gesture_name, 20)
     print('Gesztus rögzítése befejeződött!')
     
 
