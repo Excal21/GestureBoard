@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 15.0.1, 2025-03-01T14:50:11. -->
+<!-- Written by QtCreator 15.0.1, 2025-03-02T09:43:54. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -151,14 +151,14 @@
     <valuelist type="QVariantList" key="PE.EnvironmentAspect.Changes"/>
     <value type="bool" key="PE.EnvironmentAspect.PrintOnRun">false</value>
     <value type="QString" key="PerfRecordArgsId">-e cpu-cycles --call-graph &quot;dwarf,4096&quot; -F 250</value>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">C:/Users/szgyu/OneDriveSZE/Szakdolgozat/UI/Forms/main.py</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">C:/Users/szgyu/OneDriveSZE/Szakdolgozat/UI/Views/main.py</value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">PythonEditor.RunConfiguration.</value>
-    <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">C:/Users/szgyu/OneDriveSZE/Szakdolgozat/UI/Forms/main.py</value>
+    <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">C:/Users/szgyu/OneDriveSZE/Szakdolgozat/UI/Views/main.py</value>
     <value type="bool" key="ProjectExplorer.RunConfiguration.Customized">false</value>
-    <value type="QString" key="PythonEditor.RunConfiguation.Script">C:\Users\szgyu\OneDriveSZE\Szakdolgozat\UI\Forms\main.py</value>
+    <value type="QString" key="PythonEditor.RunConfiguation.Script">C:\Users\szgyu\OneDriveSZE\Szakdolgozat\UI\Views\main.py</value>
     <value type="bool" key="RunConfiguration.UseCppDebuggerAuto">true</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
-    <value type="QString" key="RunConfiguration.WorkingDirectory.default">C:/Users/szgyu/OneDriveSZE/Szakdolgozat/UI/Forms</value>
+    <value type="QString" key="RunConfiguration.WorkingDirectory.default">C:/Users/szgyu/OneDriveSZE/Szakdolgozat/UI/Views</value>
    </valuemap>
    <value type="qlonglong" key="ProjectExplorer.Target.RunConfigurationCount">1</value>
   </valuemap>

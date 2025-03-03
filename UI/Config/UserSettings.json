@@ -1,0 +1,14 @@
+{
+    "0": {
+        "gesture": "Első gesztus",
+        "action": "os.screenshot()"
+    },
+    "1": {
+        "gesture": "Második gesztus",
+        "action": null
+    },
+    "2": {
+        "gesture": "Harmadik gesztus",
+        "action": "os.start('calc')"
+    }
+}
