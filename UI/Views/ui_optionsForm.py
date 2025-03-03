@@ -63,6 +63,9 @@ class Ui_OptionsForm(object):
         self.btnReset = QPushButton(self.frameButtons)
         self.btnReset.setObjectName(u"btnReset")
         self.btnReset.setGeometry(QRect(230, 340, 120, 40))
+        self.btnTeach = QPushButton(self.frameButtons)
+        self.btnTeach.setObjectName(u"btnTeach")
+        self.btnTeach.setGeometry(QRect(20, 340, 191, 40))
 
         self.retranslateUi(OptionsForm)
 
@@ -75,5 +78,6 @@ class Ui_OptionsForm(object):
         self.lblDescription.setText(QCoreApplication.translate("OptionsForm", u"Le\u00edr\u00e1s", None))
         self.btnSave.setText(QCoreApplication.translate("OptionsForm", u"Ment\u00e9s", None))
         self.btnReset.setText(QCoreApplication.translate("OptionsForm", u"Alaphelyzet", None))
+        self.btnTeach.setText(QCoreApplication.translate("OptionsForm", u"Gesztusok tan\u00edt\u00e1sa", None))
     # retranslateUi
 

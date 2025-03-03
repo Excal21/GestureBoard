@@ -52,8 +52,14 @@ class OptionsMenuController(QWidget):
         #Gombok
         self.ui.btnReset.setFont(self.font)
         self.ui.btnSave.setFont(self.font)
+        self.ui.btnTeach.setFont(self.font)
         self.ui.btnReset.setStyleSheet(options_button_style)
         self.ui.btnSave.setStyleSheet(options_button_style)
+        self.ui.btnTeach.setStyleSheet(options_button_style)
+
+        self.ui.btnTeach.clicked.connect(lambda event: self.stacked_widget.setCurrentIndex(3))
+        self.ui.btnTeach.enterEvent = lambda event: self.ui.btnTeach.setStyleSheet(options_button_hover_style)
+        self.ui.btnTeach.leaveEvent = lambda event: self.ui.btnTeach.setStyleSheet(options_button_style)
 
         self.ui.btnSave.clicked.connect(lambda: self.saveMappings())
         self.ui.btnSave.enterEvent = lambda event: self.ui.btnSave.setStyleSheet(options_button_hover_style)

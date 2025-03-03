@@ -35,7 +35,7 @@ options_button_hover_style = """
             color:  black;
             border: 1px solid rgb(70, 70, 70);
             background-color: lightgray;
-            border-radius: 10px;
+            border-radius: 5px;
             font-size: 14pt;
 """
 
@@ -78,6 +78,11 @@ description_style = """
             font-size: 14pt;
 """
 
+long_desciption_style = """
+            color: white;
+            font-size: 12pt;
+"""
+
 info_label_style = """
             color: rgb(36, 41, 67);
             font-size: 24pt;
@@ -117,4 +122,17 @@ scrollbar_style ="""
         QScrollBar::add-page:vertical {
             border-radius: 5px;
         }
+"""
+
+train_label_style = """
+            color: rgb(36, 41, 67);
+            font-size: 16pt;
+"""
+
+train_input_style = """
+            color: rgb(36, 41, 67);
+            font-size: 14pt;
+            border: 1px solid rgb(70, 70, 70);
+            border-radius: 5px;
+            padding-left: 5px;
 """

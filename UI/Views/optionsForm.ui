@@ -148,6 +148,19 @@
      <string>Alaphelyzet</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="btnTeach">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>340</y>
+      <width>191</width>
+      <height>40</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Gesztusok tanítása</string>
+    </property>
+   </widget>
   </widget>
  </widget>
  <resources/>

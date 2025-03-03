@@ -7,6 +7,7 @@ from PySide6.QtCore import Qt, QThread, Signal
 import Controllers.MainMenuController
 import Controllers.OptionsMenuController
 import Controllers.LoadingScreenController
+import Controllers.TrainMenuController
 from Models.RecognizerHandler import *
 from Models.MediaPipeHandler import MediapipeLoader
 
@@ -32,10 +33,12 @@ class MainWindow(QMainWindow):
         self.main_menu = Controllers.MainMenuController.MainMenuController(self.stacked_widget)
         self.options_menu = Controllers.OptionsMenuController.OptionsMenuController(self.stacked_widget)
         self.loading_screen = Controllers.LoadingScreenController.LoadingScreenController(self.stacked_widget)
+        self.teach_menu = Controllers.TrainMenuController.TrainMenuController(self.stacked_widget)
 
         self.stacked_widget.addWidget(self.loading_screen)
         self.stacked_widget.addWidget(self.main_menu)
         self.stacked_widget.addWidget(self.options_menu)
+        self.stacked_widget.addWidget(self.teach_menu)
 
     def closeEvent(self, event):
         rl.stop()
@@ -56,7 +59,7 @@ if __name__ == "__main__":
     ml.start()
     ml.finished.connect(rl.load)
     rl.finished.connect(lambda: window.stacked_widget.setCurrentIndex(1))
-    
+    window.stacked_widget.setCurrentIndex(1)
 
 
     sys.exit(app.exec())

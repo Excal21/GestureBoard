@@ -210,7 +210,8 @@ class Recognizer:
         if all(gesture == last_gestures[0] for gesture in last_gestures) and (datetime.now() - last_gesture_time).total_seconds() > 1 and last_gestures[0]  != '':
           print(last_gestures[0])
           if last_gestures[0] in gesture_mappings.keys():
-            exec(gesture_mappings[last_gestures[0]])
+            print(last_gestures[0])
+            exec(gesture_mappings[last_gestures[0]]['action'])
             print("last_gesture: {0}, confidence: {1:2f}".format(last_gestures[0], gesture[0].score))
           last_gesture_time = datetime.now()
         last_gestures.clear()

@@ -29,6 +29,7 @@ class MainMenuController(QWidget):
             font = QFont(font_family, 16)
             self.ui.btnStart.setFont(font)
             self.ui.btnOptions.setFont(font)
+            self.ui.btnCameraOptions.setFont(font)
             self.ui.lblTitle.setFont(font)
         else:
             print("Hiba: Nem sikerült betölteni az Ubuntu fontot!")
@@ -43,7 +44,6 @@ class MainMenuController(QWidget):
         self.ui.frameBlue.setStyleSheet(sidebar_style)
         self.ui.lblTitle.setStyleSheet(sidebar_title_style)
 
-        self.ui.btnStart.clicked.connect(lambda: self.start())
         
 
         #Gombok elrendezése
@@ -60,19 +60,29 @@ class MainMenuController(QWidget):
         self.ui.btnOptions.setStyleSheet(button_style)
 
 
+        self.ui.btnCameraOptions.setFixedWidth(420)
+        self.ui.btnCameraOptions.setFixedHeight(80)
+        self.ui.btnCameraOptions.setStyleSheet(button_style)
+
+
         layout.setSpacing(30)
         layout.addWidget(self.ui.btnStart, alignment=Qt.AlignCenter)
         layout.addWidget(self.ui.btnOptions, alignment=Qt.AlignCenter)
+        layout.addWidget(self.ui.btnCameraOptions, alignment=Qt.AlignCenter)
         layout.addStretch()
 
         #Gombok eseménykezelése 
-        self.ui.btnOptions.clicked.connect(self.show_options)
+        self.ui.btnStart.clicked.connect(lambda: self.start())
         self.ui.btnStart.enterEvent = lambda event: self.ui.btnStart.setStyleSheet(button_hover_style)
         self.ui.btnStart.leaveEvent = lambda event: self.ui.btnStart.setStyleSheet(button_style)
 
+        self.ui.btnOptions.clicked.connect(self.show_options)
         self.ui.btnOptions.enterEvent = lambda event: self.ui.btnOptions.setStyleSheet(button_hover_style)
         self.ui.btnOptions.leaveEvent = lambda event: self.ui.btnOptions.setStyleSheet(button_style)
 
+
+        self.ui.btnCameraOptions.enterEvent = lambda event: self.ui.btnCameraOptions.setStyleSheet(button_hover_style)
+        self.ui.btnCameraOptions.leaveEvent = lambda event: self.ui.btnCameraOptions.setStyleSheet(button_style)
 
 
     def show_options(self):

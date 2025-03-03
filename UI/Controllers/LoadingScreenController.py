@@ -44,7 +44,7 @@ class LoadingScreenController(QWidget):
         self.ui.lblLoading.setFont(font)
         self.ui.lblLoading.setStyleSheet(info_label_style)
         
-        self.movie = QMovie("Resources\\Icons\\loading.gif")  # Cseréld ki egy valódi GIF fájlra
+        self.movie = QMovie("Resources\\Icons\\loading.gif")
         self.ui.lblLoadingSpinner.setMovie(self.movie)
         self.movie.setScaledSize(QSize(70,70))
 
