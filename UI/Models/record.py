@@ -5,16 +5,19 @@ import json
 
 # Kamera inicializálása
 url = 'http://192.168.1.12:8080/video'
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
 
 width = 500
 height = 500
 
 img_counter = 0
 
+settings_path = os.path.join(os.path.dirname(__file__), '../Config/UserSettings.json')
+
+
 def loadSettings():
-    with open('UserSettings.json', encoding='UTF-8') as f:
-        data = json.load(f)
+    with open(settings_path, encoding='UTF-8') as f:
+        data = dict(json.load(f))
     return data
 
 def record_batch(gesture_id, gesture_name, imgcnt):
@@ -44,7 +47,7 @@ def record_batch(gesture_id, gesture_name, imgcnt):
 
 def guide():
     data = loadSettings()
-    gesture_id = len(data)
+    gesture_id = int(max(data.keys())) + 1 if data else 0
     gesture_name = None
 
     print('Írd be a gesztus nevét: ', end='')
@@ -66,7 +69,7 @@ def guide():
 
     gesture_entry = {gesture_id : {'gesture' : gesture_name, 'action' : None}}
     data.update(gesture_entry)
-    with open('UserSettings.json', 'w', encoding='UTF-8') as f:
+    with open(settings_path, 'w', encoding='UTF-8') as f:
         json.dump(data, f, ensure_ascii=False, indent=4)
 
 

@@ -1,46 +1,6 @@
 {
     "0": {
-        "gesture": "Három",
-        "action": "os.screenshot()"
-    },
-    "1": {
-        "gesture": "Metál",
-        "action": null
-    },
-    "2": {
-        "gesture": "Képernyőkép",
-        "action": null
-    },
-    "3": {
-        "gesture": "Négy",
-        "action": null
-    },
-    "4": {
-        "gesture": "Öt",
-        "action": null
-    },
-    "5": {
-        "gesture": "Hat",
-        "action": null
-    },
-    "6": {
-        "gesture": "Hét",
-        "action": null
-    },
-    "7": {
-        "gesture": "Nyolc",
-        "action": null
-    },
-    "8": {
-        "gesture": "Kilenc",
-        "action": null
-    },
-    "9": {
-        "gesture": "Tíz",
-        "action": null
-    },
-    "10": {
-        "gesture": "Egy",
+        "gesture": "Első",
         "action": null
     }
 }

@@ -9,6 +9,8 @@ from time import sleep
 from Resources.Stylesheets.styles import *
 from Views.ui_trainOptionsForm import Ui_Form
 import json
+import shutil
+
 
 class TrainMenuController(QWidget):
     def __init__(self, stacked_widget):
@@ -80,7 +82,8 @@ class TrainMenuController(QWidget):
         
         self.ui.btnDelete.enterEvent = lambda event: self.ui.btnDelete.setStyleSheet(options_button_hover_style)
         self.ui.btnDelete.leaveEvent = lambda event: self.ui.btnDelete.setStyleSheet(options_button_style)
-        
+        self.ui.btnDelete.clicked.connect(self.delete)
+
         self.ui.btnTrain.enterEvent = lambda event: self.ui.btnTrain.setStyleSheet(options_button_hover_style)
         self.ui.btnTrain.leaveEvent = lambda event: self.ui.btnTrain.setStyleSheet(options_button_style)        
 
@@ -102,13 +105,17 @@ class TrainMenuController(QWidget):
 
 
     def updateList(self):
+        while self.scroll_layout.count():
+            child = self.scroll_layout.takeAt(0)
+            if child.widget():
+                child.widget().deleteLater()
         with open('Config\\UserSettings.json', 'r', encoding="UTF-8") as f:
             data = dict(json.load(f))
         for key, value in data.items():
             entry = QPushButton(value['gesture'])
             entry.setStyleSheet(predefined_label_style)
             entry.setFont(self.font)
-            entry.setFixedHeight(35)
+            entry.setFixedHeight(33)
             
             entry.clicked.connect(lambda event, key=key, entry = entry : self.select(key, entry))
             
@@ -127,6 +134,22 @@ class TrainMenuController(QWidget):
             label.setStyleSheet(predefined_label_style)
             self.selected_gesture = None
         
+    def delete(self):
+        def remove_readonly(func, path, _):
+            import stat
+            os.chmod(path, stat.S_IWRITE)  # Eltávolítja az írásvédettséget
+            func(path)
+
+        if self.selected_gesture != None:
+            with open('Config\\UserSettings.json', 'r', encoding="UTF-8") as f:
+                data = dict(json.load(f))
+            data.pop(self.selected_gesture)
+            with open('Config\\UserSettings.json', 'w', encoding="UTF-8") as f:
+                json.dump(data, f, ensure_ascii=False, indent=4)
+
+        shutil.rmtree('Models\\Samples\\' + self.selected_gesture, onerror=remove_readonly)
+        self.updateList()
+        self.selected_gesture = None
 
     def loadFont(self):
         font_id = QFontDatabase.addApplicationFont("Resources\\Fonts\\Ubuntu-R.ttf")
