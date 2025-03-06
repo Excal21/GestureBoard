@@ -17,6 +17,8 @@ class TrainMenuController(QWidget):
     def __init__(self, stacked_widget):
         super().__init__()
         self.stacked_widget = stacked_widget
+        self.stacked_widget.currentChanged.connect(self.onReturn)
+
 
         self.ui = Ui_Form()
         self.ui.setupUi(self)
@@ -73,58 +75,6 @@ class TrainMenuController(QWidget):
         server_options_layout.addWidget(self.ui.lblServer)
         server_options_layout.addWidget(self.ui.txtinputServer)
         
-#region Új gesztus varázsló
-        #Felbukkanó új gesztus varázsló elrendezése
-        self.ui.frameNewGesture.hide()
-        self.ui.frameNewGesture_layout = QVBoxLayout(self.ui.frameNewGesture)
-        horizontal_layout = QHBoxLayout()
-        horizontal_layout.addStretch()
-        horizontal_layout.addWidget(self.ui.lblInfo, alignment=Qt.AlignCenter)
-        horizontal_layout.addStretch()
-        self.ui.lblInfo.setStyleSheet(info_label_style)
-        self.ui.lblInfo.setFont(self.font)
-
-        self.ui.frameNewGesture_layout.addLayout(horizontal_layout)
-        self.ui.frameNewGesture_layout.setContentsMargins(0, 55, 0, 0)
-        self.ui.lblImage = QLabel(self.ui.frameNewGesture)
-        self.ui.lblImage.setFixedSize(200, 200)
-        self.ui.lblImage.setAlignment(Qt.AlignCenter)
-        self.ui.frameNewGesture_layout.addWidget(self.ui.lblImage, alignment=Qt.AlignCenter)
-        self.ui.lblImage.setPixmap(QPixmap(os.path.join(os.path.dirname(__file__), '..', 'Resources', 'Icons', 'hand.png')).scaled(100, 100, Qt.KeepAspectRatio))
-
-
-        #Geszuts neve input mező
-        vertical_layout = QHBoxLayout()
-        self.ui.lblGestureInputLabel.setStyleSheet(train_label_style)
-        self.ui.txtinputGestureName.setStyleSheet(train_input_style)
-        self.ui.btnNameOK.setStyleSheet(options_button_style)
-        self.ui.lblGestureInputLabel.setFont(self.font)
-        self.ui.txtinputGestureName.setFont(self.font)
-        self.ui.txtinputGestureName.setContextMenuPolicy(Qt.NoContextMenu)
-
-
-        vertical_layout.addWidget(self.ui.lblGestureInputLabel, alignment=Qt.AlignCenter)
-        vertical_layout.addWidget(self.ui.txtinputGestureName, alignment=Qt.AlignCenter)
-        vertical_layout.addWidget(self.ui.btnNameOK, alignment=Qt.AlignCenter)
-
-        self.ui.btnNameOK.setIcon(QIcon("Resources\\Icons\\check.png"))
-        self.ui.btnNameOK.setIconSize(QSize(30, 30))
-        self.ui.btnNameOK.enterEvent = lambda event: self.ui.btnNameOK.setStyleSheet(options_button_hover_style)
-        self.ui.btnNameOK.leaveEvent = lambda event: self.ui.btnNameOK.setStyleSheet(options_button_style)
-        self.ui.btnNameOK.clicked.connect(self.train)
-
-        #Középre igazított usert segítő szövegdoboz
-        self.ui.lblUserGuide.setStyleSheet(guide_style)
-        self.ui.lblUserGuide.setAlignment(Qt.AlignCenter) 
-        self.ui.lblUserGuide.setFont(self.font)
-        self.ui.lblUserGuide.setText("")
-
-        self.ui.frameNewGesture_layout.addWidget(self.ui.lblUserGuide, alignment=Qt.AlignCenter)
-        self.ui.frameNewGesture_layout.addStretch()
-
-
-        QShortcut(Qt.Key_Space, self).activated.connect(self.train)
-#endregion
 
 #region Gombok
         #Gombok kinézete
@@ -139,6 +89,7 @@ class TrainMenuController(QWidget):
         #Gombeventek
         self.ui.btnRecord.enterEvent = lambda event: self.ui.btnRecord.setStyleSheet(options_button_hover_style)
         self.ui.btnRecord.leaveEvent = lambda event: self.ui.btnRecord.setStyleSheet(options_button_style)
+        self.ui.btnRecord.clicked.connect(lambda event: self.stacked_widget.setCurrentIndex(4))
         
         self.ui.btnDelete.enterEvent = lambda event: self.ui.btnDelete.setStyleSheet(options_button_hover_style)
         self.ui.btnDelete.leaveEvent = lambda event: self.ui.btnDelete.setStyleSheet(options_button_style)
@@ -167,49 +118,11 @@ class TrainMenuController(QWidget):
 
 #endregion
 
-#region Record
-    def openTrainSubWindow(self):
-        self.ui.frameNewGesture.show()
-        self.ui.lblUserGuide.hide()
-        self.ui.btnNameOK.show()
-        self.ui.txtinputGestureName.show()
-        self.ui.lblGestureInputLabel.show()
-        self.ui.lblDescription.setText("Kövesd a képernyőn megjelenő utasításokat!")
-        self.ui.lblGestureInputLabel.setText("Új gesztus neve:")
-        self.ui.txtinputGestureName.setPlaceholderText("Gesztus neve")
 
-    def train(self):
-        if self.ui.frameNewGesture.isVisible():
-            if self.recording_stage == 0:
-                self.gesture_name = self.ui.txtinputGestureName.text()
-                self.rec.load()
-                self.ui.frameNewGesture.show()
-                self.ui.lblGestureInputLabel.hide()
-                self.ui.txtinputGestureName.hide()
-                self.ui.btnNameOK.hide()
-                self.ui.lblUserGuide.show()
-
-                self.recording_stage = 1
-                self.ui.lblUserGuide.setText("Tartsd a kezed a kívánt gesztus pozíciójában, majd nyomj szőközt a másik kezeddel!")
-                print("Elindítva!")
-
-            elif self.recording_stage == 1:
-                self.rec.record_batch(self.gesture_name, 0)
-                print("Első szakasz rögzítve!")
-                self.ui.lblUserGuide.setText("Most picit mozdítsd el ugyanebben a pozícióban a kezed, majd nyomj szőközt a másik kezeddel!")
-                self.recording_stage = 2
-
-            elif self.recording_stage == 2:
-                self.rec.record_batch(self.gesture_name, 0)
-                print("Második szakasz rögzítve!")
-                self.rec.save()
-                print("Mentve!")
-                self.recording_stage = 0
-                self.ui.frameNewGesture.hide()
-                self.updateList()
-
-#endregion
-
+    def onReturn(self):
+        if self.stacked_widget.widget(3) == self:
+            print("Gesztusok frissítve")
+            self.updateList()
 
     def updateList(self):
         while self.scroll_layout.count():
@@ -218,16 +131,17 @@ class TrainMenuController(QWidget):
                 child.widget().deleteLater()
         with open('Config\\UserSettings.json', 'r', encoding="UTF-8") as f:
             data = dict(json.load(f))
-        for key, value in data.items():
-            entry = QPushButton(value['gesture'])
-            entry.setStyleSheet(predefined_label_style)
-            entry.setFont(self.font)
-            entry.setFixedHeight(33)
-            
-            entry.clicked.connect(lambda event, key=key, entry = entry : self.select(key, entry))
-            
+        if len(data) > 0:
+            for key, value in data.items():
+                entry = QPushButton(value['gesture'])
+                entry.setStyleSheet(predefined_label_style)
+                entry.setFont(self.font)
+                entry.setFixedHeight(33)
+                
+                entry.clicked.connect(lambda event, key=key, entry = entry : self.select(key, entry))
+                
 
-            self.scroll_layout.addWidget(entry)
+                self.scroll_layout.addWidget(entry)
 
     def select(self, key, label):
         for i in range(self.scroll_layout.count()):

@@ -3,6 +3,7 @@
         "loadingForm.ui",
         "main.py",
         "mainMenuForm.ui",
+        "newGestureWizardForm.ui",
         "optionsForm.ui",
         "trainOptionsForm.ui"
     ]

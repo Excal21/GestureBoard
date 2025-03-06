@@ -2,7 +2,6 @@ from time import sleep
 import cv2
 import os
 import json
-import keyboard
 
 class Recorder():
     # Kamera inicializálása
@@ -29,8 +28,8 @@ class Recorder():
         self.data = data
 
         self.cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+        self.__gesture_id = int(max(data.keys())) + 1 if len(data) > 0 else 0
         print("loaded")
-        self.__gesture_id = int(max(data.keys())) + 1 if data else 0
 
 
     def record_batch(self, gesture_name, imgcnt):
@@ -66,4 +65,6 @@ class Recorder():
 
         with open(self.settings_path, 'w', encoding='UTF-8') as f:
             json.dump(self.data, f, ensure_ascii=False, indent=4)
+
+
         

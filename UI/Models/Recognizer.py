@@ -109,8 +109,6 @@ class Recognizer:
 #endregion
 
 
-  def __Execute(self, command):
-    pass
 
 #region Vizualizáció
   def draw_landmarks_on_image(self, rgb_image, detection_result):
@@ -147,6 +145,21 @@ class Recognizer:
 
     return annotated_image
 #endregion
+
+
+  def annotateImage(self, image):
+    #img = cv2.flip(img, 1)
+    img = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+    mp_image = Image(image_format=ImageFormat.SRGB, data=img)
+
+    result = self.recognizer.recognize(mp_image)
+    annotated_image = self.draw_landmarks_on_image(mp_image.numpy_view(), result)
+    annotated_image = cv2.cvtColor(annotated_image, cv2.COLOR_BGR2RGB)
+
+    return annotated_image
+
+
+
 
   def loadGestures(self):
     with open(self.__configpath, "r") as file:

@@ -8,9 +8,10 @@ import Controllers.MainMenuController
 import Controllers.OptionsMenuController
 import Controllers.LoadingScreenController
 import Controllers.TrainMenuController
+import Controllers.NewGestureWizardController
 from Models.RecognizerHandler import *
 from Models.MediaPipeHandler import MediapipeLoader
-
+from Models.Recorder import Recorder
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "Controllers")))
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "Models")))
@@ -34,11 +35,13 @@ class MainWindow(QMainWindow):
         self.options_menu = Controllers.OptionsMenuController.OptionsMenuController(self.stacked_widget)
         self.loading_screen = Controllers.LoadingScreenController.LoadingScreenController(self.stacked_widget)
         self.teach_menu = Controllers.TrainMenuController.TrainMenuController(self.stacked_widget)
+        self.new_gesture_wizard = Controllers.NewGestureWizardController.NewGestureWizardController(self.stacked_widget)
 
         self.stacked_widget.addWidget(self.loading_screen)
         self.stacked_widget.addWidget(self.main_menu)
         self.stacked_widget.addWidget(self.options_menu)
         self.stacked_widget.addWidget(self.teach_menu)
+        self.stacked_widget.addWidget(self.new_gesture_wizard)
 
     def closeEvent(self, event):
         rl.stop()

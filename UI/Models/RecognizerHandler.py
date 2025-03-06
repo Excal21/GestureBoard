@@ -26,6 +26,9 @@ class RecognizerHandler(QThread):
             print("Recognizer loaded")
         self.finished.emit()
 
+    def annotate(self, frame):
+        return self.__recognizer.annotateImage(frame)
+
     def start(self):
         self.__recognizer.Run()
 
