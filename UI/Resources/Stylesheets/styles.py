@@ -78,6 +78,11 @@ description_style = """
             font-size: 14pt;
 """
 
+guide_style = """
+            color: rgb(36, 41, 67);
+            font-size: 14pt;
+"""
+
 long_desciption_style = """
             color: white;
             font-size: 12pt;

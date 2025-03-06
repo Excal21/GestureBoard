@@ -41,7 +41,7 @@ class MainWindow(QMainWindow):
         self.stacked_widget.addWidget(self.teach_menu)
 
     def closeEvent(self, event):
-        # rl.stop()
+        rl.stop()
         event.accept()
 
 if __name__ == "__main__":
@@ -53,13 +53,13 @@ if __name__ == "__main__":
     QApplication.processEvents()
 
 
-    # ml = MediapipeLoader()
-    # rl = RecognizerHandler.getInstance()
+    ml = MediapipeLoader()
+    rl = RecognizerHandler.getInstance()
 
-    # ml.start()
-    # ml.finished.connect(rl.load)
-    # rl.finished.connect(lambda: window.stacked_widget.setCurrentIndex(1))
-    window.stacked_widget.setCurrentIndex(1)
+    ml.start()
+    ml.finished.connect(rl.load)
+    rl.finished.connect(lambda: window.stacked_widget.setCurrentIndex(1))
+    #window.stacked_widget.setCurrentIndex(1)
 
 
     sys.exit(app.exec())

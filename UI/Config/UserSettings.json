@@ -1,1 +1,10 @@
-{}
+{
+    "1": {
+        "gesture": "Első",
+        "action": null
+    },
+    "2": {
+        "gesture": "Második",
+        "action": null
+    }
+}
