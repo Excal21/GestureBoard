@@ -41,19 +41,26 @@ class Recorder():
             os.makedirs(gesture_dir)
 
         for i in range(imgcnt):
-            # Kép közepének kivágása (320x240 pixel)
+    # Kép beolvasása
             ret, frame = self.cap.read()
-            y, x, _ = frame.shape
-            start_x = x // 2 - 160
-            start_y = y // 2 - 120
-            end_x = start_x + self.width
-            end_y = start_y + self.height
-            cropped_frame = frame[start_y:end_y, start_x:end_x]
+            if frame is not None:
+                h, w, _ = frame.shape
 
-            img_name = os.path.join(gesture_dir, f'{gesture_name}_{self.img_counter}.png')
-            cv2.imwrite(img_name, cropped_frame)
-            self.img_counter += 1
-            sleep(0.02)
+                # Kép közepének kivágása (270x170 pixel)
+                center_x, center_y = w // 2, h // 2
+                crop_width, crop_height = 270, 170
+                x1, x2 = center_x - crop_width // 2, center_x + crop_width // 2
+                y1, y2 = center_y - crop_height // 2, center_y + crop_height // 2
+
+                cropped_frame = frame[y1:y2, x1:x2].copy()  # C-contiguous hiba elkerülése miatt
+
+                # Kép mentése
+                img_name = os.path.join(gesture_dir, f'{gesture_name}_{self.img_counter}.png')
+                cv2.imwrite(img_name, cropped_frame)
+                self.img_counter += 1
+
+                # Kis késleltetés
+                sleep(0.02)
 
 
     def save(self):

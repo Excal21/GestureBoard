@@ -42,7 +42,7 @@ class Recognizer:
       self.recognizer = python.vision.GestureRecognizer.create_from_options(self.options)
 
       self.__camera = 0
-      self.__confidence = 0.7
+      self.__confidence = 0.5
       self.__stop = False
       self.__commands = {}
       self.__camerafeed = True

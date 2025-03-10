@@ -11,6 +11,7 @@ from Views.ui_trainOptionsForm import Ui_Form
 from Models.Recorder import Recorder
 import json
 import shutil
+from Models.Trainer import Trainer
 
 
 class TrainMenuController(QWidget):
@@ -31,6 +32,7 @@ class TrainMenuController(QWidget):
         self.rec = Recorder()
 
 
+#region Alapbeállítások
 
         #Kék alapú díszítősáv elrendezése
         layout = QVBoxLayout(self.ui.frameBlue)
@@ -63,7 +65,7 @@ class TrainMenuController(QWidget):
         </style>
         <body>
                 <p align='justify'>
-        Add meg a tanítást végző kiszolgáló címét és portját vagy válassz ki egy előre betanított modellt!
+        Add meg a tanítást végző kiszolgáló címét és portját, majd rögzítsd és tanítsd meg saját gesztusaidat!
                 </p>
             </body>
         </html>'''
@@ -86,7 +88,6 @@ class TrainMenuController(QWidget):
 
         
 
-#region Gombok
         #Gombok kinézete
         self.ui.btnRecord.setStyleSheet(options_button_style)
         self.ui.btnDelete.setStyleSheet(options_button_style)
@@ -108,7 +109,7 @@ class TrainMenuController(QWidget):
 
         self.ui.btnTrain.enterEvent = lambda event: self.ui.btnTrain.setStyleSheet(options_button_hover_style)
         self.ui.btnTrain.leaveEvent = lambda event: self.ui.btnTrain.setStyleSheet(options_button_style)        
-        self.ui.btnTrain.clicked.connect(lambda event: self.openTrainSubWindow())
+        self.ui.btnTrain.clicked.connect(lambda event: self.startTraining())
 
 
         #Gesztusok listája
@@ -129,6 +130,7 @@ class TrainMenuController(QWidget):
 
 #endregion
 
+#region Lista kezelése
 
     def onReturn(self):
         if self.stacked_widget.widget(3) == self:
@@ -182,6 +184,24 @@ class TrainMenuController(QWidget):
         shutil.rmtree('Data\\Samples\\' + self.selected_gesture, onerror=remove_readonly)
         self.updateList()
         self.selected_gesture = None
+
+#endregion
+
+
+#region Tanítás kezelése
+    def startTraining(self):
+        loading_page = self.stacked_widget.widget(0)
+        info_widget = loading_page.findChild(QLabel, "lblLoading")
+
+        info_widget.setText("Kérem várjon, a tanítás folyamatban van...")
+        self.stacked_widget.setCurrentIndex(0)
+        self.trainer = Trainer()
+        self.trainer.finished.connect(lambda: self.stacked_widget.setCurrentIndex(3))
+        self.trainer.progress.connect(lambda text: info_widget.setText(text))
+        self.trainer.start()
+#endregion
+
+
 
     def loadFont(self):
         font_id = QFontDatabase.addApplicationFont("Resources\\Fonts\\Ubuntu-R.ttf")

@@ -15,36 +15,19 @@ button_style = """
             font-size: 20pt;
 """
 
-button_hover_style = """
-            color:  black;
-            border: 1px solid rgb(70, 70, 70);
+button_hover_style = button_style + """
             background-color: lightgray;
-            border-radius: 10px;
-            font-size: 20pt;
 """
 
-entry_button_style = """
-            background-color: white;
-            color:  black;
-            border: 1px solid rgb(70, 70, 70);
-            border-radius: 10px;
-            font-size: 20pt;
-"""
+entry_button_style = button_style
 
-options_button_hover_style = """
-            color:  black;
-            border: 1px solid rgb(70, 70, 70);
-            background-color: lightgray;
-            border-radius: 10px;
+options_button_style = button_style + """
             font-size: 14pt;
 """
 
-options_button_style = """
-            background-color: white;
-            color:  black;
-            border: 1px solid rgb(70, 70, 70);
-            border-radius: 10px;
-            font-size: 14pt;
+options_button_hover_style = options_button_style + """
+            background-color: lightgray;
+
 """
 
 entry_label_style = """
@@ -131,11 +114,11 @@ scrollbar_style ="""
 
 train_scrollBar_style = scrollbar_style + """
         #scrollArea {
-        border: 1px solid rgb(70, 70, 70);
-        border-radius: 10px;
-        background: white;
+            border: 1px solid rgb(70, 70, 70);
+            background: white;
+            border-radius: 10px;
         }
-
+        
         #scrollAreaWidgetContents {
             border: none;
             background: transparent;

@@ -105,15 +105,16 @@ class NewGestureWizardController(QWidget):
     def train(self):
         self.rec.load()
         self.rec.cap.set(cv2.CAP_PROP_BUFFERSIZE, 1)
-        self.rec.cap.set(cv2.CAP_PROP_FPS, 30)
+        self.rec.cap.set(cv2.CAP_PROP_FPS, 60)
         print("Train meghívva")
         if self.recording_stage == 0:
             self.gesture_name = self.ui.txtinputGestureName.text()
 
             self.timer = QTimer(self)
                     # QTimer használata while True helyett
+            sleep(1)
             self.timer.timeout.connect(self.updateFrame)
-            self.timer.start(20)
+            self.timer.start(10)
             self.lblImage.hide()
             self.ui.lblCvImg.show()
             self.ui.frameNewGesture.show()
@@ -129,13 +130,13 @@ class NewGestureWizardController(QWidget):
 
         elif self.recording_stage == 1:
             print('Első rész')
-            self.rec.record_batch(self.gesture_name, 0)
+            self.rec.record_batch(self.gesture_name, 20)
             print("Első szakasz rögzítve!")
             self.ui.lblUserGuide.setText("Most picit mozdítsd el ugyanebben a pozícióban a kezed, majd nyomj szőközt a másik kezeddel!")
             self.recording_stage = 2
 
         elif self.recording_stage == 2:
-            self.rec.record_batch(self.gesture_name, 0)
+            self.rec.record_batch(self.gesture_name, 20)
             print("Második szakasz rögzítve!")
             self.rec.save()
             print("Mentve!")
