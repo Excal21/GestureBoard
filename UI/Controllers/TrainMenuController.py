@@ -72,8 +72,18 @@ class TrainMenuController(QWidget):
         self.ui.lblServer.setFixedHeight(30)
         self.ui.txtinputServer.setFixedHeight(30)
 
+
+
         server_options_layout.addWidget(self.ui.lblServer)
         server_options_layout.addWidget(self.ui.txtinputServer)
+        
+
+        self.ui.btnBack.setStyleSheet(options_button_style)
+        self.ui.btnBack.setFont(self.font)
+        self.ui.btnBack.clicked.connect(lambda event: self.stacked_widget.setCurrentIndex(2))
+        self.ui.btnBack.enterEvent = lambda event: self.ui.btnBack.setStyleSheet(options_button_hover_style)
+        self.ui.btnBack.leaveEvent = lambda event: self.ui.btnBack.setStyleSheet(options_button_style)
+
         
 
 #region Gombok
@@ -106,7 +116,8 @@ class TrainMenuController(QWidget):
         self.ui.lblGestures.setStyleSheet(train_label_style)
         self.ui.lblGestures.setFont(self.font)
 
-        self.ui.scrollArea.setStyleSheet(scrollbar_style)
+        self.ui.scrollArea.setStyleSheet(train_scrollBar_style)
+
         self.ui.scrollArea.verticalScrollBar().setContextMenuPolicy(Qt.NoContextMenu)
         self.scroll_layout.setAlignment(Qt.AlignTop)
         self.scroll_layout.setSpacing(0)

@@ -1,1 +1,43 @@
-{}
+{
+    "0": {
+        "gesture": "esfs",
+        "action": "os.system('start ca,lc')"
+    },
+    "1": {
+        "gesture": "esf",
+        "action": "os.system('start notepad')"
+    },
+    "2": {
+        "gesture": "es",
+        "action": "os.system('start cmd')"
+    },
+    "3": {
+        "gesture": "ef",
+        "action": "os.system('start chrome')"
+    },
+    "4": {
+        "gesture": "sf",
+        "action": "os.system('start firefox')"
+    },
+    "5": {
+        "gesture": "s",
+        "action": "os.system('start explorer')"
+    },
+    "6": {
+        "gesture": "e",
+        "action": "os.system('start excel')"
+    },
+    "7": {
+        "gesture": "f",
+        "action": "os.system('start firefox')"
+    },
+    "8": {
+        "gesture": "l",
+        "action": "os.system('start chrome')"
+    },
+    "9": {
+        "gesture": "c",
+        "action": "os.system('start cmd')"
+    }
+
+}
