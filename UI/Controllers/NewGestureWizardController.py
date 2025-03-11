@@ -83,7 +83,7 @@ class NewGestureWizardController(QWidget):
         self.ui.btnNameOK.setIconSize(QSize(30, 30))
         self.ui.btnNameOK.enterEvent = lambda event: self.ui.btnNameOK.setStyleSheet(options_button_hover_style)
         self.ui.btnNameOK.leaveEvent = lambda event: self.ui.btnNameOK.setStyleSheet(options_button_style)
-        self.ui.btnNameOK.clicked.connect(self.train)
+        self.ui.btnNameOK.clicked.connect(self.record)
 
         #Középre igazított usert segítő szövegdoboz
         self.ui.lblUserGuide.setStyleSheet(guide_style)
@@ -96,14 +96,14 @@ class NewGestureWizardController(QWidget):
 
         shortcut = QShortcut(Qt.Key_Space, self)
         shortcut.setContext(Qt.ApplicationShortcut)
-        shortcut.activated.connect(self.train)
+        shortcut.activated.connect(self.record)
 #endregion
 
 
 #region Record
 
-    def train(self):
-        self.rec.load()
+    def record(self):
+        self.rec.load(self.stacked_widget.widget(3).data)
         self.rec.cap.set(cv2.CAP_PROP_BUFFERSIZE, 1)
         self.rec.cap.set(cv2.CAP_PROP_FPS, 60)
         print("Train meghívva")
@@ -152,6 +152,14 @@ class NewGestureWizardController(QWidget):
             self.ui.lblCvImg.hide()
             self.timer.stop()
             self.lblImage.show()
+
+
+            self.__gesture_id = int(max(self.stacked_widget.widget(3).data.keys())) + 1 if self.stacked_widget.widget(3).data else 0
+            gesture_entry = {'gesture' : self.gesture_name, 'action' : None}
+            print(self.stacked_widget.widget(3).data)
+            self.stacked_widget.widget(3).data[str(self.__gesture_id)] = gesture_entry
+            print(self.stacked_widget.widget(3).data)
+
             self.stacked_widget.setCurrentIndex(3)
 
 

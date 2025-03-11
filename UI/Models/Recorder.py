@@ -19,12 +19,12 @@ class Recorder():
         self.cap = None
 
 
-        self.settings_path = os.path.join(os.path.dirname(__file__), '../Config/UserSettings.json')
+        #self.settings_path = os.path.join(os.path.dirname(__file__), '../Config/UserSettings.json')
 
 
-    def load(self):
-        with open(self.settings_path, encoding='UTF-8') as f:
-            data = dict(json.load(f))
+    def load(self, data):
+        # with open(self.settings_path, encoding='UTF-8') as f:
+        #     data = dict(json.load(f))
         self.data = data
 
         self.cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
@@ -61,13 +61,13 @@ class Recorder():
 
     def save(self):
         self.cap.release()
-        gesture_entry = {self.__gesture_id : {'gesture' : self.__gesture_name, 'action' : None}}
+        # gesture_entry = {self.__gesture_id : {'gesture' : self.__gesture_name, 'action' : None}}
 
-        self.data.update(gesture_entry)
+        # self.data.update(gesture_entry)
 
 
-        with open(self.settings_path, 'w', encoding='UTF-8') as f:
-            json.dump(self.data, f, ensure_ascii=False, indent=4)
+        # with open(self.settings_path, 'w', encoding='UTF-8') as f:
+        #     json.dump(self.data, f, ensure_ascii=False, indent=4)
 
 
         
