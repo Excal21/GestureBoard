@@ -2,7 +2,7 @@ from PySide6.QtCore import Qt, QThread, Signal
 import sys
 import os
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 class RecognizerHandler(QThread):
     _instance = None
@@ -23,8 +23,12 @@ class RecognizerHandler(QThread):
         if not self.__recognizer:
             from Models.Recognizer import Recognizer
             self.__recognizer = Recognizer('Models\\gesture_recognizer.task', 'Config\\UserSettings.json')
-            print("Recognizer loaded")
+            print('Recognizer loaded')
         self.finished.emit()
+
+    def reload(self):
+        self.__recognizer.reloadModel()
+        print('Reloaded')
 
     def annotate(self, frame):
         return self.__recognizer.annotateImage(frame)
@@ -37,4 +41,4 @@ class RecognizerHandler(QThread):
 
     def stop(self):
         self.__recognizer.Stop()
-        print("Recognizer stopped")
+        print('Recognizer stopped')

@@ -22,13 +22,15 @@ class Recognizer:
       self.FONT_SIZE = 1
       self.FONT_THICKNESS = 1
       self.HANDEDNESS_TEXT_COLOR = (88, 205, 54)  # vibrant green
+      self.__task_file_path = task_file_path
 
       self.mp_hands = solutions.hands
       self.mp_drawing = solutions.drawing_utils
       self.mp_drawing_styles = solutions.drawing_styles
 
+
       #Modelfájl betöltése és beállítása
-      self.model_file = open(task_file_path, "rb")
+      self.model_file = open(self.__task_file_path, "rb")
       self.model_data = self.model_file.read()
       self.model_file.close()
       self.base_options = python.BaseOptions(model_asset_buffer=self.model_data)
@@ -107,6 +109,20 @@ class Recognizer:
     self.__error = value
 
 #endregion
+
+  def reloadModel(self):
+      self.model_file = open(self.__task_file_path, "rb")
+      self.model_data = self.model_file.read()
+      self.model_file.close()
+      self.base_options = python.BaseOptions(model_asset_buffer=self.model_data)
+
+      self.options = python.vision.GestureRecognizerOptions(
+          base_options=self.base_options,
+          min_tracking_confidence=0.7,
+          
+          num_hands=4
+          )
+      self.recognizer = python.vision.GestureRecognizer.create_from_options(self.options)
 
 
 

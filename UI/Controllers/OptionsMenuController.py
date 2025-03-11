@@ -18,6 +18,8 @@ class OptionsMenuController(QWidget):
         super().__init__()
         self.setAttribute(Qt.WA_TranslucentBackground)
         self.stacked_widget = stacked_widget
+        self.stacked_widget.currentChanged.connect(self.load_entries)
+
 
         self.ui = Ui_OptionsForm()
         self.ui.setupUi(self)
@@ -81,6 +83,8 @@ class OptionsMenuController(QWidget):
         self.loadComboMenu()
         self.ui.scrollCombo.hide()
 
+#region JSON betöltés
+
     def load_entries(self):
         config_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "Config", "UserSettings.json"))
         with open(config_path, "r", encoding="utf-8") as file:
@@ -88,6 +92,11 @@ class OptionsMenuController(QWidget):
 
 
         print('UserSettings JSON loaded')
+        while self.scroll_layout.count():
+            child = self.scroll_layout.takeAt(0)
+            if child.widget():
+                child.widget().deleteLater()
+
         for key, entry in data.items():
 
             gesture_entry = QWidget()
@@ -141,7 +150,9 @@ class OptionsMenuController(QWidget):
         
         self.scroll_layout.addStretch()
 
+#endregion
 
+#region Előtanított műveletek
     def loadComboMenu(self):
         self.ui.scrollCombo.setParent(self.ui.frameButtons)
         combo_layout = QVBoxLayout(self.ui.scrollComboWidgetContents)
@@ -166,6 +177,10 @@ class OptionsMenuController(QWidget):
 
         combo_layout.setContentsMargins(0, 30, 0, 30)
         combo_layout.addStretch()
+
+#endregion
+
+#region Mentés, reset, stb.
 
     def showSubSelection(self, JSONkey):
         self.clicked = JSONkey

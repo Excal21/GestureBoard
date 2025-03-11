@@ -1,10 +1,1 @@
-{
-    "0": {
-        "gesture": "Okaly",
-        "action": "os.system('start calc')"
-    },
-    "1": {
-        "gesture": "Like",
-        "action": "os.system('start http://www.google.com')"
-    }
-}
+{}

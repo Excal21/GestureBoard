@@ -30,7 +30,7 @@ class TrainMenuController(QWidget):
         self.__cap = None
         self.selected_gesture = None
         self.rec = Recorder()
-
+        self.data = None
 
 #region Alapbeállítások
 
@@ -87,6 +87,11 @@ class TrainMenuController(QWidget):
         self.ui.btnBack.leaveEvent = lambda event: self.ui.btnBack.setStyleSheet(options_button_style)
 
         
+        self.ui.btnSave.setStyleSheet(options_button_style)
+        self.ui.btnSave.setFont(self.font)
+        self.ui.btnSave.clicked.connect(self.save)
+        self.ui.btnSave.enterEvent = lambda event: self.ui.btnSave.setStyleSheet(options_button_hover_style)
+        self.ui.btnSave.leaveEvent = lambda event: self.ui.btnSave.setStyleSheet(options_button_style)
 
         #Gombok kinézete
         self.ui.btnRecord.setStyleSheet(options_button_style)
@@ -135,17 +140,20 @@ class TrainMenuController(QWidget):
     def onReturn(self):
         if self.stacked_widget.widget(3) == self:
             print("Gesztusok frissítve")
+            self.data = None
             self.updateList()
 
     def updateList(self):
+        if self.data is None:
+            with open('Config\\UserSettings.json', 'r', encoding="UTF-8") as f:
+                self.data = dict(json.load(f))
+
         while self.scroll_layout.count():
             child = self.scroll_layout.takeAt(0)
             if child.widget():
                 child.widget().deleteLater()
-        with open('Config\\UserSettings.json', 'r', encoding="UTF-8") as f:
-            data = dict(json.load(f))
-        if len(data) > 0:
-            for key, value in data.items():
+        if len(self.data) > 0:
+            for key, value in self.data.items():
                 entry = QPushButton(value['gesture'])
                 entry.setStyleSheet(predefined_label_style)
                 entry.setFont(self.font)
@@ -169,24 +177,26 @@ class TrainMenuController(QWidget):
             self.selected_gesture = None
         
     def delete(self):
+        if self.selected_gesture != None:
+            self.data.pop(self.selected_gesture)
+
+        self.updateList()
+        self.selected_gesture = None
+
+    def save(self):
         def remove_readonly(func, path, _):
             import stat
             os.chmod(path, stat.S_IWRITE)  # Eltávolítja az írásvédettséget
             func(path)
 
-        if self.selected_gesture != None:
-            with open('Config\\UserSettings.json', 'r', encoding="UTF-8") as f:
-                data = dict(json.load(f))
-            data.pop(self.selected_gesture)
-            with open('Config\\UserSettings.json', 'w', encoding="UTF-8") as f:
-                json.dump(data, f, ensure_ascii=False, indent=4)
+        with open('Config\\UserSettings.json', 'w', encoding="UTF-8") as f:
+            json.dump(self.data, f, ensure_ascii=False, indent=4)
 
-        shutil.rmtree('Data\\Samples\\' + self.selected_gesture, onerror=remove_readonly)
-        self.updateList()
-        self.selected_gesture = None
+        for key in os.listdir('Data\\Samples'):
+            if key not in self.data.keys():
+                shutil.rmtree('Data\\Samples\\' + key, onerror=remove_readonly)
 
 #endregion
-
 
 #region Tanítás kezelése
     def startTraining(self):
@@ -199,6 +209,7 @@ class TrainMenuController(QWidget):
         self.trainer.finished.connect(lambda: self.stacked_widget.setCurrentIndex(3))
         self.trainer.progress.connect(lambda text: info_widget.setText(text))
         self.trainer.start()
+        
 #endregion
 
 

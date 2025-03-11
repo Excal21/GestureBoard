@@ -13,18 +13,18 @@ from Models.RecognizerHandler import *
 from Models.MediaPipeHandler import MediapipeLoader
 from Models.Recorder import Recorder
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "Controllers")))
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "Models")))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'Controllers')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'Models')))
 
 
 
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("GestureBoard")
+        self.setWindowTitle('GestureBoard')
         # self.setGeometry(100, 100, 800, 410)
         self.setFixedSize(800, 410)
-        self.setStyleSheet("background-color: white;")  # Alap háttérszín
+        self.setStyleSheet('background-color: white;')  # Alap háttérszín
 
         # QStackedWidget létrehozása
         self.stacked_widget = QStackedWidget()
@@ -47,7 +47,7 @@ class MainWindow(QMainWindow):
         rl.stop()
         event.accept()
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     app = QApplication(sys.argv)
   
 
@@ -62,7 +62,7 @@ if __name__ == "__main__":
     ml.start()
     ml.finished.connect(rl.load)
     rl.finished.connect(lambda: window.stacked_widget.setCurrentIndex(1))
-    #window.stacked_widget.setCurrentIndex(1)
+    # window.stacked_widget.setCurrentIndex(1)
 
 
     sys.exit(app.exec())

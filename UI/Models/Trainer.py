@@ -4,6 +4,7 @@ from shutil import make_archive
 from time import sleep
 import requests
 from PySide6.QtCore import QThread, Signal
+from Models.RecognizerHandler import RecognizerHandler
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "Data")))
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "Models")))
@@ -49,6 +50,7 @@ class Trainer(QThread):
             if response.status_code == 200:
                 with open('Models\\gesture_recognizer.task', 'wb') as f:
                     f.write(response.content)
+                RecognizerHandler.getInstance().reload()
                 self.progress.emit('Modell elmentve')
             else:
                 self.progress.emit('Hiba történt a modell letöltése közben')

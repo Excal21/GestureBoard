@@ -29,7 +29,7 @@ class Recorder():
 
         self.cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
         self.__gesture_id = int(max(data.keys())) + 1 if len(data) > 0 else 0
-        print("loaded")
+        print('loaded')
 
 
     def record_batch(self, gesture_name, imgcnt):
@@ -41,25 +41,21 @@ class Recorder():
             os.makedirs(gesture_dir)
 
         for i in range(imgcnt):
-    # Kép beolvasása
             ret, frame = self.cap.read()
             if frame is not None:
                 h, w, _ = frame.shape
 
-                # Kép közepének kivágása (270x170 pixel)
                 center_x, center_y = w // 2, h // 2
-                crop_width, crop_height = 270, 170
+                crop_width, crop_height = 500, 300
                 x1, x2 = center_x - crop_width // 2, center_x + crop_width // 2
                 y1, y2 = center_y - crop_height // 2, center_y + crop_height // 2
 
                 cropped_frame = frame[y1:y2, x1:x2].copy()  # C-contiguous hiba elkerülése miatt
 
-                # Kép mentése
                 img_name = os.path.join(gesture_dir, f'{gesture_name}_{self.img_counter}.png')
                 cv2.imwrite(img_name, cropped_frame)
                 self.img_counter += 1
 
-                # Kis késleltetés
                 sleep(0.02)
 
 

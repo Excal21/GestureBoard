@@ -163,18 +163,23 @@ class NewGestureWizardController(QWidget):
         if frame is not None:
             h, w, _ = frame.shape
 
+            crop_width, crop_height = 500, 300
+            resize_width, resize_height = 270, 170
+
             center_x, center_y = w // 2, h // 2
-            crop_width, crop_height = 270, 170
+
             x1, x2 = center_x - crop_width // 2, center_x + crop_width // 2
             y1, y2 = center_y - crop_height // 2, center_y + crop_height // 2
 
-            frame = frame[y1:y2, x1:x2].copy() #C-contiguous hiba miatt kell!!!
+            cropped_frame = frame[y1:y2, x1:x2].copy()  # C-contiguous hiba elkerülése miatt
 
-            h, w, ch = frame.shape
+            resized_frame = cv2.resize(cropped_frame, (resize_width, resize_height), interpolation=cv2.INTER_AREA)
+
+            h, w, ch = resized_frame.shape
             bytes_per_line = ch * w
-            q_image = QImage(frame.data, w, h, bytes_per_line, QImage.Format_RGB888).rgbSwapped()
-            self.ui.lblCvImg.setPixmap(QPixmap.fromImage(q_image))
+            q_image = QImage(resized_frame.data, w, h, bytes_per_line, QImage.Format_RGB888).rgbSwapped()
 
+            self.ui.lblCvImg.setPixmap(QPixmap.fromImage(q_image))
 
 
 #endregion
