@@ -75,10 +75,7 @@ class Ui_Form(object):
         self.scrollArea.raise_()
         self.btnBack = QPushButton(Form)
         self.btnBack.setObjectName(u"btnBack")
-        self.btnBack.setGeometry(QRect(520, 340, 120, 40))
-        self.btnSave = QPushButton(Form)
-        self.btnSave.setObjectName(u"btnSave")
-        self.btnSave.setGeometry(QRect(650, 340, 120, 40))
+        self.btnBack.setGeometry(QRect(650, 340, 120, 40))
 
         self.retranslateUi(Form)
 
@@ -95,6 +92,5 @@ class Ui_Form(object):
         self.btnDelete.setText(QCoreApplication.translate("Form", u"Gesztus t\u00f6rl\u00e9se", None))
         self.lblGestures.setText(QCoreApplication.translate("Form", u"Gesztusok:", None))
         self.btnBack.setText(QCoreApplication.translate("Form", u"Vissza", None))
-        self.btnSave.setText(QCoreApplication.translate("Form", u"Ment\u00e9s", None))
     # retranslateUi
 

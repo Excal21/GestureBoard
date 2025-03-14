@@ -1,5 +1,6 @@
 {
     "Böngésző elindítása": "os.system('start http://www.google.com')",
     "Képernyőkép készítése": "os.screenshot()",
-    "Számológép indítása": "os.system('start calc')"
+    "Számológép indítása": "os.system('start calc')",
+    "Gmail megnyitása": "os.system('start http://www.gmail.com')"
 }

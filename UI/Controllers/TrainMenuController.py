@@ -87,11 +87,11 @@ class TrainMenuController(QWidget):
         self.ui.btnBack.leaveEvent = lambda event: self.ui.btnBack.setStyleSheet(options_button_style)
 
         
-        self.ui.btnSave.setStyleSheet(options_button_style)
-        self.ui.btnSave.setFont(self.font)
-        self.ui.btnSave.clicked.connect(self.save)
-        self.ui.btnSave.enterEvent = lambda event: self.ui.btnSave.setStyleSheet(options_button_hover_style)
-        self.ui.btnSave.leaveEvent = lambda event: self.ui.btnSave.setStyleSheet(options_button_style)
+        # self.ui.btnSave.setStyleSheet(options_button_style)
+        # self.ui.btnSave.setFont(self.font)
+        # self.ui.btnSave.clicked.connect(self.save)
+        # self.ui.btnSave.enterEvent = lambda event: self.ui.btnSave.setStyleSheet(options_button_hover_style)
+        # self.ui.btnSave.leaveEvent = lambda event: self.ui.btnSave.setStyleSheet(options_button_style)
 
         #Gombok kinézete
         self.ui.btnRecord.setStyleSheet(options_button_style)
@@ -139,15 +139,15 @@ class TrainMenuController(QWidget):
 
     def onReturn(self):
         if self.stacked_widget.widget(3) == self:
-            print("Gesztusok frissítve")
+            print('Gesztusok frissítve')
             if self.data is None:
-                with open('Config\\UserSettings.json', 'r', encoding="UTF-8") as f:
+                with open('Config\\UserSettings.json', 'r', encoding='UTF-8') as f:
                     self.data = dict(json.load(f))
             self.updateList()
 
     def updateList(self):
         if self.data is None:
-            with open('Config\\UserSettings.json', 'r', encoding="UTF-8") as f:
+            with open('Config\\UserSettings.json', 'r', encoding='UTF-8') as f:
                 self.data = dict(json.load(f))
         print('listaadat: ', self.data)
 
@@ -192,8 +192,9 @@ class TrainMenuController(QWidget):
             os.chmod(path, stat.S_IWRITE)  # Eltávolítja az írásvédettséget
             func(path)
 
-        with open('Config\\UserSettings.json', 'w', encoding="UTF-8") as f:
+        with open('Config\\UserSettings.json', 'w', encoding='UTF-8') as f:
             json.dump(self.data, f, ensure_ascii=False, indent=4)
+        print('JSON dumped')
 
         for key in os.listdir('Data\\Samples'):
             if key not in self.data.keys():
@@ -204,31 +205,37 @@ class TrainMenuController(QWidget):
 #region Tanítás kezelése
     def startTraining(self):
         loading_page = self.stacked_widget.widget(0)
-        info_widget = loading_page.findChild(QLabel, "lblLoading")
+        info_widget = loading_page.findChild(QLabel, 'lblLoading')
 
-        info_widget.setText("Kérem várjon, a tanítás folyamatban van...")
+        info_widget.setText('Várakozás a kiszolgálóra...')
         self.stacked_widget.setCurrentIndex(0)
         self.trainer = Trainer()
-        self.trainer.finished.connect(lambda: self.stacked_widget.setCurrentIndex(3))
+        self.trainer.finished.connect(self.finishTraining)
         self.trainer.progress.connect(lambda text: info_widget.setText(text))
         self.trainer.start()
         
+
+    def finishTraining(self):
+        self.stacked_widget.setCurrentIndex(3)
+        self.updateList()
+        self.save()
+
 #endregion
 
 
 
     def loadFont(self):
-        font_id = QFontDatabase.addApplicationFont("Resources\\Fonts\\Ubuntu-R.ttf")
+        font_id = QFontDatabase.addApplicationFont('Resources\\Fonts\\Ubuntu-R.ttf')
         if font_id != -1:
             font_family = QFontDatabase.applicationFontFamilies(font_id)[0]
             self.font = QFont(font_family, 16)
             self.ui.lblTitle.setFont(self.font)
             self.ui.lblDescription.setFont(self.font)
         else:
-            print("Hiba: Nem sikerült betölteni az Ubuntu fontot!")
+            print('Hiba: Nem sikerült betölteni az Ubuntu fontot!')
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     app = QApplication(sys.argv)
     window = TrainMenuController()
     window.show()

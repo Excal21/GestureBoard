@@ -9,6 +9,8 @@ import Controllers.OptionsMenuController
 import Controllers.LoadingScreenController
 import Controllers.TrainMenuController
 import Controllers.NewGestureWizardController
+
+import Controllers.CameraOptionsController
 from Models.RecognizerHandler import *
 from Models.MediaPipeHandler import MediapipeLoader
 from Models.Recorder import Recorder
@@ -36,12 +38,14 @@ class MainWindow(QMainWindow):
         self.loading_screen = Controllers.LoadingScreenController.LoadingScreenController(self.stacked_widget)
         self.teach_menu = Controllers.TrainMenuController.TrainMenuController(self.stacked_widget)
         self.new_gesture_wizard = Controllers.NewGestureWizardController.NewGestureWizardController(self.stacked_widget)
+        self.camera_options = Controllers.CameraOptionsController.CameraOptionsController(self.stacked_widget)
 
         self.stacked_widget.addWidget(self.loading_screen)
         self.stacked_widget.addWidget(self.main_menu)
         self.stacked_widget.addWidget(self.options_menu)
         self.stacked_widget.addWidget(self.teach_menu)
         self.stacked_widget.addWidget(self.new_gesture_wizard)
+        self.stacked_widget.addWidget(self.camera_options)
 
     def closeEvent(self, event):
         rl.stop()
@@ -59,10 +63,10 @@ if __name__ == '__main__':
     ml = MediapipeLoader()
     rl = RecognizerHandler.getInstance()
 
-    ml.start()
-    ml.finished.connect(rl.load)
-    rl.finished.connect(lambda: window.stacked_widget.setCurrentIndex(1))
-    # window.stacked_widget.setCurrentIndex(1)
+    # ml.start()
+    # ml.finished.connect(rl.load)
+    # rl.finished.connect(lambda: window.stacked_widget.setCurrentIndex(1))
+    window.stacked_widget.setCurrentIndex(1)
 
 
     sys.exit(app.exec())

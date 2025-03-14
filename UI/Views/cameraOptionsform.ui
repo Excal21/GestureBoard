@@ -73,43 +73,30 @@
    <property name="frameShadow">
     <enum>QFrame::Shadow::Raised</enum>
    </property>
-   <widget class="QLabel" name="lblServer">
+   <widget class="QLabel" name="lblCamera">
     <property name="geometry">
      <rect>
       <x>40</x>
-      <y>30</y>
+      <y>40</y>
       <width>161</width>
-      <height>20</height>
+      <height>30</height>
      </rect>
     </property>
     <property name="text">
-     <string>Kiszolgáló címe</string>
+     <string>Kamera:</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="txtinputServer">
+   <widget class="QLineEdit" name="txtInputCamera">
     <property name="geometry">
      <rect>
       <x>220</x>
-      <y>30</y>
+      <y>40</y>
       <width>271</width>
-      <height>21</height>
+      <height>30</height>
      </rect>
     </property>
    </widget>
-   <widget class="QPushButton" name="btnRecord">
-    <property name="geometry">
-     <rect>
-      <x>30</x>
-      <y>130</y>
-      <width>171</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Gesztus felvétele</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="btnTrain">
+   <widget class="QPushButton" name="btnStartCam">
     <property name="geometry">
      <rect>
       <x>30</x>
@@ -119,78 +106,48 @@
      </rect>
     </property>
     <property name="text">
-     <string>Gesztusok tanítása</string>
+     <string>Kamerateszt</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="btnDelete">
+   <widget class="QPushButton" name="btnBack">
     <property name="geometry">
      <rect>
-      <x>30</x>
-      <y>200</y>
-      <width>171</width>
-      <height>41</height>
+      <x>360</x>
+      <y>340</y>
+      <width>120</width>
+      <height>40</height>
      </rect>
     </property>
     <property name="text">
-     <string>Gesztus törlése</string>
+     <string>Vissza</string>
     </property>
    </widget>
-   <widget class="QScrollArea" name="scrollArea">
+   <widget class="QSlider" name="sliderHue">
     <property name="geometry">
      <rect>
-      <x>223</x>
-      <y>130</y>
+      <x>220</x>
+      <y>95</y>
       <width>271</width>
-      <height>181</height>
+      <height>31</height>
      </rect>
     </property>
-    <property name="widgetResizable">
-     <bool>true</bool>
+    <property name="orientation">
+     <enum>Qt::Orientation::Horizontal</enum>
     </property>
-    <widget class="QWidget" name="scrollAreaWidgetContents">
-     <property name="geometry">
-      <rect>
-       <x>0</x>
-       <y>0</y>
-       <width>269</width>
-       <height>179</height>
-      </rect>
-     </property>
-    </widget>
    </widget>
-   <widget class="QLabel" name="lblGestures">
+   <widget class="QLabel" name="lblHue">
     <property name="geometry">
      <rect>
-      <x>230</x>
+      <x>40</x>
       <y>90</y>
-      <width>251</width>
-      <height>41</height>
+      <width>161</width>
+      <height>30</height>
      </rect>
     </property>
     <property name="text">
-     <string>Gesztusok:</string>
+     <string>Hue eltolás</string>
     </property>
    </widget>
-   <zorder>lblServer</zorder>
-   <zorder>txtinputServer</zorder>
-   <zorder>btnRecord</zorder>
-   <zorder>btnTrain</zorder>
-   <zorder>btnDelete</zorder>
-   <zorder>lblGestures</zorder>
-   <zorder>scrollArea</zorder>
-  </widget>
-  <widget class="QPushButton" name="btnBack">
-   <property name="geometry">
-    <rect>
-     <x>650</x>
-     <y>340</y>
-     <width>120</width>
-     <height>40</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Vissza</string>
-   </property>
   </widget>
  </widget>
  <resources/>

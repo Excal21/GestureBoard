@@ -151,7 +151,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Leírás</string>
+     <string/>
     </property>
     <property name="wordWrap">
      <bool>true</bool>

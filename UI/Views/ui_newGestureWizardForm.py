@@ -79,6 +79,6 @@ class Ui_Form(object):
         self.btnNameOK.setText("")
         self.lblCvImg.setText(QCoreApplication.translate("Form", u"TextLabel", None))
         self.lblTitle.setText(QCoreApplication.translate("Form", u"GestureBoard", None))
-        self.lblDescription.setText(QCoreApplication.translate("Form", u"Le\u00edr\u00e1s", None))
+        self.lblDescription.setText("")
     # retranslateUi
 

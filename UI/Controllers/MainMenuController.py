@@ -8,8 +8,8 @@ from Resources.Stylesheets.styles import *
 from Views.ui_mainMenuForm import Ui_MainWindow
 from Models.RecognizerHandler import *
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "Views")))
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "Resources", "Stylesheets")))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'Views')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'Resources', 'Stylesheets')))
 
 class MainMenuController(QWidget):
     def __init__(self, stacked_widget):
@@ -23,7 +23,7 @@ class MainMenuController(QWidget):
 
         self.recognizer_active = False
 
-        font_id = QFontDatabase.addApplicationFont("Resources\\Fonts\\Ubuntu-R.ttf")
+        font_id = QFontDatabase.addApplicationFont('Resources\\Fonts\\Ubuntu-R.ttf')
         if font_id != -1:
             font_family = QFontDatabase.applicationFontFamilies(font_id)[0]
             font = QFont(font_family, 16)
@@ -32,7 +32,7 @@ class MainMenuController(QWidget):
             self.ui.btnCameraOptions.setFont(font)
             self.ui.lblTitle.setFont(font)
         else:
-            print("Hiba: Nem sikerült betölteni az Ubuntu fontot!")
+            print('Hiba: Nem sikerült betölteni az Ubuntu fontot!')
 
 
         #Kék alapú díszítősáv elrendezése
@@ -83,22 +83,23 @@ class MainMenuController(QWidget):
 
         self.ui.btnCameraOptions.enterEvent = lambda event: self.ui.btnCameraOptions.setStyleSheet(button_hover_style)
         self.ui.btnCameraOptions.leaveEvent = lambda event: self.ui.btnCameraOptions.setStyleSheet(button_style)
+        self.ui.btnCameraOptions.clicked.connect(lambda event: self.stacked_widget.setCurrentIndex(5))
 
 
     def show_options(self):
-        """Váltás a Beállítások oldalra."""
+        '''Váltás a Beállítások oldalra.'''
         self.stacked_widget.setCurrentIndex(2)
 
 
     def start(self):
         if not self.recognizer_active:
             self.recognizer_active = True
-            self.ui.btnStart.setText("Gesztusvezérlés kikapcsolása")
+            self.ui.btnStart.setText('Gesztusvezérlés kikapcsolása')
             self.ui.btnOptions.setEnabled(False)
             self.recognizer.setCamera(0)
             self.recognizer.start()
         else:
             self.recognizer_active = False
             self.recognizer.stop()
-            self.ui.btnStart.setText("Gesztusvezérlés indítása")
+            self.ui.btnStart.setText('Gesztusvezérlés indítása')
             self.ui.btnOptions.setEnabled(True)

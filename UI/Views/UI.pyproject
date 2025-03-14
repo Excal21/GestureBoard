@@ -1,5 +1,6 @@
 {
     "files": [
+        "cameraOptionsForm.ui",
         "loadingForm.ui",
         "main.py",
         "mainMenuForm.ui",
