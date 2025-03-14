@@ -3,7 +3,7 @@ import sys
 
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QApplication
-from PySide6.QtGui import QFontDatabase, QFont, QMovie, QPixmap, QShortcut, QIcon, QImage
+from PySide6.QtGui import QFontDatabase, QFont, QMovie, QPixmap, QShortcut, QIcon, QImage, QRegion, QPainterPath
 from PySide6.QtCore import QThread, Signal, QSize, QTimer
 from time import sleep
 from Resources.Stylesheets.styles import *
@@ -61,8 +61,7 @@ class NewGestureWizardController(QWidget):
         self.ui.frameNewGesture_layout.addWidget(self.lblImage, alignment=Qt.AlignCenter)
         self.ui.frameNewGesture_layout.addWidget(self.ui.lblCvImg, alignment=Qt.AlignCenter)
         self.lblImage.setPixmap(QPixmap(os.path.join(os.path.dirname(__file__), '..', 'Resources', 'Icons', 'hand.png')).scaled(100, 100, Qt.KeepAspectRatio))
-        self.ui.lblCvImg.setContentsMargins(0, 15, 0, 15)
-        self.ui.lblCvImg.setFixedHeight(200)
+        self.ui.lblCvImg.setStyleSheet(camera_label_style)
         self.ui.lblCvImg.hide()
 
         #Geszuts neve input mező
@@ -79,7 +78,7 @@ class NewGestureWizardController(QWidget):
         vertical_layout.addWidget(self.ui.txtinputGestureName, alignment=Qt.AlignCenter)
         vertical_layout.addWidget(self.ui.btnNameOK, alignment=Qt.AlignCenter)
 
-        self.ui.btnNameOK.setIcon(QIcon("Resources\\Icons\\check.png"))
+        self.ui.btnNameOK.setIcon(QIcon('Resources\\Icons\\check.png'))
         self.ui.btnNameOK.setIconSize(QSize(30, 30))
         self.ui.btnNameOK.enterEvent = lambda event: self.ui.btnNameOK.setStyleSheet(options_button_hover_style)
         self.ui.btnNameOK.leaveEvent = lambda event: self.ui.btnNameOK.setStyleSheet(options_button_style)
@@ -89,7 +88,7 @@ class NewGestureWizardController(QWidget):
         self.ui.lblUserGuide.setStyleSheet(guide_style)
         self.ui.lblUserGuide.setAlignment(Qt.AlignCenter) 
         self.ui.lblUserGuide.setFont(self.font)
-        self.ui.lblUserGuide.setText("")
+        self.ui.lblUserGuide.setText('')
 
         self.ui.frameNewGesture_layout.addWidget(self.ui.lblUserGuide, alignment=Qt.AlignCenter)
         self.ui.frameNewGesture_layout.addStretch()
@@ -106,7 +105,7 @@ class NewGestureWizardController(QWidget):
         self.rec.load(self.stacked_widget.widget(3).data)
         self.rec.cap.set(cv2.CAP_PROP_BUFFERSIZE, 1)
         self.rec.cap.set(cv2.CAP_PROP_FPS, 60)
-        print("Train meghívva")
+        print('Train meghívva')
         if self.recording_stage == 0:
             self.gesture_name = self.ui.txtinputGestureName.text()
 
@@ -124,26 +123,26 @@ class NewGestureWizardController(QWidget):
             self.lblImage.hide()
 
             self.ui.lblUserGuide.show()
-            self.ui.lblUserGuide.setText("Tartsd a kezed a kívánt gesztus pozíciójában, majd nyomj szőközt a másik kezeddel!")
+            self.ui.lblUserGuide.setText('Tartsd a kezed a kívánt gesztus pozíciójában, majd nyomj szőközt a másik kezeddel!')
             self.recording_stage = 1
-            print("Elindítva!")
+            print('Elindítva!')
 
         elif self.recording_stage == 1:
             print('Első rész')
             self.rec.record_batch(self.gesture_name, 20)
-            print("Első szakasz rögzítve!")
-            self.ui.lblUserGuide.setText("Most picit mozdítsd el ugyanebben a pozícióban a kezed, majd nyomj szőközt a másik kezeddel!")
+            print('Első szakasz rögzítve!')
+            self.ui.lblUserGuide.setText('Most picit mozdítsd el ugyanebben a pozícióban a kezed, majd nyomj szőközt a másik kezeddel!')
             self.recording_stage = 2
 
         elif self.recording_stage == 2:
             self.rec.record_batch(self.gesture_name, 20)
-            print("Második szakasz rögzítve!")
-            self.rec.save()
-            print("Mentve!")
+            print('Második szakasz rögzítve!')
+            self.rec.release()
+            print('Mentve!')
             self.recording_stage = 0
-            self.ui.lblUserGuide.setText("A gesztus sikeresen rögzítve!")
+            self.ui.lblUserGuide.setText('A gesztus sikeresen rögzítve!')
             sleep(2)
-            self.ui.lblUserGuide.setText("")
+            self.ui.lblUserGuide.setText('')
             self.ui.lblUserGuide.hide()
             
             self.ui.lblGestureInputLabel.show()
@@ -187,6 +186,14 @@ class NewGestureWizardController(QWidget):
             bytes_per_line = ch * w
             q_image = QImage(resized_frame.data, w, h, bytes_per_line, QImage.Format_RGB888).rgbSwapped()
 
+
+            path = QPainterPath()
+            radius = 10
+            path.addRoundedRect(0, 0, self.ui.lblCvImg.width(), self.ui.lblCvImg.height(), radius, radius)
+            region = QRegion(path.toFillPolygon().toPolygon())
+
+
+            self.ui.lblCvImg.setMask(region)
             self.ui.lblCvImg.setPixmap(QPixmap.fromImage(q_image))
 
 
@@ -194,11 +201,11 @@ class NewGestureWizardController(QWidget):
 
 
     def loadFont(self):
-        font_id = QFontDatabase.addApplicationFont("Resources\\Fonts\\Ubuntu-R.ttf")
+        font_id = QFontDatabase.addApplicationFont('Resources\\Fonts\\Ubuntu-R.ttf')
         if font_id != -1:
             font_family = QFontDatabase.applicationFontFamilies(font_id)[0]
             self.font = QFont(font_family, 16)
             self.ui.lblTitle.setFont(self.font)
             self.ui.lblDescription.setFont(self.font)
         else:
-            print("Hiba: Nem sikerült betölteni az Ubuntu fontot!")
+            print('Hiba: Nem sikerült betölteni az Ubuntu fontot!')

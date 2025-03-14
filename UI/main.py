@@ -63,10 +63,10 @@ if __name__ == '__main__':
     ml = MediapipeLoader()
     rl = RecognizerHandler.getInstance()
 
-    # ml.start()
-    # ml.finished.connect(rl.load)
-    # rl.finished.connect(lambda: window.stacked_widget.setCurrentIndex(1))
-    window.stacked_widget.setCurrentIndex(1)
+    ml.start()
+    ml.finished.connect(rl.load)
+    rl.finished.connect(lambda: window.stacked_widget.setCurrentIndex(1))
+    #window.stacked_widget.setCurrentIndex(1)
 
 
     sys.exit(app.exec())

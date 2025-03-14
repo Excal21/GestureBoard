@@ -16,7 +16,8 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QFrame, QLabel, QLineEdit,
-    QPushButton, QSizePolicy, QSlider, QWidget)
+    QPushButton, QSizePolicy, QSlider, QSpinBox,
+    QWidget)
 
 class Ui_Form(object):
     def setupUi(self, Form):
@@ -33,8 +34,11 @@ class Ui_Form(object):
         self.lblTitle.setGeometry(QRect(0, 20, 240, 50))
         self.lblDescription = QLabel(self.frameBlue)
         self.lblDescription.setObjectName(u"lblDescription")
-        self.lblDescription.setGeometry(QRect(20, 90, 231, 241))
+        self.lblDescription.setGeometry(QRect(20, 250, 231, 101))
         self.lblDescription.setWordWrap(True)
+        self.lblCvImg = QLabel(self.frameBlue)
+        self.lblCvImg.setObjectName(u"lblCvImg")
+        self.lblCvImg.setGeometry(QRect(20, 100, 241, 141))
         self.frameButtons = QFrame(Form)
         self.frameButtons.setObjectName(u"frameButtons")
         self.frameButtons.setGeometry(QRect(280, 0, 520, 410))
@@ -48,7 +52,7 @@ class Ui_Form(object):
         self.txtInputCamera.setGeometry(QRect(220, 40, 271, 30))
         self.btnStartCam = QPushButton(self.frameButtons)
         self.btnStartCam.setObjectName(u"btnStartCam")
-        self.btnStartCam.setGeometry(QRect(30, 270, 171, 41))
+        self.btnStartCam.setGeometry(QRect(30, 140, 171, 41))
         self.btnBack = QPushButton(self.frameButtons)
         self.btnBack.setObjectName(u"btnBack")
         self.btnBack.setGeometry(QRect(360, 340, 120, 40))
@@ -59,6 +63,24 @@ class Ui_Form(object):
         self.lblHue = QLabel(self.frameButtons)
         self.lblHue.setObjectName(u"lblHue")
         self.lblHue.setGeometry(QRect(40, 90, 161, 30))
+        self.lblFrameCnt = QLabel(self.frameButtons)
+        self.lblFrameCnt.setObjectName(u"lblFrameCnt")
+        self.lblFrameCnt.setGeometry(QRect(40, 250, 301, 30))
+        self.lblDelay = QLabel(self.frameButtons)
+        self.lblDelay.setObjectName(u"lblDelay")
+        self.lblDelay.setGeometry(QRect(40, 290, 341, 30))
+        self.lblConfidence = QLabel(self.frameButtons)
+        self.lblConfidence.setObjectName(u"lblConfidence")
+        self.lblConfidence.setGeometry(QRect(40, 210, 191, 30))
+        self.spinConfidence = QSpinBox(self.frameButtons)
+        self.spinConfidence.setObjectName(u"spinConfidence")
+        self.spinConfidence.setGeometry(QRect(360, 210, 42, 31))
+        self.spinFrameCnt = QSpinBox(self.frameButtons)
+        self.spinFrameCnt.setObjectName(u"spinFrameCnt")
+        self.spinFrameCnt.setGeometry(QRect(360, 250, 42, 31))
+        self.spinDelay = QSpinBox(self.frameButtons)
+        self.spinDelay.setObjectName(u"spinDelay")
+        self.spinDelay.setGeometry(QRect(360, 290, 42, 31))
 
         self.retranslateUi(Form)
 
@@ -69,9 +91,13 @@ class Ui_Form(object):
         Form.setWindowTitle(QCoreApplication.translate("Form", u"Form", None))
         self.lblTitle.setText(QCoreApplication.translate("Form", u"GestureBoard", None))
         self.lblDescription.setText(QCoreApplication.translate("Form", u"Le\u00edr\u00e1s", None))
+        self.lblCvImg.setText(QCoreApplication.translate("Form", u"TextLabel", None))
         self.lblCamera.setText(QCoreApplication.translate("Form", u"Kamera:", None))
         self.btnStartCam.setText(QCoreApplication.translate("Form", u"Kamerateszt", None))
         self.btnBack.setText(QCoreApplication.translate("Form", u"Vissza", None))
         self.lblHue.setText(QCoreApplication.translate("Form", u"Hue eltol\u00e1s", None))
+        self.lblFrameCnt.setText(QCoreApplication.translate("Form", u"K\u00e9pkocka gesztusonk\u00e9nt", None))
+        self.lblDelay.setText(QCoreApplication.translate("Form", u"Sz\u00fcnet gesztusok k\u00f6z\u00f6tt", None))
+        self.lblConfidence.setText(QCoreApplication.translate("Form", u"Magabiztoss\u00e1g", None))
     # retranslateUi
 

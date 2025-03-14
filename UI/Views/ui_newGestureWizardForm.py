@@ -46,7 +46,7 @@ class Ui_Form(object):
         self.btnNameOK.setGeometry(QRect(450, 320, 31, 31))
         self.lblCvImg = QLabel(self.frameNewGesture)
         self.lblCvImg.setObjectName(u"lblCvImg")
-        self.lblCvImg.setGeometry(QRect(60, 100, 391, 201))
+        self.lblCvImg.setGeometry(QRect(130, 100, 270, 170))
         self.lblGestureInputLabel.raise_()
         self.txtinputGestureName.raise_()
         self.btnNameOK.raise_()

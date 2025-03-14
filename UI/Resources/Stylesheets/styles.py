@@ -173,3 +173,8 @@ QSlider::handle:horizontal:hover {
     border-radius: 5px;
 }
 '''
+
+camera_label_style = '''
+            background-color: white;
+            border-radius: 10px;
+'''
