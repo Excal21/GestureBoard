@@ -12,8 +12,6 @@ t1 = None
 # API kulcs beállítása
 API_KEY = 'secret' #Ezt majd hashelni kell
 
-
-
 # API-kulcs ellenőrzése
 @app.before_request
 def check_auth():
@@ -28,7 +26,7 @@ def upload():
     if file and file.filename.endswith('.zip'):
         shutil.unpack_archive(file.filename, 'Samples')
     
-    t1 = threading.Thread(target=train)
+    t1 = threading.Thread(target=ModelTrainer.train())
     t1.start()
     training_state['status'] = 'busy'
 

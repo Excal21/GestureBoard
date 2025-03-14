@@ -1,1 +1,6 @@
-{}
+{
+    "1": {
+        "gesture": "lesjsj",
+        "action": "os.system('start calc')"
+    }
+}
