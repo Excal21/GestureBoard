@@ -2,5 +2,12 @@
     "Böngésző elindítása": "os.system('start http://www.google.com')",
     "Képernyőkép készítése": "os.screenshot()",
     "Számológép indítása": "os.system('start calc')",
-    "Gmail megnyitása": "os.system('start http://www.gmail.com')"
+    "Gmail megnyitása": "os.system('start http://www.gmail.com')",
+    "Lejátszás/ szünet": "pyautogui.press('playpause')",
+    "Következő szám": "pyautogui.press('nexttrack')",
+    "Előző szám": "pyautogui.press('prevtrack')",
+    "Hangerő növelése": "pyautogui.press('volumeup')",
+    "Hangerő csökkentése": "pyautogui.press('volumedown')",
+    "Alt + Tab": "pyautogui.hotkey('alt', 'tab')",
+    "Asztal megjelenítése": "pyautogui.hotkey('win', 'd')"
 }

@@ -1,14 +1,18 @@
 {
     "0": {
+        "gesture": "Nyílt tenyér",
+        "action": "pyautogui.press('playpause')"
+    },
+    "1": {
+        "gesture": "Mutatás két ujjal",
+        "action": "os.system('start http://www.google.com')"
+    },
+    "2": {
         "gesture": "Force",
         "action": "os.system('start http://www.google.com')"
     },
-    "1": {
+    "3": {
         "gesture": "FY",
-        "action": "os.system('start calc')"
-    },
-    "2": {
-        "gesture": "2 ujj",
         "action": "os.system('start http://www.gmail.com')"
     }
 }

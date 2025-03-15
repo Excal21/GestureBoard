@@ -58,3 +58,4 @@ class Recorder():
 
     def release(self):
         self.cap.release()
+        self.img_counter = 0

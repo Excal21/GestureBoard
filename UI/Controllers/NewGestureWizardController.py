@@ -106,6 +106,7 @@ class NewGestureWizardController(QWidget):
         self.rec.cap.set(cv2.CAP_PROP_BUFFERSIZE, 1)
         self.rec.cap.set(cv2.CAP_PROP_FPS, 60)
         print('Train meghívva')
+        self.__gesture_id = int(max(self.stacked_widget.widget(3).data.keys())) + 1 if self.stacked_widget.widget(3).data else 0
         if self.recording_stage == 0:
             self.gesture_name = self.ui.txtinputGestureName.text()
 
@@ -129,13 +130,13 @@ class NewGestureWizardController(QWidget):
 
         elif self.recording_stage == 1:
             print('Első rész')
-            self.rec.record_batch(self.gesture_name, 20)
+            self.rec.record_batch(self.__gesture_id, 20)
             print('Első szakasz rögzítve!')
             self.ui.lblUserGuide.setText('Most picit mozdítsd el ugyanebben a pozícióban a kezed, majd nyomj szőközt a másik kezeddel!')
             self.recording_stage = 2
 
         elif self.recording_stage == 2:
-            self.rec.record_batch(self.gesture_name, 20)
+            self.rec.record_batch(self.__gesture_id, 20)
             print('Második szakasz rögzítve!')
             self.rec.release()
             print('Mentve!')
@@ -153,7 +154,6 @@ class NewGestureWizardController(QWidget):
             self.lblImage.show()
 
 
-            self.__gesture_id = int(max(self.stacked_widget.widget(3).data.keys())) + 1 if self.stacked_widget.widget(3).data else 0
             gesture_entry = {'gesture' : self.gesture_name, 'action' : None}
             print(self.stacked_widget.widget(3).data)
             self.stacked_widget.widget(3).data[str(self.__gesture_id)] = gesture_entry

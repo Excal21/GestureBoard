@@ -73,8 +73,8 @@ class MainMenuController(QWidget):
 
         #Gombok eseménykezelése 
         self.ui.btnStart.clicked.connect(lambda: self.start())
-        self.ui.btnStart.enterEvent = lambda event: self.ui.btnStart.setStyleSheet(button_hover_style)
-        self.ui.btnStart.leaveEvent = lambda event: self.ui.btnStart.setStyleSheet(button_style)
+        self.ui.btnStart.enterEvent = lambda event: self.ui.btnStart.setStyleSheet(button_hover_style if not self.recognizer_active else button_hover_style + 'background-color: rgb(201, 97, 97)')
+        self.ui.btnStart.leaveEvent = lambda event: self.ui.btnStart.setStyleSheet(button_style if not self.recognizer_active else button_style + 'background-color: rgb(227, 109, 109)')
 
         self.ui.btnOptions.clicked.connect(self.show_options)
         self.ui.btnOptions.enterEvent = lambda event: self.ui.btnOptions.setStyleSheet(button_hover_style)

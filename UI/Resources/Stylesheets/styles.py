@@ -29,6 +29,10 @@ options_button_hover_style = options_button_style + '''
             background-color: lightgray;
 
 '''
+options_button_active_style = options_button_style + '''
+            background-color: rgb(0, 172, 201);
+'''
+
 
 entry_label_style = '''
             color: rgb(36, 41, 67);

@@ -9,9 +9,9 @@ from PySide6.QtWidgets import QApplication, QStackedWidget
 from Resources.Stylesheets.styles import *
 from Views.ui_optionsForm import Ui_OptionsForm
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "Views")))
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "Config")))
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "Resources", "Stylesheets")))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'Views')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'Config')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'Resources', 'Stylesheets')))
 
 class OptionsMenuController(QWidget):
     def __init__(self, stacked_widget):
@@ -39,7 +39,7 @@ class OptionsMenuController(QWidget):
         self.ui.frameBlue.setStyleSheet(sidebar_style)
         self.ui.lblTitle.setStyleSheet(sidebar_title_style)
         self.ui.lblDescription.setStyleSheet(description_style)
-        self.ui.lblDescription.setText("")
+        self.ui.lblDescription.setText('')
 
         #Görgethető terület
         self.scroll_area = self.ui.scrollArea
@@ -86,8 +86,8 @@ class OptionsMenuController(QWidget):
 #region JSON betöltés
 
     def load_entries(self):
-        config_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "Config", "UserSettings.json"))
-        with open(config_path, "r", encoding="utf-8") as file:
+        config_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'Config', 'UserSettings.json'))
+        with open(config_path, 'r', encoding='utf-8') as file:
             data = dict(json.load(file))
 
 
@@ -113,13 +113,13 @@ class OptionsMenuController(QWidget):
             btnConsole = QPushButton()                
 
             #Gombok ikonjainak beállítása
-            btnCombo.setIcon(QIcon("Resources\\Icons\\widget.png"))
+            btnCombo.setIcon(QIcon('Resources\\Icons\\widget.png'))
             btnCombo.setIconSize(QSize(40, 40))
 
-            btnConsole.setIcon(QIcon("Resources\\Icons\\console.png"))
+            btnConsole.setIcon(QIcon('Resources\\Icons\\console.png'))
             btnConsole.setIconSize(QSize(50, 45))
 
-            btnKey.setIcon(QIcon("Resources\\Icons\\keyboard.png"))
+            btnKey.setIcon(QIcon('Resources\\Icons\\keyboard.png'))
             btnKey.setIconSize(QSize(60, 60))
 
             #Gombok helyének beállítása
@@ -131,15 +131,15 @@ class OptionsMenuController(QWidget):
             btnContainer_layout.addWidget(btnConsole)
 
             #Gombeventek
-            btnCombo.enterEvent = lambda event: self.showDescription("Előre definiált műveletek")
-            btnCombo.leaveEvent = lambda event: self.showDescription("")
+            btnCombo.enterEvent = lambda event: self.showDescription('Előre definiált műveletek')
+            btnCombo.leaveEvent = lambda event: self.showDescription('')
 
 
-            btnKey.enterEvent = lambda event: self.showDescription("Billentyűszimuláció")
-            btnKey.leaveEvent = lambda event: self.showDescription("")
+            btnKey.enterEvent = lambda event: self.showDescription('Billentyűszimuláció')
+            btnKey.leaveEvent = lambda event: self.showDescription('')
 
-            btnConsole.enterEvent = lambda event: self.showDescription("Parancssor")
-            btnConsole.leaveEvent = lambda event: self.showDescription("")
+            btnConsole.enterEvent = lambda event: self.showDescription('Parancssor')
+            btnConsole.leaveEvent = lambda event: self.showDescription('')
 
             btnCombo.clicked.connect(lambda event, key=key: self.showSubSelection(key))
 
@@ -158,7 +158,7 @@ class OptionsMenuController(QWidget):
         combo_layout = QVBoxLayout(self.ui.scrollComboWidgetContents)
         combo_layout.setSpacing(10)
 
-        with open("Config\\PredefinedActionMap.json", "r", encoding="utf-8") as file:
+        with open('Config\\PredefinedActionMap.json', 'r', encoding='utf-8') as file:
             data = dict(json.load(file))
 
         for gesture, action in data.items():
@@ -195,13 +195,13 @@ class OptionsMenuController(QWidget):
         self.ui.scrollArea.setDisabled(False)
 
     def saveMappings(self):
-        with open("Config\\UserSettings.json", "r", encoding="utf-8") as file:
+        with open('Config\\UserSettings.json', 'r', encoding='utf-8') as file:
             data = dict(json.load(file))
         
         for gesture, action in self.mappings_to_save.items():
             data[gesture]['action'] = action
 
-        with open("Config\\UserSettings.json", "w", encoding="utf-8") as file:
+        with open('Config\\UserSettings.json', 'w', encoding='utf-8') as file:
             json.dump(data, file, ensure_ascii=False, indent=4)
         print('Settings saved')
         
@@ -209,13 +209,13 @@ class OptionsMenuController(QWidget):
 
     
     def resetMappings(self):
-        with open("Config\\UserSettings.json", "r", encoding="utf-8") as file:
+        with open('Config\\UserSettings.json', 'r', encoding='utf-8') as file:
             data = dict(json.load(file))
         
         for gesture in data.keys():
             data[gesture]['action'] = None
 
-        with open("Config\\UserSettings.json", "w", encoding="utf-8") as file:
+        with open('Config\\UserSettings.json', 'w', encoding='utf-8') as file:
             json.dump(data, file, ensure_ascii=False, indent=4)
         print('Settings reset')
         
@@ -229,11 +229,11 @@ class OptionsMenuController(QWidget):
         self.stacked_widget.setCurrentIndex(1)
 
     def loadFont(self):
-        font_id = QFontDatabase.addApplicationFont("Resources\\Fonts\\Ubuntu-R.ttf")
+        font_id = QFontDatabase.addApplicationFont('Resources\\Fonts\\Ubuntu-R.ttf')
         if font_id != -1:
             font_family = QFontDatabase.applicationFontFamilies(font_id)[0]
             self.font = QFont(font_family, 16)
             self.ui.lblTitle.setFont(self.font)
             self.ui.lblDescription.setFont(self.font)
         else:
-            print("Hiba: Nem sikerült betölteni az Ubuntu fontot!")
+            print('Hiba: Nem sikerült betölteni az Ubuntu fontot!')
