@@ -15,9 +15,9 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QFrame, QLabel, QLineEdit,
-    QPushButton, QSizePolicy, QSlider, QSpinBox,
-    QWidget)
+from PySide6.QtWidgets import (QAbstractSpinBox, QApplication, QDoubleSpinBox, QFrame,
+    QLabel, QLineEdit, QPushButton, QSizePolicy,
+    QSlider, QSpinBox, QWidget)
 
 class Ui_Form(object):
     def setupUi(self, Form):
@@ -74,13 +74,19 @@ class Ui_Form(object):
         self.lblConfidence.setGeometry(QRect(40, 210, 191, 30))
         self.spinConfidence = QSpinBox(self.frameButtons)
         self.spinConfidence.setObjectName(u"spinConfidence")
-        self.spinConfidence.setGeometry(QRect(360, 210, 42, 31))
+        self.spinConfidence.setGeometry(QRect(420, 210, 60, 31))
+        self.spinConfidence.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.NoButtons)
         self.spinFrameCnt = QSpinBox(self.frameButtons)
         self.spinFrameCnt.setObjectName(u"spinFrameCnt")
-        self.spinFrameCnt.setGeometry(QRect(360, 250, 42, 31))
-        self.spinDelay = QSpinBox(self.frameButtons)
+        self.spinFrameCnt.setGeometry(QRect(420, 250, 60, 31))
+        self.spinFrameCnt.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.NoButtons)
+        self.spinDelay = QDoubleSpinBox(self.frameButtons)
         self.spinDelay.setObjectName(u"spinDelay")
-        self.spinDelay.setGeometry(QRect(360, 290, 42, 31))
+        self.spinDelay.setGeometry(QRect(420, 290, 60, 25))
+        self.spinDelay.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.NoButtons)
+        self.btnSave = QPushButton(self.frameButtons)
+        self.btnSave.setObjectName(u"btnSave")
+        self.btnSave.setGeometry(QRect(230, 340, 120, 40))
 
         self.retranslateUi(Form)
 
@@ -100,5 +106,6 @@ class Ui_Form(object):
         self.lblFrameCnt.setText(QCoreApplication.translate("Form", u"K\u00e9pkocka gesztusonk\u00e9nt", None))
         self.lblDelay.setText(QCoreApplication.translate("Form", u"Sz\u00fcnet gesztusok k\u00f6z\u00f6tt", None))
         self.lblConfidence.setText(QCoreApplication.translate("Form", u"Magabiztoss\u00e1g", None))
+        self.btnSave.setText(QCoreApplication.translate("Form", u"Ment\u00e9s", None))
     # retranslateUi
 

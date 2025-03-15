@@ -10,7 +10,9 @@ from Views.ui_cameraOptionsForm import Ui_Form
 from Models.RecognizerHandler import RecognizerHandler
 from Models.Recorder import Recorder
 from time import sleep
+import json
 
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'Views')))
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'Resources', 'Stylesheets')))
 
@@ -22,11 +24,14 @@ class CameraOptionsController(QWidget):
 
         self.ui = Ui_Form()
         self.ui.setupUi(self)
-        self.loadFont()
+
+        self.setStyles()
+        self.setFonts()
+        self.setEventHandlers()
 
         self.rec = Recorder()
-        
         self.is_camera_on = False
+        self.data = {}
 
         #Kék alapú díszítősáv elrendezése
         layout = QVBoxLayout(self.ui.frameBlue)
@@ -34,70 +39,33 @@ class CameraOptionsController(QWidget):
         layout.setSpacing(0)
         layout.addWidget(self.ui.lblTitle, alignment=Qt.AlignCenter)
         layout.addStretch()
-        self.ui.frameBlue.setStyleSheet(sidebar_style)
-        self.ui.lblTitle.setStyleSheet(sidebar_title_style)
 
         self.ui.lblDescription.setText('')
 
-        self.ui.btnBack.setStyleSheet(options_button_style)
-        self.ui.btnBack.setFont(self.font)
-        self.ui.btnBack.clicked.connect(lambda event: self.stacked_widget.setCurrentIndex(1))
-        self.ui.btnBack.enterEvent = lambda event: self.ui.btnBack.setStyleSheet(options_button_hover_style)
-        self.ui.btnBack.leaveEvent = lambda event: self.ui.btnBack.setStyleSheet(options_button_style)
-
-        self.ui.btnStartCam.setStyleSheet(options_button_style)
-        self.ui.btnStartCam.setFont(self.font)
-
-        self.ui.btnStartCam.enterEvent = lambda event, active = self.is_camera_on: self.ui.btnStartCam.setStyleSheet(options_button_hover_style if not self.is_camera_on else options_button_hover_style + 'background-color: rgb(201, 97, 97)')
-        
-        self.ui.btnStartCam.leaveEvent = lambda event, active = self.is_camera_on: self.ui.btnStartCam.setStyleSheet(options_button_style if not self.is_camera_on else options_button_hover_style + 'background-color: rgb(227, 109, 109)')
-        self.ui.btnStartCam.clicked.connect(self.startCamera)
-
-
-        self.ui.lblCamera.setStyleSheet(train_label_style)
-        self.ui.lblCamera.setFont(self.font)
-
-        self.ui.lblHue.setStyleSheet(train_label_style)
-        self.ui.lblHue.setFont(self.font)
-
-        self.ui.lblConfidence.setStyleSheet(train_label_style)
-        self.ui.lblConfidence.setFont(self.font)
-
-        self.ui.lblFrameCnt.setStyleSheet(train_label_style)
-        self.ui.lblFrameCnt.setFont(self.font)
-
-        self.ui.lblDelay.setStyleSheet(train_label_style)
-        self.ui.lblDelay.setFont(self.font)
-
-
-        self.ui.sliderHue.setStyleSheet(slider_style)
-
-        self.ui.txtInputCamera.setStyleSheet(train_input_style)
-        self.ui.txtInputCamera.setFont(self.font)
         self.ui.txtInputCamera.setContextMenuPolicy(Qt.NoContextMenu)
+        self.ui.spinConfidence.setFixedWidth(60)
+        self.ui.spinFrameCnt.setFixedWidth(60)
+        self.ui.spinDelay.setFixedWidth(60)
 
-        self.ui.lblCamera.enterEvent = lambda event: self.ui.lblDescription.setText(self.textToHTML('Itt választhatod ki a kamerát a kamera indexével vagy hálózati elérésével. Alapból a beépített kamera van beállítva.'))
-        self.ui.lblCamera.leaveEvent = lambda event: self.ui.lblDescription.setText('')
+        self.ui.sliderHue.setRange(0, 255)
+        self.ui.spinConfidence.setRange(0, 100)
+        self.ui.spinFrameCnt.setRange(1, 30)
+        self.ui.spinDelay.setRange(0, 5)
+
+        self.ui.spinConfidence.setAlignment(Qt.AlignCenter)
+        self.ui.spinFrameCnt.setAlignment(Qt.AlignCenter)
+        self.ui.spinDelay.setAlignment(Qt.AlignCenter)
+        self.ui.spinConfidence.setContentsMargins(0, 0, 0, 0)
+        self.ui.spinFrameCnt.setContentsMargins(0, 0, 0, 0)
+        self.ui.spinDelay.setContentsMargins(0, 0, 0, 0)
 
 
-        self.ui.lblHue.enterEvent = lambda event: self.ui.lblDescription.setText(self.textToHTML('A színek eltolásával beállíthatod, hogy kesztyűben is felismerje a kezedet a program. Kapcsold be a kamerát és állítsd be óvatosan a csúszkával!'))
-        self.ui.lblHue.leaveEvent = lambda event: self.ui.lblDescription.setText('')
-
-        self.ui.lblConfidence.enterEvent = lambda event: self.ui.lblDescription.setText(self.textToHTML('Növelésével csökkenthető a véletlen felismerések száma, de csökken a felismerés érzékenysége.'))
-        self.ui.lblConfidence.leaveEvent = lambda event: self.ui.lblDescription.setText('')
-
-        self.ui.lblFrameCnt.enterEvent = lambda event: self.ui.lblDescription.setText(self.textToHTML('A program ennyi képkockán keresztül figyeli a gesztust a művelet végrehajtása előtt. Növelésével pontosabb, de lassabb lesz a felismerés.'))
-        self.ui.lblCvImg.setStyleSheet(camera_label_style)
-
-        self.ui.lblDelay.enterEvent = lambda event: self.ui.lblDescription.setText(self.textToHTML('Két gesztus közt eltelt idő másodpercben. Csökkentésével gyorsabban tudod kiadni a parancsokat.'))
-        
-            
-        self.ui.lblDelay.leaveEvent = lambda event: self.ui.lblDescription.setText('')
-
-        #Gombok ikonjainak beállítása
         self.ui.lblCvImg.setAlignment(Qt.AlignCenter)
         self.ui.lblCvImg.setPixmap(QPixmap('Resources\\Icons\\camera.png').scaled(100, 70, Qt.KeepAspectRatio, Qt.SmoothTransformation))
 
+        self.loadSettings()
+
+#region Kamerakép
     def startCamera(self):
         if not self.is_camera_on:
             self.rec.loadCameraOnly()
@@ -118,9 +86,16 @@ class CameraOptionsController(QWidget):
             self.ui.btnStartCam.setText('Kamera tesztelése')
             self.ui.btnStartCam.setStyleSheet(options_button_style)
 
-#region Kamerakép
     def updateFrame(self):
-        frame = RecognizerHandler.getInstance().annotate(self.rec.cap.read()[1])
+        frame = self.rec.cap.read()[1]
+
+        if self.ui.sliderHue.value() != 0:
+            frame = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+            frame[:, :, 0] += self.ui.sliderHue.value()
+            frame = cv2.cvtColor(frame, cv2.COLOR_HSV2BGR)
+
+        frame = RecognizerHandler.getInstance().annotate(frame)
+
         if frame is not None:
             h, w, _ = frame.shape
 
@@ -151,6 +126,105 @@ class CameraOptionsController(QWidget):
 
 #endregion
 
+#region Stílusállítók
+
+    def setStyles(self):
+        self.ui.frameBlue.setStyleSheet(sidebar_style)
+        self.ui.lblTitle.setStyleSheet(sidebar_title_style)
+        self.ui.btnSave.setStyleSheet(options_button_style)
+        self.ui.btnBack.setStyleSheet(options_button_style)
+        self.ui.btnStartCam.setStyleSheet(options_button_style)
+        self.ui.lblCamera.setStyleSheet(train_label_style)
+        self.ui.lblHue.setStyleSheet(train_label_style)
+        self.ui.lblConfidence.setStyleSheet(train_label_style)
+        self.ui.lblFrameCnt.setStyleSheet(train_label_style)
+        self.ui.lblDelay.setStyleSheet(train_label_style)
+        self.ui.sliderHue.setStyleSheet(slider_style)
+        self.ui.txtInputCamera.setStyleSheet(train_input_style)
+        self.ui.lblCvImg.setStyleSheet(camera_label_style)
+        self.ui.spinConfidence.setStyleSheet(train_input_style)
+        self.ui.spinFrameCnt.setStyleSheet(train_input_style)
+        self.ui.spinDelay.setStyleSheet(train_input_style)
+
+    def setFonts(self):
+        self.loadFont()
+
+        self.ui.lblTitle.setFont(self.font)
+        self.ui.lblDescription.setFont(self.font)
+        self.ui.txtInputCamera.setFont(self.font)
+        
+        self.ui.lblCamera.setFont(self.font)
+        
+        self.ui.lblHue.setFont(self.font)
+        self.ui.lblConfidence.setFont(self.font)
+        self.ui.lblFrameCnt.setFont(self.font)
+        self.ui.lblDelay.setFont(self.font)
+
+        self.ui.btnBack.setFont(self.font)
+        self.ui.btnSave.setFont(self.font)
+        self.ui.btnStartCam.setFont(self.font)
+
+        self.ui.spinConfidence.setFont(self.font)
+        self.ui.spinFrameCnt.setFont(self.font)
+        self.ui.spinDelay.setFont(self.font)
+
+#endregion
+
+#region Eseménykezelők
+    def setEventHandlers(self):
+        self.ui.btnSave.clicked.connect(self.saveSettings)
+        self.ui.btnSave.enterEvent = lambda event: self.ui.btnSave.setStyleSheet(options_button_hover_style)
+        self.ui.btnSave.leaveEvent = lambda event: self.ui.btnSave.setStyleSheet(options_button_style)
+
+        self.ui.btnBack.enterEvent = lambda event: self.ui.btnBack.setStyleSheet(options_button_hover_style)
+        self.ui.btnBack.leaveEvent = lambda event: self.ui.btnBack.setStyleSheet(options_button_style)
+        self.ui.btnBack.clicked.connect(lambda event: self.stacked_widget.setCurrentIndex(1))
+
+        self.ui.btnStartCam.enterEvent = lambda event: self.ui.btnStartCam.setStyleSheet(options_button_hover_style if not self.is_camera_on else options_button_hover_style + 'background-color: rgb(201, 97, 97)')
+        
+        self.ui.btnStartCam.leaveEvent = lambda event: self.ui.btnStartCam.setStyleSheet(options_button_style if not self.is_camera_on else options_button_hover_style + 'background-color: rgb(227, 109, 109)')
+        self.ui.btnStartCam.clicked.connect(self.startCamera)
+
+
+
+        self.ui.lblCamera.enterEvent = lambda event: self.ui.lblDescription.setText(self.textToHTML('Itt választhatod ki a kamerát a kamera indexével vagy hálózati elérésével. Alapból a beépített kamera van beállítva.'))
+        self.ui.lblCamera.leaveEvent = lambda event: self.ui.lblDescription.setText('')
+
+        self.ui.lblHue.enterEvent = lambda event: self.ui.lblDescription.setText(self.textToHTML('A színek eltolásával beállíthatod, hogy kesztyűben is felismerje a kezedet a program. Kapcsold be a kamerát és állítsd be óvatosan a csúszkával!'))
+        self.ui.lblHue.leaveEvent = lambda event: self.ui.lblDescription.setText('')
+
+        self.ui.lblConfidence.enterEvent = lambda event: self.ui.lblDescription.setText(self.textToHTML('Növelésével csökkenthető a véletlen felismerések száma, de csökken a felismerés érzékenysége.'))
+        self.ui.lblConfidence.leaveEvent = lambda event: self.ui.lblDescription.setText('')
+
+        self.ui.lblFrameCnt.enterEvent = lambda event: self.ui.lblDescription.setText(self.textToHTML('A program ennyi képkockán keresztül figyeli a gesztust a művelet végrehajtása előtt. Növelésével pontosabb, de lassabb lesz a felismerés.'))
+
+        self.ui.lblDelay.enterEvent = lambda event: self.ui.lblDescription.setText(self.textToHTML('Két gesztus közt eltelt idő másodpercben. Csökkentésével gyorsabban tudod kiadni a parancsokat.'))
+
+        self.ui.lblDelay.leaveEvent = lambda event: self.ui.lblDescription.setText('')
+#endregion
+
+#region Beállítások kezelése
+    def loadSettings(self):
+        with open('Config\\CameraSettings.json', 'r') as file:
+            self.data = json.load(file)
+            self.ui.txtInputCamera.setText(str(self.data['Camera']))
+            self.ui.sliderHue.setValue(self.data['HueOffset'])
+            self.ui.spinConfidence.setValue(self.data['Confidence'])
+            self.ui.spinFrameCnt.setValue(self.data['FrameCount'])
+            self.ui.spinDelay.setValue(self.data['Delay'])
+    
+    def saveSettings(self):
+        self.data['Camera'] = self.ui.txtInputCamera.text()
+        self.data['HueOffset'] = self.ui.sliderHue.value()
+        self.data['Confidence'] = self.ui.spinConfidence.value()
+        self.data['FrameCount'] = self.ui.spinFrameCnt.value()
+        self.data['Delay'] = self.ui.spinDelay.value()
+
+        with open('Config\\CameraSettings.json', 'w') as file:
+            json.dump(self.data, file, indent=4)
+
+#endregion
+
     def textToHTML(self, text):
         return '''<html>
             <style>
@@ -161,7 +235,6 @@ class CameraOptionsController(QWidget):
                 <p align='justify'>'''+ text +'''</p>
                 </body>
             </html>'''
-            
 
 
     def loadFont(self):
@@ -173,4 +246,3 @@ class CameraOptionsController(QWidget):
             self.ui.lblDescription.setFont(self.font)
         else:
             print('Hiba: Nem sikerült betölteni az Ubuntu fontot!')
-        
