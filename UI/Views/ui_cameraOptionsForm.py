@@ -15,8 +15,8 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QAbstractSpinBox, QApplication, QDoubleSpinBox, QFrame,
-    QLabel, QLineEdit, QPushButton, QSizePolicy,
+from PySide6.QtWidgets import (QAbstractSpinBox, QApplication, QComboBox, QDoubleSpinBox,
+    QFrame, QLabel, QPushButton, QSizePolicy,
     QSlider, QSpinBox, QWidget)
 
 class Ui_Form(object):
@@ -47,9 +47,6 @@ class Ui_Form(object):
         self.lblCamera = QLabel(self.frameButtons)
         self.lblCamera.setObjectName(u"lblCamera")
         self.lblCamera.setGeometry(QRect(40, 40, 161, 30))
-        self.txtInputCamera = QLineEdit(self.frameButtons)
-        self.txtInputCamera.setObjectName(u"txtInputCamera")
-        self.txtInputCamera.setGeometry(QRect(220, 40, 271, 30))
         self.btnStartCam = QPushButton(self.frameButtons)
         self.btnStartCam.setObjectName(u"btnStartCam")
         self.btnStartCam.setGeometry(QRect(40, 140, 171, 41))
@@ -87,6 +84,9 @@ class Ui_Form(object):
         self.btnSave = QPushButton(self.frameButtons)
         self.btnSave.setObjectName(u"btnSave")
         self.btnSave.setGeometry(QRect(230, 340, 120, 40))
+        self.comboCamera = QComboBox(self.frameButtons)
+        self.comboCamera.setObjectName(u"comboCamera")
+        self.comboCamera.setGeometry(QRect(301, 40, 181, 31))
 
         self.retranslateUi(Form)
 
@@ -99,7 +99,6 @@ class Ui_Form(object):
         self.lblDescription.setText(QCoreApplication.translate("Form", u"Le\u00edr\u00e1s", None))
         self.lblCvImg.setText(QCoreApplication.translate("Form", u"TextLabel", None))
         self.lblCamera.setText(QCoreApplication.translate("Form", u"Kamera:", None))
-        self.txtInputCamera.setPlaceholderText(QCoreApplication.translate("Form", u"Kamera c\u00edme", None))
         self.btnStartCam.setText(QCoreApplication.translate("Form", u"Kamerateszt", None))
         self.btnBack.setText(QCoreApplication.translate("Form", u"Vissza", None))
         self.lblHue.setText(QCoreApplication.translate("Form", u"Hue eltol\u00e1s", None))

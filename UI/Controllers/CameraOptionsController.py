@@ -40,9 +40,9 @@ class CameraOptionsController(QWidget):
         layout.addWidget(self.ui.lblTitle, alignment=Qt.AlignCenter)
         layout.addStretch()
 
+
         self.ui.lblDescription.setText('')
 
-        self.ui.txtInputCamera.setContextMenuPolicy(Qt.NoContextMenu)
         self.ui.spinConfidence.setFixedWidth(60)
         self.ui.spinFrameCnt.setFixedWidth(60)
         self.ui.spinDelay.setFixedWidth(60)
@@ -68,7 +68,7 @@ class CameraOptionsController(QWidget):
 #region Kamerakép
     def startCamera(self):
         if not self.is_camera_on:
-            self.rec.loadCameraOnly()
+            self.rec.loadCameraOnly(self.data['Camera'])
             self.rec.cap.set(cv2.CAP_PROP_BUFFERSIZE, 1)
             self.rec.cap.set(cv2.CAP_PROP_FPS, 60)
             self.timer = QTimer(self)
@@ -87,12 +87,7 @@ class CameraOptionsController(QWidget):
             self.ui.btnStartCam.setStyleSheet(options_button_style)
 
     def updateFrame(self):
-        frame = self.rec.cap.read()[1]
-
-        if self.ui.sliderHue.value() != 0:
-            frame = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-            frame[:, :, 0] += self.ui.sliderHue.value()
-            frame = cv2.cvtColor(frame, cv2.COLOR_HSV2BGR)
+        frame = self.rec.getFrame(self.ui.sliderHue.value())
 
         frame = RecognizerHandler.getInstance().annotate(frame)
 
@@ -140,7 +135,7 @@ class CameraOptionsController(QWidget):
         self.ui.lblFrameCnt.setStyleSheet(train_label_style)
         self.ui.lblDelay.setStyleSheet(train_label_style)
         self.ui.sliderHue.setStyleSheet(slider_style)
-        self.ui.txtInputCamera.setStyleSheet(train_input_style)
+        self.ui.comboCamera.setStyleSheet(camera_combo_style)
         self.ui.lblCvImg.setStyleSheet(camera_label_style)
         self.ui.spinConfidence.setStyleSheet(train_input_style)
         self.ui.spinFrameCnt.setStyleSheet(train_input_style)
@@ -151,7 +146,7 @@ class CameraOptionsController(QWidget):
 
         self.ui.lblTitle.setFont(self.font)
         self.ui.lblDescription.setFont(self.font)
-        self.ui.txtInputCamera.setFont(self.font)
+        self.ui.comboCamera.setFont(self.font)
         
         self.ui.lblCamera.setFont(self.font)
         
@@ -171,7 +166,13 @@ class CameraOptionsController(QWidget):
 #endregion
 
 #region Eseménykezelők
+    def updateCameraIndex(self, index):
+        self.data['Camera'] = index
+    
     def setEventHandlers(self):
+        self.ui.comboCamera.currentIndexChanged.connect(self.updateCameraIndex)
+    
+
         self.ui.btnSave.clicked.connect(self.saveSettings)
         self.ui.btnSave.enterEvent = lambda event: self.ui.btnSave.setStyleSheet(options_button_hover_style)
         self.ui.btnSave.leaveEvent = lambda event: self.ui.btnSave.setStyleSheet(options_button_style)
@@ -187,7 +188,7 @@ class CameraOptionsController(QWidget):
 
 
 
-        self.ui.lblCamera.enterEvent = lambda event: self.ui.lblDescription.setText(self.textToHTML('Itt választhatod ki a kamerát a kamera indexével vagy hálózati elérésével. Alapból a beépített kamera van beállítva.'))
+        self.ui.lblCamera.enterEvent = lambda event: self.ui.lblDescription.setText(self.textToHTML('Válaszd ki a kamerát, amivel a gesztusokat tudja érzékelni a program!'))
         self.ui.lblCamera.leaveEvent = lambda event: self.ui.lblDescription.setText('')
 
         self.ui.lblHue.enterEvent = lambda event: self.ui.lblDescription.setText(self.textToHTML('A színek eltolásával beállíthatod, hogy kesztyűben is felismerje a kezedet a program. Kapcsold be a kamerát és állítsd be óvatosan a csúszkával!'))
@@ -204,19 +205,29 @@ class CameraOptionsController(QWidget):
 #endregion
 
 #region Beállítások kezelése
+    def loadCameraCombo(self):
+        self.ui.comboCamera.clear()
+        for cameraIDX in self.rec.getCameras():
+            if cameraIDX == 0:
+                self.ui.comboCamera.addItem('Beépített kamera')
+            else:
+                self.ui.comboCamera.addItem(f'{cameraIDX + 1}. kamera')
+
+
     def loadSettings(self):
+        self.loadCameraCombo()
         with open('Config\\CameraSettings.json', 'r') as file:
             self.data = json.load(file)
-            self.ui.txtInputCamera.setText(str(self.data['Camera']))
+            self.ui.comboCamera.setCurrentIndex(self.data['Camera'])
             self.ui.sliderHue.setValue(self.data['HueOffset'])
-            self.ui.spinConfidence.setValue(self.data['Confidence'])
+            self.ui.spinConfidence.setValue(self.data['Confidence']*100)
             self.ui.spinFrameCnt.setValue(self.data['FrameCount'])
             self.ui.spinDelay.setValue(self.data['Delay'])
     
     def saveSettings(self):
-        self.data['Camera'] = self.ui.txtInputCamera.text()
+        self.data['Camera'] = self.ui.comboCamera.currentIndex()
         self.data['HueOffset'] = self.ui.sliderHue.value()
-        self.data['Confidence'] = self.ui.spinConfidence.value()
+        self.data['Confidence'] = self.ui.spinConfidence.value()/100
         self.data['FrameCount'] = self.ui.spinFrameCnt.value()
         self.data['Delay'] = self.ui.spinDelay.value()
 

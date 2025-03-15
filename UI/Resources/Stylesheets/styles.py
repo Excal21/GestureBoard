@@ -146,39 +146,66 @@ train_input_style = '''
 
 
 slider_style = '''
-QSlider::groove:horizontal {
-    background: lightgray;
-    height: 7px;
-    border-radius: 3px;
-}
+        QSlider::groove:horizontal {
+            background: lightgray;
+            height: 7px;
+            border-radius: 3px;
+        }
 
-QSlider::groove:horizontal:hover {
-    background: rgb(0, 172, 201);
-}
+        QSlider::groove:horizontal:hover {
+            background: rgb(0, 172, 201);
+        }
 
-QSlider::sub-page:horizontal {
-    background: rgb(36 , 41 , 67);
-    border-radius: 3px;
-}
+        QSlider::sub-page:horizontal {
+            background: rgb(36 , 41 , 67);
+            border-radius: 3px;
+        }
 
-QSlider::handle:horizontal {
-    background: white;
-    width: 12px;
-    height: 12px;
-    border-radius: 6px;
-    border: 2px solid rgb(70, 70, 70);
-    margin: -5px 0; /* Ez mindenképp kell, különben négyzetes lesz a csúszka!!! */
-}
+        QSlider::handle:horizontal {
+            background: white;
+            width: 12px;
+            height: 12px;
+            border-radius: 6px;
+            border: 2px solid rgb(70, 70, 70);
+            margin: -5px 0; /* Ez mindenképp kell, különben négyzetes lesz a csúszka!!! */
+        }
 
-QSlider::handle:horizontal:hover {
-    background: lightgray;
-    width: 12px;
-    height: 12px;
-    border-radius: 5px;
-}
+        QSlider::handle:horizontal:hover {
+            background: lightgray;
+            width: 12px;
+            height: 12px;
+            border-radius: 5px;
+        }
 '''
 
 camera_label_style = '''
             background-color: white;
             border-radius: 10px;
+'''
+
+camera_combo_style = '''
+        QComboBox {
+            color: rgb(36, 41, 67);
+            font-size: 14pt;
+            border: 1px solid rgb(70, 70, 70);
+            border-radius: 5px;
+            padding-left: 5px;
+        }
+        QComboBox::drop-down {
+            border: 1px solid rgb(70, 70, 70);
+            background: transparent;
+        }
+        QComboBox QAbstractItemView {
+            background: white;
+            color: rgb(36, 41, 67);
+            border: 1px solid rgb(70, 70, 70);
+            border-radius: 5px;
+        }
+        QComboBox::drop-down {
+            border: none;
+            background: transparent;
+        }
+        QComboBox::down-arrow {
+            width: 0px;
+        }
 '''

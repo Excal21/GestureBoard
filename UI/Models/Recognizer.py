@@ -49,6 +49,8 @@ class Recognizer:
       self.__commands = {}
       self.__camerafeed = True
       self.__framecount = 5
+      self.__hueoffset = 0
+      self.__delay = 1
       self.__error = False
       self.__configpath = config_path
 
@@ -175,16 +177,23 @@ class Recognizer:
     return annotated_image
 
 
-
-
   def loadGestures(self):
     with open(self.__configpath, "r") as file:
       data = dict(json.load(file))
     return data
 
+  def loadCameraSettings(self):
+    with open('Config/CameraSettings.json', encoding='UTF-8') as f:
+      data = dict(json.load(f))
+      self.__camera = data['Camera']
+      self.__framecount = data['FrameCount']
+      self.__confidence = data['Confidence']
+      self.__hueoffset = data['HueOffset']
+      self.__delay = data['Delay']
 
   def Run(self):
-    print("Minden fasza")
+    print('Recognizer started')
+    self.loadCameraSettings()
     gesture_mappings = self.loadGestures()
 
 
@@ -212,9 +221,12 @@ class Recognizer:
       #Beépített kamera
       ret, img = cap.read()
       #img = cv2.flip(img, 1)
-
       img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
       
+      if self.__hueoffset != 0:
+        img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+        img[:, :, 0] += self.__hueoffset
+        img = cv2.cvtColor(img, cv2.COLOR_HSV2BGR)
       
       
       #Kilépés ESC gombra
@@ -236,7 +248,7 @@ class Recognizer:
 
       #Ha a halmozás eredménye az, hogy self.__framecount db ugyanolyan gesztus van, akkor biztos, hogy valamit akar a user
       if len(last_gestures) >= self.__framecount:
-        if all(gesture == last_gestures[0] for gesture in last_gestures) and (datetime.now() - last_gesture_time).total_seconds() > 1 and last_gestures[0]  != '':
+        if all(gesture == last_gestures[0] for gesture in last_gestures) and (datetime.now() - last_gesture_time).total_seconds() > self.__delay and last_gestures[0]  != '':
           print(last_gestures[0])
           if last_gestures[0] in gesture_mappings.keys():
             print(last_gestures[0])
@@ -260,8 +272,7 @@ class Recognizer:
 if __name__ == '__main__':
   taskFile = "gesture_recognizer.task"
   recognizer = Recognizer("gesture_recognizer.task")
-  #print(recognizer.camera)
-  #print(recognizer.labels)
+
   recognizer.confidence = 0.6
   recognizer.camera = 0
   recognizer.camerafeed = True

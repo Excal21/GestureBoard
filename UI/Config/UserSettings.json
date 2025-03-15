@@ -1,18 +1,14 @@
 {
-    "0": {
-        "gesture": "Nyílt tenyér",
+    "5": {
+        "gesture": "OK",
+        "action": "os.system('start http://www.gmail.com')"
+    },
+    "6": {
+        "gesture": "Victory",
         "action": "pyautogui.press('playpause')"
     },
-    "1": {
-        "gesture": "Mutatás két ujjal",
-        "action": "os.system('start http://www.google.com')"
-    },
-    "2": {
-        "gesture": "Force",
-        "action": "os.system('start http://www.google.com')"
-    },
-    "3": {
-        "gesture": "FY",
-        "action": "os.system('start http://www.gmail.com')"
+    "7": {
+        "gesture": "Zárt ököl",
+        "action": "pyautogui.hotkey('win', 'd')"
     }
 }

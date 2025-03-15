@@ -99,19 +99,6 @@
      <string>Kamera:</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="txtInputCamera">
-    <property name="geometry">
-     <rect>
-      <x>220</x>
-      <y>40</y>
-      <width>271</width>
-      <height>30</height>
-     </rect>
-    </property>
-    <property name="placeholderText">
-     <string>Kamera címe</string>
-    </property>
-   </widget>
    <widget class="QPushButton" name="btnStartCam">
     <property name="geometry">
      <rect>
@@ -253,6 +240,16 @@
     </property>
     <property name="text">
      <string>Mentés</string>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="comboCamera">
+    <property name="geometry">
+     <rect>
+      <x>301</x>
+      <y>40</y>
+      <width>181</width>
+      <height>31</height>
+     </rect>
     </property>
    </widget>
   </widget>

@@ -209,6 +209,18 @@ class TrainMenuController(QWidget):
 
         info_widget.setText('Várakozás a kiszolgálóra...')
         self.stacked_widget.setCurrentIndex(0)
+
+        def remove_readonly(func, path, _):
+            import stat
+            os.chmod(path, stat.S_IWRITE)  # Eltávolítja az írásvédettséget
+            func(path)
+
+
+        for key in os.listdir('Data\\Samples'):
+            if key not in self.data.keys():
+                shutil.rmtree('Data\\Samples\\' + key, onerror=remove_readonly)
+
+                
         self.trainer = Trainer()
         self.trainer.finished.connect(self.finishTraining)
         self.trainer.progress.connect(lambda text: info_widget.setText(text))
