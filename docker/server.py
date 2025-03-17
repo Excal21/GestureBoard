@@ -26,7 +26,7 @@ def upload():
     if file and file.filename.endswith('.zip'):
         shutil.unpack_archive(file.filename, 'Samples')
     
-    t1 = threading.Thread(target=ModelTrainer.train())
+    t1 = threading.Thread(target=ModelTrainer.train)
     t1.start()
     training_state['status'] = 'busy'
 
@@ -36,8 +36,10 @@ def upload():
 def status():
     if t1 is not None and t1.is_alive():
         training_state['status'] = 'busy'
+        print('busy')
     elif t1 is not None and not t1.is_alive() and training_state['status'] == 'busy':
         training_state['status'] = 'idle'
+        print('idle')
     return jsonify(training_state)
 
 @app.route('/download', methods=['GET'])

@@ -204,12 +204,6 @@ class TrainMenuController(QWidget):
 
 #region Tanítás kezelése
     def startTraining(self):
-        loading_page = self.stacked_widget.widget(0)
-        info_widget = loading_page.findChild(QLabel, 'lblLoading')
-
-        info_widget.setText('Várakozás a kiszolgálóra...')
-        self.stacked_widget.setCurrentIndex(0)
-
         def remove_readonly(func, path, _):
             import stat
             os.chmod(path, stat.S_IWRITE)  # Eltávolítja az írásvédettséget
@@ -219,6 +213,13 @@ class TrainMenuController(QWidget):
         for key in os.listdir('Data\\Samples'):
             if key not in self.data.keys():
                 shutil.rmtree('Data\\Samples\\' + key, onerror=remove_readonly)
+                
+        loading_page = self.stacked_widget.widget(0)
+        info_widget = loading_page.findChild(QLabel, 'lblLoading')
+
+        info_widget.setText('Várakozás a kiszolgálóra...')
+        self.stacked_widget.setCurrentIndex(0)
+
 
                 
         self.trainer = Trainer()

@@ -34,6 +34,7 @@ class RecognizerHandler(QThread):
         return self.__recognizer.annotateImage(frame)
 
     def start(self):
+        self.__recognizer.camerafeed = False
         self.__recognizer.Run()
 
     def setCamera(self, camera):

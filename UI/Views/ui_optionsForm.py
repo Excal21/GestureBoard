@@ -67,6 +67,14 @@ class Ui_OptionsForm(object):
         self.btnTeach = QPushButton(self.frameButtons)
         self.btnTeach.setObjectName(u"btnTeach")
         self.btnTeach.setGeometry(QRect(20, 340, 191, 40))
+        self.frameHide = QFrame(self.frameButtons)
+        self.frameHide.setObjectName(u"frameHide")
+        self.frameHide.setGeometry(QRect(20, 30, 221, 301))
+        self.frameHide.setFrameShape(QFrame.Shape.StyledPanel)
+        self.frameHide.setFrameShadow(QFrame.Shadow.Raised)
+        self.lblUserGuide = QLabel(self.frameHide)
+        self.lblUserGuide.setObjectName(u"lblUserGuide")
+        self.lblUserGuide.setGeometry(QRect(8, 20, 221, 81))
 
         self.retranslateUi(OptionsForm)
 
@@ -80,5 +88,6 @@ class Ui_OptionsForm(object):
         self.btnSave.setText(QCoreApplication.translate("OptionsForm", u"Ment\u00e9s", None))
         self.btnReset.setText(QCoreApplication.translate("OptionsForm", u"Alaphelyzet", None))
         self.btnTeach.setText(QCoreApplication.translate("OptionsForm", u"Gesztusok kezel\u00e9se", None))
+        self.lblUserGuide.setText(QCoreApplication.translate("OptionsForm", u"TextLabel", None))
     # retranslateUi
 
