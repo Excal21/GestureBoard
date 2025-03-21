@@ -1,0 +1,89 @@
+{
+ "version": "auto-py-to-exe-configuration_v1",
+ "pyinstallerOptions": [
+  {
+   "optionDest": "noconfirm",
+   "value": true
+  },
+  {
+   "optionDest": "filenames",
+   "value": "C:/Users/szgyu/OneDriveSZE/Szakdolgozat/UI/main.pyw"
+  },
+  {
+   "optionDest": "onefile",
+   "value": false
+  },
+  {
+   "optionDest": "console",
+   "value": true
+  },
+  {
+   "optionDest": "icon_file",
+   "value": "C:/Users/szgyu/OneDriveSZE/Szakdolgozat/UI/Resources/Icons/hand.ico"
+  },
+  {
+   "optionDest": "clean_build",
+   "value": false
+  },
+  {
+   "optionDest": "strip",
+   "value": false
+  },
+  {
+   "optionDest": "noupx",
+   "value": false
+  },
+  {
+   "optionDest": "disable_windowed_traceback",
+   "value": false
+  },
+  {
+   "optionDest": "uac_admin",
+   "value": false
+  },
+  {
+   "optionDest": "uac_uiaccess",
+   "value": false
+  },
+  {
+   "optionDest": "argv_emulation",
+   "value": false
+  },
+  {
+   "optionDest": "bootloader_ignore_signals",
+   "value": false
+  },
+  {
+   "optionDest": "datas",
+   "value": "C:/Users/szgyu/OneDriveSZE/Szakdolgozat/UI/Views;Views/"
+  },
+  {
+   "optionDest": "datas",
+   "value": "C:/Users/szgyu/OneDriveSZE/Szakdolgozat/UI/Resources;Resources/"
+  },
+  {
+   "optionDest": "datas",
+   "value": "C:/Users/szgyu/OneDriveSZE/Szakdolgozat/UI/Models;Models/"
+  },
+  {
+   "optionDest": "datas",
+   "value": "C:/Users/szgyu/OneDriveSZE/Szakdolgozat/UI/Controllers;Controllers/"
+  },
+  {
+   "optionDest": "excludes",
+   "value": "PyQt6"
+  },
+  {
+   "optionDest": "hiddenimports",
+   "value": "tensorflow"
+  },
+  {
+   "optionDest": "datas",
+   "value": "C:/Users/szgyu/OneDriveSZE/Szakdolgozat/UI/Config;Config/"
+  }
+ ],
+ "nonPyinstallerOptions": {
+  "increaseRecursionLimit": true,
+  "manualArguments": ""
+ }
+}

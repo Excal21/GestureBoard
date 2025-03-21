@@ -20,8 +20,7 @@ class OptionsMenuController(QWidget):
         super().__init__()
         self.setAttribute(Qt.WA_TranslucentBackground)
         self.stacked_widget = stacked_widget
-        self.stacked_widget.currentChanged.connect(self.load_entries)
-
+        self.stacked_widget.currentChanged.connect(self.updateEntries)
 
         self.ui = Ui_OptionsForm()
         self.ui.setupUi(self)
@@ -38,7 +37,9 @@ class OptionsMenuController(QWidget):
         self.keycapture_active = False
         self.key_command = ''
 
-        self.mappings_to_save = {}
+        self.data = None
+
+        self.loadConfig()
 
         #Kék alapú díszítősáv elrendezése
         layout = QVBoxLayout(self.ui.frameBlue)
@@ -68,7 +69,6 @@ class OptionsMenuController(QWidget):
         self.ui.scrollCombo.horizontalScrollBar().setContextMenuPolicy(Qt.NoContextMenu)
         self.predefined_clicked = None
 
-        self.load_entries()
         self.ui.scrollCombo.setParent(self.ui.frameButtons)
         self.loadComboMenu()
         self.ui.scrollCombo.hide()
@@ -77,21 +77,20 @@ class OptionsMenuController(QWidget):
         self.ui.frameHide.hide()
         self.ui.lblUserGuide.setAlignment(Qt.AlignHCenter)
 
-#region JSON betöltés
-
-    def load_entries(self):
+    def loadConfig(self):
         config_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'Config', 'UserSettings.json'))
         with open(config_path, 'r', encoding='utf-8') as file:
-            data = dict(json.load(file))
-
-
+            self.data = dict(json.load(file))
         print('UserSettings JSON loaded')
+
+#region Válaszhatók menüje
+    def updateEntries(self):
         while self.scroll_layout.count():
             child = self.scroll_layout.takeAt(0)
             if child.widget():
                 child.widget().deleteLater()
 
-        for key, entry in data.items():
+        for key, entry in self.data.items():
 
             gesture_entry = QWidget()
             gesture_entry_layout = QHBoxLayout(gesture_entry)
@@ -116,6 +115,14 @@ class OptionsMenuController(QWidget):
             btnKey.setIcon(QIcon('Resources\\Icons\\keyboard.png'))
             btnKey.setIconSize(QSize(60, 60))
 
+
+            if(entry['highlight'] == 0):
+                btnCombo.setIcon(QIcon('Resources\\Icons\\widget_green.png'))
+            elif(entry['highlight'] == 1):
+                btnKey.setIcon(QIcon('Resources\\Icons\\keyboard_green.png'))
+            elif(entry['highlight'] == 2):
+                btnConsole.setIcon(QIcon('Resources\\Icons\\console_green.png'))
+
             #Gombok helyének beállítása
             btnContainer = QWidget()
             btnContainer_layout = QHBoxLayout(btnContainer)
@@ -125,15 +132,14 @@ class OptionsMenuController(QWidget):
             btnContainer_layout.addWidget(btnConsole)
 
             #Gombeventek
-            btnCombo.enterEvent = lambda event: self.showDescription('Előre definiált műveletek')
-            btnCombo.leaveEvent = lambda event: self.showDescription('')
+            btnCombo.enterEvent = lambda event, entry = entry: self.showDescription(entry, 0)
+            btnCombo.leaveEvent = lambda event: self.ui.lblDescription.setText('')
 
+            btnKey.enterEvent = lambda event, entry = entry: self.showDescription(entry, 1)
+            btnKey.leaveEvent = lambda event: self.ui.lblDescription.setText('')
 
-            btnKey.enterEvent = lambda event: self.showDescription('Billentyűszimuláció')
-            btnKey.leaveEvent = lambda event: self.showDescription('')
-
-            btnConsole.enterEvent = lambda event: self.showDescription('Parancssor')
-            btnConsole.leaveEvent = lambda event: self.showDescription('')
+            btnConsole.enterEvent = lambda event, entry = entry: self.showDescription(entry, 2)
+            btnConsole.leaveEvent = lambda event: self.ui.lblDescription.setText('')
 
             btnCombo.clicked.connect(lambda event, key=key: self.showSubSelection(key))
             btnKey.clicked.connect(lambda event, key=key: self.startKeyCapture(key))
@@ -168,17 +174,17 @@ class OptionsMenuController(QWidget):
         combo_layout.setSpacing(10)
 
         with open('Config\\PredefinedActionMap.json', 'r', encoding='utf-8') as file:
-            data = dict(json.load(file))
+            predefined_actions_data = dict(json.load(file))
 
-        for gesture, action in data.items():
-            combo_entry = QPushButton(gesture)
+        for predefined_action in predefined_actions_data.items():
+            combo_entry = QPushButton(predefined_action[0])
             combo_entry.setFixedHeight(30)
             combo_entry.setStyleSheet(predefined_label_style)
             combo_entry.setFont(self.font)
             
             combo_entry.enterEvent = lambda event, entry=combo_entry: entry.setStyleSheet(predefined_hover_label_style)
             combo_entry.leaveEvent = lambda event, entry=combo_entry: entry.setStyleSheet(predefined_label_style)
-            combo_entry.clicked.connect(lambda event, action=action: self.saveSubSelection(action))
+            combo_entry.clicked.connect(lambda event, predefined_action = predefined_action: self.saveSubSelection(predefined_action))
 
             combo_layout.addWidget(combo_entry)
 
@@ -186,11 +192,14 @@ class OptionsMenuController(QWidget):
         combo_layout.addStretch()
 
 
-    def saveSubSelection(self, action):
-        self.predefined_clicked = action
-        self.mappings_to_save[self.clicked] = self.predefined_clicked
+    def saveSubSelection(self, predefined_action):
+        self.data[self.clicked]['action'] = predefined_action[1]
+        self.data[self.clicked]['highlight'] = 0
+        self.data[self.clicked]['description'] = predefined_action[0]
         self.ui.scrollCombo.hide()
         self.ui.scrollArea.setDisabled(False)
+        self.sub_menu_active = False
+        self.updateEntries()
 #endregion
 
 #region Billentyűszimuláció
@@ -207,63 +216,67 @@ class OptionsMenuController(QWidget):
             self.ui.lblUserGuide.setText('Billentyűkombináció')
 
     def keyPressEvent(self, event: QKeyEvent):
-        modifiers = []
-        if event.modifiers() & Qt.ControlModifier:
-            modifiers.append('ctrl')
-        if event.modifiers() & Qt.AltModifier:
-            modifiers.append('alt')
-        if event.modifiers() & Qt.ShiftModifier:
-            modifiers.append('shift')
-        key = event.nativeVirtualKey()
-
-        key_map = {
-            222: 'Á',
-            226: 'Í',
-            186: 'É',
-            187: 'Ó',
-            192: 'Ö',
-            219: 'Ő',
-            221: 'Ú',
-            191: 'Ü',
-            220: 'Ű'
-        }
-
-        keystr = ''
-        
-        if modifiers:
-            combination = ' , '.join(modifiers)
-        else:
-            combination = keystr
-
         if self.keycapture_active:
-            print(self.key_command)
+            modifiers = []
+            if event.modifiers() & Qt.ControlModifier:
+                modifiers.append('ctrl')
+            if event.modifiers() & Qt.AltModifier:
+                modifiers.append('alt')
+            if event.modifiers() & Qt.ShiftModifier:
+                modifiers.append('shift')
+            key = event.nativeVirtualKey()
 
-        valid = False
+            key_map = {
+                222: 'Á',
+                226: 'Í',
+                186: 'É',
+                187: 'Ó',
+                192: 'Ö',
+                219: 'Ő',
+                221: 'Ú',
+                191: 'Ü',
+                220: 'Ű'
+            }
 
-        if key in key_map:
-            keystr = key_map[key]
-            valid = True
-        elif 32 <= key <= 126:
-            valid = True
-            keystr = chr(key)
-        
-        self.ui.lblUserGuide.setText(f'Billentyűkombináció\n {combination.replace(',', '+') + (' + ' if combination else '') + keystr}')
-        
-        if valid:
-            key_command = 'pyautogui.hotkey('
-            for modifier in modifiers:
-                key_command += f'\'{modifier}\', '
-
-            key_command += f'\'{keystr.lower()}\')'
-
-            self.mappings_to_save[self.clicked] = key_command
-            print(f'Billentyűkombináció\n {combination.replace(',', '+') + (' + ' if combination else '') + keystr}')
-            self.ui.lblUserGuide.setText(f'Billentyűkombináció\n {combination.replace(',', '+') + (' + ' if combination else '') + keystr}')
-            QApplication.processEvents()
-            sleep(0.5)
-            self.ui.frameHide.hide()
-            self.keycapture_active = False
+            keystr = ''
             
+            if modifiers:
+                combination = ' , '.join(modifiers)
+            else:
+                combination = keystr
+
+            if self.keycapture_active:
+                print(self.key_command)
+
+            valid = False
+
+            if key in key_map:
+                keystr = key_map[key]
+                valid = True
+            elif 32 <= key <= 126:
+                valid = True
+                keystr = chr(key)
+            
+            self.ui.lblUserGuide.setText(f'Billentyűkombináció\n {combination.replace(',', '+') + (' + ' if combination else '') + keystr}')
+            
+            if valid:
+                key_command = 'pyautogui.hotkey('
+                for modifier in modifiers:
+                    key_command += f'\'{modifier}\', '
+
+                key_command += f'\'{keystr.lower()}\')'
+
+                self.data[self.clicked]['action'] = key_command
+                self.data[self.clicked]['description'] = f'{combination.replace(',', '+') + (' + ' if combination else '') + keystr}'
+                self.data[self.clicked]['highlight'] = 1
+
+                print(f'Billentyűkombináció\n {combination.replace(',', '+') + (' + ' if combination else '') + keystr}')
+                self.ui.lblUserGuide.setText(f'Billentyűkombináció\n {combination.replace(',', '+') + (' + ' if combination else '') + keystr}')
+                QApplication.processEvents()
+                sleep(0.5)
+                self.ui.frameHide.hide()
+                self.keycapture_active = False
+                self.updateEntries()
 
     def keyReleaseEvent(self, event):
         if self.keycapture_active:
@@ -276,14 +289,11 @@ class OptionsMenuController(QWidget):
 #region Mentés, reset, stb.
 
     def saveMappings(self):
-        with open('Config\\UserSettings.json', 'r', encoding='utf-8') as file:
-            data = dict(json.load(file))
+        # with open('Config\\UserSettings.json', 'r', encoding='utf-8') as file:
+        #     data = dict(json.load(file))
         
-        for gesture, action in self.mappings_to_save.items():
-            data[gesture]['action'] = action
-
         with open('Config\\UserSettings.json', 'w', encoding='utf-8') as file:
-            json.dump(data, file, ensure_ascii=False, indent=4)
+            json.dump(self.data, file, ensure_ascii=False, indent=4)
         print('Settings saved')
         
 
@@ -294,21 +304,24 @@ class OptionsMenuController(QWidget):
 
     
     def resetMappings(self):
-        with open('Config\\UserSettings.json', 'r', encoding='utf-8') as file:
-            data = dict(json.load(file))
-        
-        for gesture in data.keys():
-            data[gesture]['action'] = None
+        for gesture in self.data.keys():
+            self.data[gesture]['action'] = None
+            self.data[gesture]['highlight'] = -1
+            self.data[gesture]['description'] = None
 
-        with open('Config\\UserSettings.json', 'w', encoding='utf-8') as file:
-            json.dump(data, file, ensure_ascii=False, indent=4)
-        print('Settings reset')
-        
-        self.stacked_widget.setCurrentIndex(1)
+        self.updateEntries()
 
 
-    def showDescription(self, text):
-        self.ui.lblDescription.setText(text)
+    def showDescription(self, entry, hoveridx):
+        if entry['highlight'] == hoveridx:
+            self.ui.lblDescription.setText(entry['description'])
+        else:
+            if hoveridx == 0:
+                self.ui.lblDescription.setText('Előre definiált művelet')
+            elif hoveridx == 1:
+                self.ui.lblDescription.setText('Billentyűkombináció')
+            elif hoveridx == 2:
+                self.ui.lblDescription.setText('Parancs')
 
     def showOptions(self):
         self.stacked_widget.setCurrentIndex(1)

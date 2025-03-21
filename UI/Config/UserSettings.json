@@ -1,14 +1,20 @@
 {
+    "0": {
+        "gesture": "Fel",
+        "action": "pyautogui.hotkey('w')",
+        "description": "W",
+        "highlight": 1
+    },
+    "1": {
+        "gesture": "Jobbra",
+        "action": "pyautogui.hotkey('j')",
+        "description": "J",
+        "highlight": 1
+    },
     "2": {
-        "gesture": "Zárt ököl",
-        "action": "pyautogui.hotkey('f')"
-    },
-    "3": {
-        "gesture": "Nyílt tenyér",
-        "action": "pyautogui.hotkey('win', 'd')"
-    },
-    "4": {
-        "gesture": "Like",
-        "action": "pyautogui.hotkey('ctrl', 'f')"
+        "gesture": "Balra",
+        "action": "pyautogui.hotkey('b')",
+        "description": "B",
+        "highlight": 1
     }
 }

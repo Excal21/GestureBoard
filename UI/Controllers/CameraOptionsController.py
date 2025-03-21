@@ -33,6 +33,8 @@ class CameraOptionsController(QWidget):
         self.is_camera_on = False
         self.data = {}
 
+        self.timer = None
+
         #Kék alapú díszítősáv elrendezése
         layout = QVBoxLayout(self.ui.frameBlue)
         layout.setContentsMargins(0, 55, 0, 0)
@@ -179,7 +181,7 @@ class CameraOptionsController(QWidget):
 
         self.ui.btnBack.enterEvent = lambda event: self.ui.btnBack.setStyleSheet(options_button_hover_style)
         self.ui.btnBack.leaveEvent = lambda event: self.ui.btnBack.setStyleSheet(options_button_style)
-        self.ui.btnBack.clicked.connect(lambda event: self.stacked_widget.setCurrentIndex(1))
+        self.ui.btnBack.clicked.connect(self.backToMainMenu)
 
         self.ui.btnStartCam.enterEvent = lambda event: self.ui.btnStartCam.setStyleSheet(options_button_hover_style if not self.is_camera_on else options_button_hover_style + 'background-color: rgb(201, 97, 97)')
         
@@ -234,6 +236,15 @@ class CameraOptionsController(QWidget):
         with open('Config\\CameraSettings.json', 'w') as file:
             json.dump(self.data, file, indent=4)
         
+
+        if self.is_camera_on:
+            self.startCamera() #A start működése miatt itt pont, hogy le fogja állítani
+
+        self.stacked_widget.setCurrentIndex(1)
+
+    def backToMainMenu(self):
+        if self.is_camera_on:
+            self.startCamera()
         self.stacked_widget.setCurrentIndex(1)
 
 #endregion
