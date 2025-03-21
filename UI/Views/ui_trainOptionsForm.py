@@ -90,7 +90,7 @@ class Ui_Form(object):
         self.btnRecord.setText(QCoreApplication.translate("Form", u"Gesztus felv\u00e9tele", None))
         self.btnTrain.setText(QCoreApplication.translate("Form", u"Gesztusok tan\u00edt\u00e1sa", None))
         self.btnDelete.setText(QCoreApplication.translate("Form", u"Gesztus t\u00f6rl\u00e9se", None))
-        self.lblGestures.setText(QCoreApplication.translate("Form", u"Gesztusok:", None))
+        self.lblGestures.setText(QCoreApplication.translate("Form", u"Gesztusok", None))
         self.btnBack.setText(QCoreApplication.translate("Form", u"Vissza", None))
     # retranslateUi
 

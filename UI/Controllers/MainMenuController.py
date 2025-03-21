@@ -23,6 +23,9 @@ class MainMenuController(QWidget):
 
         self.recognizer_active = False
 
+        self.setEventHandlers()
+
+
         font_id = QFontDatabase.addApplicationFont('Resources\\Fonts\\Ubuntu-R.ttf')
         if font_id != -1:
             font_family = QFontDatabase.applicationFontFamilies(font_id)[0]
@@ -71,6 +74,45 @@ class MainMenuController(QWidget):
         layout.addWidget(self.ui.btnCameraOptions, alignment=Qt.AlignCenter)
         layout.addStretch()
 
+        
+
+
+    def show_options(self):
+        '''Váltás a Beállítások oldalra.'''
+        self.stacked_widget.setCurrentIndex(2)
+
+
+    def start(self):
+        if not self.recognizer_active:
+            self.recognizer_active = True
+            self.ui.btnStart.setText('Gesztusvezérlés kikapcsolása')
+            self.ui.btnOptions.setEnabled(False)
+            self.ui.btnCameraOptions.setEnabled(False)
+            self.ui.btnOptions.setStyleSheet(button_hover_style)
+            self.ui.btnCameraOptions.setStyleSheet(button_hover_style)
+            self.ui.btnOptions.enterEvent = lambda event: None
+            self.ui.btnOptions.leaveEvent = lambda event: None
+
+            self.ui.btnCameraOptions.enterEvent = lambda event: None
+            self.ui.btnCameraOptions.leaveEvent = lambda event: None
+            self.recognizer.start()
+        else:
+            self.recognizer_active = False
+            self.recognizer.stop()
+            self.ui.btnStart.setText('Gesztusvezérlés indítása')
+            self.ui.btnOptions.setEnabled(True)
+            self.ui.btnCameraOptions.setEnabled(True)
+            self.ui.btnStart.setStyleSheet(button_hover_style)
+            self.ui.btnOptions.setStyleSheet(button_style)
+            self.ui.btnCameraOptions.setStyleSheet(button_style)
+
+            self.ui.btnOptions.enterEvent = lambda event: self.ui.btnOptions.setStyleSheet(button_hover_style)
+            self.ui.btnOptions.leaveEvent = lambda event: self.ui.btnOptions.setStyleSheet(button_style)
+
+            self.ui.btnCameraOptions.enterEvent = lambda event: self.ui.btnCameraOptions.setStyleSheet(button_hover_style)
+            self.ui.btnCameraOptions.leaveEvent = lambda event: self.ui.btnCameraOptions.setStyleSheet(button_style)
+
+    def setEventHandlers(self):
         #Gombok eseménykezelése 
         self.ui.btnStart.clicked.connect(lambda: self.start())
         self.ui.btnStart.enterEvent = lambda event: self.ui.btnStart.setStyleSheet(button_hover_style if not self.recognizer_active else button_hover_style + 'background-color: rgb(201, 97, 97)')
@@ -84,22 +126,3 @@ class MainMenuController(QWidget):
         self.ui.btnCameraOptions.enterEvent = lambda event: self.ui.btnCameraOptions.setStyleSheet(button_hover_style)
         self.ui.btnCameraOptions.leaveEvent = lambda event: self.ui.btnCameraOptions.setStyleSheet(button_style)
         self.ui.btnCameraOptions.clicked.connect(lambda event: self.stacked_widget.setCurrentIndex(5))
-
-
-    def show_options(self):
-        '''Váltás a Beállítások oldalra.'''
-        self.stacked_widget.setCurrentIndex(2)
-
-
-    def start(self):
-        if not self.recognizer_active:
-            self.recognizer_active = True
-            self.ui.btnStart.setText('Gesztusvezérlés kikapcsolása')
-            self.ui.btnOptions.setEnabled(False)
-            self.recognizer.setCamera(0)
-            self.recognizer.start()
-        else:
-            self.recognizer_active = False
-            self.recognizer.stop()
-            self.ui.btnStart.setText('Gesztusvezérlés indítása')
-            self.ui.btnOptions.setEnabled(True)

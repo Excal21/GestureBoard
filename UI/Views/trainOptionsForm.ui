@@ -168,7 +168,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Gesztusok:</string>
+     <string>Gesztusok</string>
     </property>
    </widget>
    <zorder>lblServer</zorder>

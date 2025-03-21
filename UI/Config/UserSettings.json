@@ -1,10 +1,14 @@
 {
-    "1": {
-        "gesture": "Force",
-        "action": null
+    "2": {
+        "gesture": "Zárt ököl",
+        "action": "pyautogui.hotkey('f')"
+    },
+    "3": {
+        "gesture": "Nyílt tenyér",
+        "action": "pyautogui.hotkey('win', 'd')"
     },
     "4": {
-        "gesture": "Éhezők viadala",
-        "action": null
+        "gesture": "Like",
+        "action": "pyautogui.hotkey('ctrl', 'f')"
     }
 }

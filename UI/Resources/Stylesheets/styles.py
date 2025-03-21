@@ -139,7 +139,7 @@ train_input_style = '''
             color: rgb(36, 41, 67);
             font-size: 14pt;
             border: 1px solid rgb(70, 70, 70);
-            border-radius: 5px;
+            border-radius: 10px;
             padding-left: 5px;
 '''
 

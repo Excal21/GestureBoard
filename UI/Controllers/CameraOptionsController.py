@@ -233,6 +233,8 @@ class CameraOptionsController(QWidget):
 
         with open('Config\\CameraSettings.json', 'w') as file:
             json.dump(self.data, file, indent=4)
+        
+        self.stacked_widget.setCurrentIndex(1)
 
 #endregion
 

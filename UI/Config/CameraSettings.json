@@ -1,7 +1,7 @@
 {
-    "Camera": 1,
+    "Camera": 0,
     "HueOffset": 0,
-    "Confidence": 0.5,
-    "FrameCount": 6,
-    "Delay": 1.5
+    "Confidence": 0.75,
+    "FrameCount": 3,
+    "Delay": 1.0
 }
