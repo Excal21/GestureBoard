@@ -11,16 +11,16 @@ from PySide6.QtWidgets import QApplication, QStackedWidget
 from Resources.Stylesheets.styles import *
 from Views.ui_optionsForm import Ui_OptionsForm
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'Views')))
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'Config')))
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'Resources', 'Stylesheets')))
+#sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'Views')))
+#sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'Config')))
+#sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'Resources', 'Stylesheets')))
 
 class OptionsMenuController(QWidget):
     def __init__(self, stacked_widget):
         super().__init__()
         self.setAttribute(Qt.WA_TranslucentBackground)
         self.stacked_widget = stacked_widget
-        self.stacked_widget.currentChanged.connect(self.updateEntries)
+        self.stacked_widget.currentChanged.connect(self.onReturn)
 
         self.ui = Ui_OptionsForm()
         self.ui.setupUi(self)
@@ -78,7 +78,7 @@ class OptionsMenuController(QWidget):
         self.ui.lblUserGuide.setAlignment(Qt.AlignHCenter)
 
     def loadConfig(self):
-        config_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'Config', 'UserSettings.json'))
+        config_path = ('Config\\UserSettings.json')
         with open(config_path, 'r', encoding='utf-8') as file:
             self.data = dict(json.load(file))
         print('UserSettings JSON loaded')
@@ -151,6 +151,7 @@ class OptionsMenuController(QWidget):
         
         self.scroll_layout.addStretch()
 
+
 #endregion
 
 #region Előtanított műveletek
@@ -200,6 +201,7 @@ class OptionsMenuController(QWidget):
         self.ui.scrollArea.setDisabled(False)
         self.sub_menu_active = False
         self.updateEntries()
+        
 #endregion
 
 #region Billentyűszimuláció
@@ -329,6 +331,10 @@ class OptionsMenuController(QWidget):
     def hideEverything(self):
         self.ui.scrollCombo.hide()
         self.ui.frameHide.hide()
+
+    def onReturn(self):
+        self.loadConfig()
+        self.updateEntries()
 
 #region Eseménykezelők
     def setEventHandlers(self):

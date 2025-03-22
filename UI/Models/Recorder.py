@@ -4,8 +4,8 @@ import os
 import json
 import sys
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'Config')))
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'Data')))
+#sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'Config')))
+#sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'Data')))
 
 class Recorder():
     def __init__(self):

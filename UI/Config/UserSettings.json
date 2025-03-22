@@ -1,20 +1,14 @@
 {
-    "0": {
-        "gesture": "Fel",
-        "action": "pyautogui.hotkey('w')",
-        "description": "W",
-        "highlight": 1
-    },
     "1": {
-        "gesture": "Jobbra",
+        "gesture": "Like jel",
         "action": "pyautogui.hotkey('j')",
         "description": "J",
         "highlight": 1
     },
     "2": {
-        "gesture": "Balra",
-        "action": "pyautogui.hotkey('b')",
-        "description": "B",
+        "gesture": "Nyílt tenyér",
+        "action": "pyautogui.hotkey('w')",
+        "description": "W",
         "highlight": 1
     }
 }

@@ -154,7 +154,7 @@ class NewGestureWizardController(QWidget):
             self.lblImage.show()
 
 
-            gesture_entry = {'gesture' : self.gesture_name, 'action' : None}
+            gesture_entry = {'gesture' : self.gesture_name, 'action' : None, 'description': None, 'highlight': -1}
             print(self.stacked_widget.widget(3).data)
             self.stacked_widget.widget(3).data[str(self.__gesture_id)] = gesture_entry
             print(self.stacked_widget.widget(3).data)

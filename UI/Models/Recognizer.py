@@ -14,7 +14,7 @@ import shutil
 import pyautogui
 import json
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "Config")))
+#sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "Config")))
 
 class Recognizer:
   def __init__(self, task_file_path: str, config_path: str):

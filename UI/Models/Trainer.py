@@ -6,8 +6,8 @@ import requests
 from PySide6.QtCore import QThread, Signal
 from Models.RecognizerHandler import RecognizerHandler
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "Data")))
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "Models")))
+#sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "Data")))
+#sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "Models")))
 
 
 class Trainer(QThread):
@@ -48,7 +48,7 @@ class Trainer(QThread):
                         headers={'X-API-KEY': 'secret'})
             
             if response.status_code == 200:
-                with open('Models\\gesture_recognizer.task', 'wb') as f:
+                with open('Config\\gesture_recognizer.task', 'wb') as f:
                     f.write(response.content)
                 RecognizerHandler.getInstance().reload()
                 self.progress.emit('Modell elmentve')
