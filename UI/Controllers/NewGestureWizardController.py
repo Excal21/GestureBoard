@@ -86,9 +86,10 @@ class NewGestureWizardController(QWidget):
 
         #Középre igazított usert segítő szövegdoboz
         self.ui.lblUserGuide.setStyleSheet(guide_style)
-        self.ui.lblUserGuide.setAlignment(Qt.AlignCenter) 
+        self.ui.lblUserGuide.setAlignment(Qt.AlignHCenter | Qt.AlignTop)
         self.ui.lblUserGuide.setFont(self.font)
         self.ui.lblUserGuide.setText('')
+        self.ui.lblUserGuide.setFixedHeight(240)
 
         self.ui.frameNewGesture_layout.addWidget(self.ui.lblUserGuide, alignment=Qt.AlignCenter)
         self.ui.frameNewGesture_layout.addStretch()

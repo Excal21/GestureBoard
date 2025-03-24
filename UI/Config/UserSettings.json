@@ -10,5 +10,11 @@
         "action": "pyautogui.hotkey('w')",
         "description": "W",
         "highlight": 1
+    },
+    "4": {
+        "gesture": "Force",
+        "action": "os.system('start http://www.gmail.com')",
+        "description": "Gmail megnyitása",
+        "highlight": 0
     }
 }

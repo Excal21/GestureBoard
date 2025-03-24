@@ -67,7 +67,7 @@ description_style = '''
 
 guide_style = '''
             color: rgb(36, 41, 67);
-            font-size: 14pt;
+            font-size: 12pt;
 '''
 
 long_desciption_style = '''
