@@ -11,7 +11,6 @@ from Models.RecognizerHandler import RecognizerHandler
 
 
 class Trainer(QThread):
-    finished = Signal()
     progress = Signal(str)
 
     filename = 'Images.zip'

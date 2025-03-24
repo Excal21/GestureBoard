@@ -140,9 +140,8 @@ class TrainMenuController(QWidget):
     def onReturn(self):
         if self.stacked_widget.widget(3) == self:
             print('Gesztusok frissítve')
-            if self.data is None:
-                with open('Config\\UserSettings.json', 'r', encoding='UTF-8') as f:
-                    self.data = dict(json.load(f))
+            with open('Config\\UserSettings.json', 'r', encoding='UTF-8') as f:
+                self.data = dict(json.load(f))
             self.updateList()
 
     def updateList(self):
