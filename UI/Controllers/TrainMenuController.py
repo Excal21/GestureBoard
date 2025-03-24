@@ -213,7 +213,8 @@ class TrainMenuController(QWidget):
         for key in os.listdir('Data\\Samples'):
             if key not in self.data.keys():
                 shutil.rmtree('Data\\Samples\\' + key, onerror=remove_readonly)
-                
+        
+
         loading_page = self.stacked_widget.widget(0)
         info_widget = loading_page.findChild(QLabel, 'lblLoading')
 
@@ -223,15 +224,21 @@ class TrainMenuController(QWidget):
 
                 
         self.trainer = Trainer()
+        self.trainer.ip = self.ui.txtinputServer.text().strip()
         self.trainer.finished.connect(self.finishTraining)
         self.trainer.progress.connect(lambda text: info_widget.setText(text))
         self.trainer.start()
         
 
     def finishTraining(self):
-        self.stacked_widget.setCurrentIndex(3)
-        self.updateList()
-        self.save()
+        print('sikeres tanítás')
+        if self.trainer.trained:
+            self.updateList()
+            self.save()
+            self.stacked_widget.setCurrentIndex(2)
+        else:
+            self.stacked_widget.setCurrentIndex(3)
+            
 
 #endregion
 

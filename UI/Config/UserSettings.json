@@ -1,10 +1,4 @@
 {
-    "1": {
-        "gesture": "Like jel",
-        "action": "pyautogui.hotkey('j')",
-        "description": "J",
-        "highlight": 1
-    },
     "2": {
         "gesture": "Nyílt tenyér",
         "action": "pyautogui.hotkey('win', 'd')",
@@ -15,6 +9,12 @@
         "gesture": "Force",
         "action": "os.system('start http://www.gmail.com')",
         "description": "Gmail megnyitása",
+        "highlight": 0
+    },
+    "6": {
+        "gesture": "Like",
+        "action": "pyautogui.hotkey('win', 'd')",
+        "description": "Asztal megjelenítése",
         "highlight": 0
     }
 }
