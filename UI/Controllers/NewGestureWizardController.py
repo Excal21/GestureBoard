@@ -23,7 +23,9 @@ class NewGestureWizardController(QWidget):
         self.ui = Ui_Form()
         self.ui.setupUi(self)
     
-        self.loadFont()
+        self.setStyles()
+        self.setLayoutSettings()
+        self.setEventHandlers()
 
         self.recording_stage = 0
         self.__cap = None
@@ -31,74 +33,12 @@ class NewGestureWizardController(QWidget):
         
 
         self.timer = QTimer(self)
-
-
-        #Kék alapú díszítősáv elrendezése
-        layout = QVBoxLayout(self.ui.frameBlue)
-        layout.setContentsMargins(0, 55, 0, 0)
-        layout.setSpacing(0)
-        layout.addWidget(self.ui.lblTitle, alignment=Qt.AlignCenter)
-        layout.addStretch()
-        self.ui.frameBlue.setStyleSheet(sidebar_style)
-        self.ui.lblTitle.setStyleSheet(sidebar_title_style)
         
-
-#region Új gesztus varázsló
-        #Felbukkanó új gesztus varázsló elrendezése
-        self.ui.frameNewGesture_layout = QVBoxLayout(self.ui.frameNewGesture)
-        horizontal_layout = QHBoxLayout()
-        horizontal_layout.addStretch()
-        horizontal_layout.addWidget(self.ui.lblInfo, alignment=Qt.AlignCenter)
-        horizontal_layout.addStretch()
-        self.ui.lblInfo.setStyleSheet(info_label_style)
-        self.ui.lblInfo.setFont(self.font)
-
-        self.ui.frameNewGesture_layout.addLayout(horizontal_layout)
-        self.ui.frameNewGesture_layout.setContentsMargins(0, 55, 0, 0)
-        self.lblImage = QLabel(self.ui.frameNewGesture)
-        self.lblImage.setFixedSize(200, 200)
-        self.lblImage.setAlignment(Qt.AlignCenter)
-        self.ui.frameNewGesture_layout.addWidget(self.lblImage, alignment=Qt.AlignCenter)
-        self.ui.frameNewGesture_layout.addWidget(self.ui.lblCvImg, alignment=Qt.AlignCenter)
-        self.lblImage.setPixmap(QPixmap(os.path.join(os.path.dirname(__file__), '..', 'Resources', 'Icons', 'hand.png')).scaled(100, 100, Qt.KeepAspectRatio))
-        self.ui.lblCvImg.setStyleSheet(camera_label_style)
-        self.ui.lblCvImg.hide()
-
-        #Geszuts neve input mező
-        vertical_layout = QHBoxLayout()
-        self.ui.lblGestureInputLabel.setStyleSheet(train_label_style)
-        self.ui.txtinputGestureName.setStyleSheet(train_input_style)
-        self.ui.btnNameOK.setStyleSheet(options_button_style)
-        self.ui.lblGestureInputLabel.setFont(self.font)
-        self.ui.txtinputGestureName.setFont(self.font)
-        self.ui.txtinputGestureName.setContextMenuPolicy(Qt.NoContextMenu)
-
-
-        vertical_layout.addWidget(self.ui.lblGestureInputLabel, alignment=Qt.AlignCenter)
-        vertical_layout.addWidget(self.ui.txtinputGestureName, alignment=Qt.AlignCenter)
-        vertical_layout.addWidget(self.ui.btnNameOK, alignment=Qt.AlignCenter)
-
-        self.ui.btnNameOK.setIcon(QIcon('Resources\\Icons\\check.png'))
-        self.ui.btnNameOK.setIconSize(QSize(30, 30))
-        self.ui.btnNameOK.enterEvent = lambda event: self.ui.btnNameOK.setStyleSheet(options_button_hover_style)
-        self.ui.btnNameOK.leaveEvent = lambda event: self.ui.btnNameOK.setStyleSheet(options_button_style)
         self.ui.btnNameOK.clicked.connect(self.record)
-
-        #Középre igazított usert segítő szövegdoboz
-        self.ui.lblUserGuide.setStyleSheet(guide_style)
-        self.ui.lblUserGuide.setAlignment(Qt.AlignHCenter | Qt.AlignTop)
-        self.ui.lblUserGuide.setFont(self.font)
-        self.ui.lblUserGuide.setText('')
-        self.ui.lblUserGuide.setFixedHeight(240)
-
-        self.ui.frameNewGesture_layout.addWidget(self.ui.lblUserGuide, alignment=Qt.AlignCenter)
-        self.ui.frameNewGesture_layout.addStretch()
 
         shortcut = QShortcut(Qt.Key_Space, self)
         shortcut.setContext(Qt.ApplicationShortcut)
         shortcut.activated.connect(self.record)
-#endregion
-
 
 #region Record
 
@@ -200,13 +140,90 @@ class NewGestureWizardController(QWidget):
 
 #endregion
 
+#region Eseménykezelők
+    def setEventHandlers(self):
+        pass
+
+#endregion
+
+#region Stílusállítók
+    def setFonts(self):
+        self.loadFont()
+        self.ui.lblTitle.setFont(self.font)
+        self.ui.lblDescription.setFont(self.font)
+        self.ui.lblInfo.setFont(self.font)
+        self.ui.lblGestureInputLabel.setFont(self.font)
+        self.ui.txtinputGestureName.setFont(self.font)
+        self.ui.lblUserGuide.setFont(self.font)
+
+    def setStyles(self):
+        self.setFonts()
+        self.ui.lblInfo.setStyleSheet(info_label_style)
+        self.ui.frameBlue.setStyleSheet(sidebar_style)
+        self.ui.lblTitle.setStyleSheet(sidebar_title_style)
+        self.ui.lblCvImg.setStyleSheet(camera_label_style)
+        self.ui.lblGestureInputLabel.setStyleSheet(train_label_style)
+        self.ui.txtinputGestureName.setStyleSheet(train_input_style)
+        self.ui.btnNameOK.setStyleSheet(options_button_style)
+        self.ui.btnNameOK.enterEvent = lambda event: self.ui.btnNameOK.setStyleSheet(options_button_hover_style)
+        self.ui.btnNameOK.leaveEvent = lambda event: self.ui.btnNameOK.setStyleSheet(options_button_style)
+        self.ui.lblUserGuide.setStyleSheet(guide_style)
+
+    def setLayoutSettings(self):
+        #Kék alapú díszítősáv elrendezése
+        layout = QVBoxLayout(self.ui.frameBlue)
+        layout.setContentsMargins(0, 55, 0, 0)
+        layout.setSpacing(0)
+        layout.addWidget(self.ui.lblTitle, alignment=Qt.AlignCenter)
+        layout.addStretch()
+
+        #Felbukkanó új gesztus varázsló elrendezése
+        self.ui.frameNewGesture_layout = QVBoxLayout(self.ui.frameNewGesture)
+        horizontal_layout = QHBoxLayout()
+        horizontal_layout.addStretch()
+        horizontal_layout.addWidget(self.ui.lblInfo, alignment=Qt.AlignCenter)
+        horizontal_layout.addStretch()
+
+        self.ui.frameNewGesture_layout.addLayout(horizontal_layout)
+        self.ui.frameNewGesture_layout.setContentsMargins(0, 55, 0, 0)
+        self.lblImage = QLabel(self.ui.frameNewGesture)
+        self.lblImage.setFixedSize(200, 200)
+        self.lblImage.setAlignment(Qt.AlignCenter)
+        self.ui.frameNewGesture_layout.addWidget(self.lblImage, alignment=Qt.AlignCenter)
+        self.ui.frameNewGesture_layout.addWidget(self.ui.lblCvImg, alignment=Qt.AlignCenter)
+        self.lblImage.setPixmap(QPixmap(os.path.join(os.path.dirname(__file__), '..', 'Resources', 'Icons', 'hand.png')).scaled(100, 100, Qt.KeepAspectRatio))
+        self.ui.lblCvImg.hide()
+
+        #Geszuts neve input mező
+        vertical_layout = QHBoxLayout()
+
+        self.ui.txtinputGestureName.setContextMenuPolicy(Qt.NoContextMenu)
+
+
+        vertical_layout.addWidget(self.ui.lblGestureInputLabel, alignment=Qt.AlignCenter)
+        vertical_layout.addWidget(self.ui.txtinputGestureName, alignment=Qt.AlignCenter)
+        vertical_layout.addWidget(self.ui.btnNameOK, alignment=Qt.AlignCenter)
+
+        self.ui.btnNameOK.setIcon(QIcon('Resources\\Icons\\check.png'))
+        self.ui.btnNameOK.setIconSize(QSize(30, 30))
+
+        #Középre igazított usert segítő szövegdoboz
+        self.ui.lblUserGuide.setAlignment(Qt.AlignHCenter | Qt.AlignTop)
+        self.ui.lblUserGuide.setText('')
+        self.ui.lblUserGuide.setFixedHeight(240)
+
+        self.ui.frameNewGesture_layout.addWidget(self.ui.lblUserGuide, alignment=Qt.AlignCenter)
+        self.ui.frameNewGesture_layout.addStretch()
+
 
     def loadFont(self):
         font_id = QFontDatabase.addApplicationFont('Resources\\Fonts\\Ubuntu-R.ttf')
         if font_id != -1:
             font_family = QFontDatabase.applicationFontFamilies(font_id)[0]
             self.font = QFont(font_family, 16)
-            self.ui.lblTitle.setFont(self.font)
-            self.ui.lblDescription.setFont(self.font)
+
         else:
             print('Hiba: Nem sikerült betölteni az Ubuntu fontot!')
+
+
+#endregion

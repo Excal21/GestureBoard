@@ -12,10 +12,6 @@ from Models.Recorder import Recorder
 from time import sleep
 import json
 
-#sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-#sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'Views')))
-#sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'Resources', 'Stylesheets')))
-
 class CameraOptionsController(QWidget):
     def __init__(self, stacked_widget):
         super().__init__()

@@ -6,10 +6,6 @@ import requests
 from PySide6.QtCore import QThread, Signal
 from Models.RecognizerHandler import RecognizerHandler
 
-#sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "Data")))
-#sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "Models")))
-
-
 class Trainer(QThread):
     progress = Signal(str)
 

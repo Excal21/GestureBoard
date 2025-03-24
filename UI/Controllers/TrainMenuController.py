@@ -18,13 +18,14 @@ class TrainMenuController(QWidget):
     def __init__(self, stacked_widget):
         super().__init__()
         self.stacked_widget = stacked_widget
-        self.stacked_widget.currentChanged.connect(self.onReturn)
 
 
         self.ui = Ui_Form()
         self.ui.setupUi(self)
-    
-        self.loadFont()
+
+        self.setStyles()
+        self.setLayoutSettings()
+        self.setEventHandlers()
 
         self.recording_stage = 0
         self.__cap = None
@@ -34,94 +35,8 @@ class TrainMenuController(QWidget):
 
 #region Alapbeállítások
 
-        #Kék alapú díszítősáv elrendezése
-        layout = QVBoxLayout(self.ui.frameBlue)
-        layout.setContentsMargins(0, 55, 0, 0)
-        layout.setSpacing(0)
-        layout.addWidget(self.ui.lblTitle, alignment=Qt.AlignCenter)
-        layout.addStretch()
-        self.ui.frameBlue.setStyleSheet(sidebar_style)
-        self.ui.lblTitle.setStyleSheet(sidebar_title_style)
-        
-        #Labelek és inputmezők elrendezése
-        layout = QVBoxLayout(self.ui.frameButtons)
-
-
-        server_options_layout = QHBoxLayout() 
-        self.ui.lblServer.setStyleSheet(train_label_style)
-        self.ui.lblServer.setFont(self.font)
-        self.ui.txtinputServer.setStyleSheet(train_input_style)
-        self.ui.txtinputServer.setAlignment(Qt.AlignVCenter)
-        self.ui.txtinputServer.setFont(self.font)
-        self.ui.txtinputServer.setPlaceholderText('127.0.0.1:5000')
-        self.ui.txtinputServer.setContextMenuPolicy(Qt.NoContextMenu)
-
-        self.ui.lblDescription.setStyleSheet(description_style)
-        self.ui.lblDescription.setFont(self.font)
-        self.ui.lblDescription.setText(
-        '''<html>
-        <style>
-                p { line-height: 1.2; }
-        </style>
-        <body>
-                <p align='justify'>
-        Add meg a tanítást végző kiszolgáló címét és portját, majd rögzítsd és tanítsd meg saját gesztusaidat!
-                </p>
-            </body>
-        </html>'''
-        )
-
-        self.ui.lblServer.setFixedHeight(30)
-        self.ui.txtinputServer.setFixedHeight(30)
-
-
-
-        server_options_layout.addWidget(self.ui.lblServer)
-        server_options_layout.addWidget(self.ui.txtinputServer)
-        
-
-        self.ui.btnBack.setStyleSheet(options_button_style)
-        self.ui.btnBack.setFont(self.font)
-        self.ui.btnBack.clicked.connect(lambda event: self.stacked_widget.setCurrentIndex(2))
-        self.ui.btnBack.enterEvent = lambda event: self.ui.btnBack.setStyleSheet(options_button_hover_style)
-        self.ui.btnBack.leaveEvent = lambda event: self.ui.btnBack.setStyleSheet(options_button_style)
-
-        
-
-        #Gombok kinézete
-        self.ui.btnRecord.setStyleSheet(options_button_style)
-        self.ui.btnDelete.setStyleSheet(options_button_style)
-        self.ui.btnTrain.setStyleSheet(options_button_style)
-        self.ui.btnRecord.setFont(self.font)
-        self.ui.btnDelete.setFont(self.font)
-        self.ui.btnTrain.setFont(self.font)
-
-
-        #Gombeventek
-        self.ui.btnRecord.enterEvent = lambda event: self.ui.btnRecord.setStyleSheet(options_button_hover_style)
-        self.ui.btnRecord.leaveEvent = lambda event: self.ui.btnRecord.setStyleSheet(options_button_style)
-        self.ui.btnRecord.clicked.connect(lambda event: self.stacked_widget.setCurrentIndex(4))
-        
-        self.ui.btnDelete.enterEvent = lambda event: self.ui.btnDelete.setStyleSheet(options_button_hover_style)
-        self.ui.btnDelete.leaveEvent = lambda event: self.ui.btnDelete.setStyleSheet(options_button_style)
-        self.ui.btnDelete.clicked.connect(self.delete)
-
-
-        self.ui.btnTrain.enterEvent = lambda event: self.ui.btnTrain.setStyleSheet(options_button_hover_style)
-        self.ui.btnTrain.leaveEvent = lambda event: self.ui.btnTrain.setStyleSheet(options_button_style)        
-        self.ui.btnTrain.clicked.connect(lambda event: self.startTraining())
-
-
         #Gesztusok listája
-        self.scroll_layout = QVBoxLayout(self.ui.scrollAreaWidgetContents)
-        self.ui.lblGestures.setStyleSheet(train_label_style)
-        self.ui.lblGestures.setFont(self.font)
 
-        self.ui.scrollArea.setStyleSheet(train_scrollBar_style)
-
-        self.ui.scrollArea.verticalScrollBar().setContextMenuPolicy(Qt.NoContextMenu)
-        self.scroll_layout.setAlignment(Qt.AlignTop)
-        self.scroll_layout.setSpacing(0)
         self.updateList()
 
 
@@ -238,21 +153,113 @@ class TrainMenuController(QWidget):
 
 #endregion
 
+#region Eseménykezelők
+    def setEventHandlers(self):
+        self.stacked_widget.currentChanged.connect(self.onReturn)
 
+        self.ui.btnBack.clicked.connect(lambda event: self.stacked_widget.setCurrentIndex(2))
+        self.ui.btnBack.enterEvent = lambda event: self.ui.btnBack.setStyleSheet(options_button_hover_style)
+        self.ui.btnBack.leaveEvent = lambda event: self.ui.btnBack.setStyleSheet(options_button_style)
+
+        
+
+        #Gombok kinézete
+        self.ui.btnRecord.setStyleSheet(options_button_style)
+        self.ui.btnDelete.setStyleSheet(options_button_style)
+        self.ui.btnTrain.setStyleSheet(options_button_style)
+
+
+        #Gombeventek
+        self.ui.btnRecord.enterEvent = lambda event: self.ui.btnRecord.setStyleSheet(options_button_hover_style)
+        self.ui.btnRecord.leaveEvent = lambda event: self.ui.btnRecord.setStyleSheet(options_button_style)
+        self.ui.btnRecord.clicked.connect(lambda event: self.stacked_widget.setCurrentIndex(4))
+        
+        self.ui.btnDelete.enterEvent = lambda event: self.ui.btnDelete.setStyleSheet(options_button_hover_style)
+        self.ui.btnDelete.leaveEvent = lambda event: self.ui.btnDelete.setStyleSheet(options_button_style)
+        self.ui.btnDelete.clicked.connect(self.delete)
+
+
+        self.ui.btnTrain.enterEvent = lambda event: self.ui.btnTrain.setStyleSheet(options_button_hover_style)
+        self.ui.btnTrain.leaveEvent = lambda event: self.ui.btnTrain.setStyleSheet(options_button_style)        
+        self.ui.btnTrain.clicked.connect(lambda event: self.startTraining())
+
+
+#endregion
+
+
+#region Stílusállítók
+    def setFonts(self):
+        self.loadFont()
+        self.ui.lblServer.setFont(self.font)
+        self.ui.txtinputServer.setFont(self.font)
+        self.ui.lblDescription.setFont(self.font)
+        self.ui.btnBack.setFont(self.font)
+        self.ui.lblTitle.setFont(self.font)
+        self.ui.lblDescription.setFont(self.font)
+        self.ui.btnRecord.setFont(self.font)
+        self.ui.btnDelete.setFont(self.font)
+        self.ui.btnTrain.setFont(self.font)
+        self.ui.lblGestures.setFont(self.font)
+
+
+    def setStyles(self):
+        self.setFonts()
+        self.ui.frameBlue.setStyleSheet(sidebar_style)
+        self.ui.lblTitle.setStyleSheet(sidebar_title_style)
+        self.ui.lblGestures.setStyleSheet(train_label_style)
+        self.ui.scrollArea.setStyleSheet(train_scrollBar_style)
+        self.ui.lblServer.setStyleSheet(train_label_style)
+        self.ui.txtinputServer.setStyleSheet(train_input_style)
+        self.ui.lblDescription.setStyleSheet(description_style)
+        self.ui.btnBack.setStyleSheet(options_button_style)
+
+    def setLayoutSettings(self):
+        #Kék alapú díszítősáv elrendezése
+        layout = QVBoxLayout(self.ui.frameBlue)
+        layout.setContentsMargins(0, 55, 0, 0)
+        layout.setSpacing(0)
+        layout.addWidget(self.ui.lblTitle, alignment=Qt.AlignCenter)
+        layout.addStretch()
+
+         #Labelek és inputmezők elrendezése
+        layout = QVBoxLayout(self.ui.frameButtons)
+
+
+        server_options_layout = QHBoxLayout() 
+        self.ui.txtinputServer.setAlignment(Qt.AlignVCenter)
+        self.ui.txtinputServer.setPlaceholderText('127.0.0.1:5000')
+        self.ui.txtinputServer.setContextMenuPolicy(Qt.NoContextMenu)
+        self.ui.lblDescription.setText(
+        '''<html>
+        <style>
+                p { line-height: 1.2; }
+        </style>
+        <body>
+                <p align='justify'>
+        Add meg a tanítást végző kiszolgáló címét és portját, majd rögzítsd és tanítsd meg saját gesztusaidat!
+                </p>
+            </body>
+        </html>'''
+        )
+
+        self.ui.lblServer.setFixedHeight(30)
+        self.ui.txtinputServer.setFixedHeight(30)
+
+
+
+        server_options_layout.addWidget(self.ui.lblServer)
+        server_options_layout.addWidget(self.ui.txtinputServer)
+        self.scroll_layout = QVBoxLayout(self.ui.scrollAreaWidgetContents)
+        self.ui.scrollArea.verticalScrollBar().setContextMenuPolicy(Qt.NoContextMenu)
+        self.scroll_layout.setAlignment(Qt.AlignTop)
+        self.scroll_layout.setSpacing(0)
 
     def loadFont(self):
         font_id = QFontDatabase.addApplicationFont('Resources\\Fonts\\Ubuntu-R.ttf')
         if font_id != -1:
             font_family = QFontDatabase.applicationFontFamilies(font_id)[0]
             self.font = QFont(font_family, 16)
-            self.ui.lblTitle.setFont(self.font)
-            self.ui.lblDescription.setFont(self.font)
         else:
             print('Hiba: Nem sikerült betölteni az Ubuntu fontot!')
 
-
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    window = TrainMenuController()
-    window.show()
-    sys.exit(app.exec_())
+#endregion

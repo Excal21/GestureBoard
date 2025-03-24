@@ -176,7 +176,7 @@ class Recognizer:
 
     return annotated_image
 
-
+#region Konfigurációs fájlok betöltése
   def loadGestures(self):
     with open(self.__configpath, "r") as file:
       data = dict(json.load(file))
@@ -190,7 +190,9 @@ class Recognizer:
       self.__confidence = data['Confidence']
       self.__hueoffset = data['HueOffset']
       self.__delay = data['Delay']
+#endregion
 
+#region Gesztusfelismerés
   def Run(self):
     print('Recognizer started')
     self.loadCameraSettings()
@@ -228,8 +230,6 @@ class Recognizer:
         img[:, :, 0] += self.__hueoffset
         img = cv2.cvtColor(img, cv2.COLOR_HSV2BGR)
       
-      
-      #Kilépés ESC gombra
       if cv2.waitKey(1) == 27: 
           self.__stop = True
       mp_image = Image(image_format=ImageFormat.SRGB, data=img)
@@ -241,7 +241,6 @@ class Recognizer:
         for gesture in result.gestures:
             if gesture[0].category_name != 'NONE' and gesture[0].category_name != '':
               if gesture[0].score > self.confidence:
-          #      print(f"{gesture[0].category_name} Confidence: {gesture[0].score:.2f}")
                 last_gestures.append(gesture[0].category_name)
 
 
@@ -267,8 +266,9 @@ class Recognizer:
 
   def Stop(self):
     self.__stop = True
+#endregion
 
-
+#region Közvetlen futtatás debughoz
 if __name__ == '__main__':
   taskFile = "gesture_recognizer.task"
   recognizer = Recognizer("gesture_recognizer.task")
@@ -278,5 +278,5 @@ if __name__ == '__main__':
   recognizer.camerafeed = True
   recognizer.Run()
 
-
+#endregion
   

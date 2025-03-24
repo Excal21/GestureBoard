@@ -11,29 +11,23 @@ from PySide6.QtWidgets import QApplication, QStackedWidget
 from Resources.Stylesheets.styles import *
 from Views.ui_optionsForm import Ui_OptionsForm
 
-#sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'Views')))
-#sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'Config')))
-#sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'Resources', 'Stylesheets')))
 
 class OptionsMenuController(QWidget):
     def __init__(self, stacked_widget):
         super().__init__()
         self.setAttribute(Qt.WA_TranslucentBackground)
         self.stacked_widget = stacked_widget
-        self.stacked_widget.currentChanged.connect(self.onReturn)
-
         self.ui = Ui_OptionsForm()
+
         self.ui.setupUi(self)
 
         self.font = None
-        self.loadFont()
-        self.setFonts()
         self.setStyles()
+        self.setLayoutSettings()
         self.setEventHandlers()
 
 
         self.sub_menu_active = False
-
         self.keycapture_active = False
         self.key_command = ''
 
@@ -41,47 +35,6 @@ class OptionsMenuController(QWidget):
 
         self.loadConfig()
 
-        #Kék alapú díszítősáv elrendezése
-        layout = QVBoxLayout(self.ui.frameBlue)
-        layout.setContentsMargins(0, 55, 0, 0)
-        layout.setSpacing(20)
-        layout.addWidget(self.ui.lblTitle, alignment=Qt.AlignCenter)
-        layout.addWidget(self.ui.lblDescription, alignment=Qt.AlignCenter)
-        layout.addStretch()
-
-        self.ui.lblDescription.setText('')
-
-        #Görgethető terület
-        self.scroll_area = self.ui.scrollArea
-        self.scroll_area.setWidgetResizable(True)
-        self.scroll_layout = QVBoxLayout(self.ui.scrollAreaWidgetContents)
-        self.scroll_area.setWidget(self.ui.scrollAreaWidgetContents)
-
-        self.ui.scrollArea.verticalScrollBar().setContextMenuPolicy(Qt.NoContextMenu)
-        self.ui.scrollArea.horizontalScrollBar().setContextMenuPolicy(Qt.NoContextMenu)
-        self.clicked = None
-
-
-        #Előre definiált beállítások menüje
-        self.ui.scrollCombo.hide()
-
-        self.ui.scrollCombo.verticalScrollBar().setContextMenuPolicy(Qt.NoContextMenu)
-        self.ui.scrollCombo.horizontalScrollBar().setContextMenuPolicy(Qt.NoContextMenu)
-        self.predefined_clicked = None
-
-        self.ui.scrollCombo.setParent(self.ui.frameButtons)
-        self.loadComboMenu()
-        self.ui.scrollCombo.hide()
-
-        #Keylog
-        self.ui.frameHide.hide()
-        self.ui.lblUserGuide.setAlignment(Qt.AlignHCenter)
-
-    def loadConfig(self):
-        config_path = ('Config\\UserSettings.json')
-        with open(config_path, 'r', encoding='utf-8') as file:
-            self.data = dict(json.load(file))
-        print('UserSettings JSON loaded')
 
 #region Válaszhatók menüje
     def updateEntries(self):
@@ -289,14 +242,16 @@ class OptionsMenuController(QWidget):
 
 
 #region Mentés, reset, stb.
+    def loadConfig(self):
+        config_path = ('Config\\UserSettings.json')
+        with open(config_path, 'r', encoding='utf-8') as file:
+            self.data = dict(json.load(file))
+        print('UserSettings JSON betöltve')
 
     def saveMappings(self):
-        # with open('Config\\UserSettings.json', 'r', encoding='utf-8') as file:
-        #     data = dict(json.load(file))
-        
         with open('Config\\UserSettings.json', 'w', encoding='utf-8') as file:
             json.dump(self.data, file, ensure_ascii=False, indent=4)
-        print('Settings saved')
+        print('Beállítások mentve')
         
 
         self.hideEverything()
@@ -339,6 +294,8 @@ class OptionsMenuController(QWidget):
 
 #region Eseménykezelők
     def setEventHandlers(self):
+        self.stacked_widget.currentChanged.connect(self.onReturn)
+
         self.ui.btnTeach.clicked.connect(lambda event: self.stacked_widget.setCurrentIndex(3))
         self.ui.btnTeach.enterEvent = lambda event: self.ui.btnTeach.setStyleSheet(options_button_hover_style)
         self.ui.btnTeach.leaveEvent = lambda event: self.ui.btnTeach.setStyleSheet(options_button_style)
@@ -357,6 +314,7 @@ class OptionsMenuController(QWidget):
 
 #region Stílusállítók
     def setStyles(self):
+        self.setFonts()
         self.ui.frameBlue.setStyleSheet(sidebar_style)
         self.ui.lblTitle.setStyleSheet(sidebar_title_style)
         self.ui.lblDescription.setStyleSheet(description_style)
@@ -370,17 +328,56 @@ class OptionsMenuController(QWidget):
 
 
     def setFonts(self):
+        self.loadFont()
         self.ui.btnReset.setFont(self.font)
         self.ui.btnSave.setFont(self.font)
         self.ui.btnTeach.setFont(self.font)
         self.ui.lblUserGuide.setFont(self.font)
 
 
+    def setLayoutSettings(self):
+        #Kék alapú díszítősáv elrendezése
+        layout = QVBoxLayout(self.ui.frameBlue)
+        layout.setContentsMargins(0, 55, 0, 0)
+        layout.setSpacing(20)
+        layout.addWidget(self.ui.lblTitle, alignment=Qt.AlignCenter)
+        layout.addWidget(self.ui.lblDescription, alignment=Qt.AlignCenter)
+        layout.addStretch()
+
+        self.ui.lblDescription.setText('')
+
+        #Görgethető terület
+        self.scroll_area = self.ui.scrollArea
+        self.scroll_area.setWidgetResizable(True)
+        self.scroll_layout = QVBoxLayout(self.ui.scrollAreaWidgetContents)
+        self.scroll_area.setWidget(self.ui.scrollAreaWidgetContents)
+
+        self.ui.scrollArea.verticalScrollBar().setContextMenuPolicy(Qt.NoContextMenu)
+        self.ui.scrollArea.horizontalScrollBar().setContextMenuPolicy(Qt.NoContextMenu)
+        self.clicked = None
+
+
+        #Előre definiált beállítások menüje
+        self.ui.scrollCombo.hide()
+
+        self.ui.scrollCombo.verticalScrollBar().setContextMenuPolicy(Qt.NoContextMenu)
+        self.ui.scrollCombo.horizontalScrollBar().setContextMenuPolicy(Qt.NoContextMenu)
+        self.predefined_clicked = None
+
+        self.ui.scrollCombo.setParent(self.ui.frameButtons)
+        self.loadComboMenu()
+        self.ui.scrollCombo.hide()
+
+        #Keylog
+        self.ui.frameHide.hide()
+        self.ui.lblUserGuide.setAlignment(Qt.AlignHCenter)
+
 #endregion
 
 
 
     def loadFont(self):
+
         font_id = QFontDatabase.addApplicationFont('Resources\\Fonts\\Ubuntu-R.ttf')
         if font_id != -1:
             font_family = QFontDatabase.applicationFontFamilies(font_id)[0]

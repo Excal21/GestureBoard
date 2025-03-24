@@ -8,9 +8,6 @@ from Resources.Stylesheets.styles import *
 from Views.ui_mainMenuForm import Ui_MainWindow
 from Models.RecognizerHandler import *
 
-#sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'Views')))
-#sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'Resources', 'Stylesheets')))
-
 class MainMenuController(QWidget):
     def __init__(self, stacked_widget):
         super().__init__()
