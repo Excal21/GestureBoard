@@ -332,9 +332,10 @@ class OptionsMenuController(QWidget):
         self.ui.scrollCombo.hide()
         self.ui.frameHide.hide()
 
-    def onReturn(self):
-        self.loadConfig()
-        self.updateEntries()
+    def onReturn(self, index):
+        if index == 2:
+            self.loadConfig()
+            self.updateEntries()
 
 #region Eseménykezelők
     def setEventHandlers(self):

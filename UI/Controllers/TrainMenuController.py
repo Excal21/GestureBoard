@@ -87,11 +87,6 @@ class TrainMenuController(QWidget):
         self.ui.btnBack.leaveEvent = lambda event: self.ui.btnBack.setStyleSheet(options_button_style)
 
         
-        # self.ui.btnSave.setStyleSheet(options_button_style)
-        # self.ui.btnSave.setFont(self.font)
-        # self.ui.btnSave.clicked.connect(self.save)
-        # self.ui.btnSave.enterEvent = lambda event: self.ui.btnSave.setStyleSheet(options_button_hover_style)
-        # self.ui.btnSave.leaveEvent = lambda event: self.ui.btnSave.setStyleSheet(options_button_style)
 
         #Gombok kinézete
         self.ui.btnRecord.setStyleSheet(options_button_style)
@@ -137,34 +132,34 @@ class TrainMenuController(QWidget):
 
 #region Lista kezelése
 
-    def onReturn(self):
-        if self.stacked_widget.widget(3) == self:
-            print('Gesztusok frissítve')
+    def onReturn(self, index):
+        if index == 3:
             with open('Config\\UserSettings.json', 'r', encoding='UTF-8') as f:
                 self.data = dict(json.load(f))
+            print('Gesztusok frissítve')
             self.updateList()
 
     def updateList(self):
-        if self.data is None:
-            with open('Config\\UserSettings.json', 'r', encoding='UTF-8') as f:
-                self.data = dict(json.load(f))
+
+        print('Lista frissítése...')
+        
         #print('listaadat: ', self.data)
+        if self.data is not None:
+            while self.scroll_layout.count():
+                child = self.scroll_layout.takeAt(0)
+                if child.widget():
+                    child.widget().deleteLater()
+            if len(self.data) > 0:
+                for key, value in self.data.items():
+                    entry = QPushButton(value['gesture'])
+                    entry.setStyleSheet(predefined_label_style)
+                    entry.setFont(self.font)
+                    entry.setFixedHeight(33)
+                    
+                    entry.clicked.connect(lambda event, key=key, entry = entry : self.select(key, entry))
+                    
 
-        while self.scroll_layout.count():
-            child = self.scroll_layout.takeAt(0)
-            if child.widget():
-                child.widget().deleteLater()
-        if len(self.data) > 0:
-            for key, value in self.data.items():
-                entry = QPushButton(value['gesture'])
-                entry.setStyleSheet(predefined_label_style)
-                entry.setFont(self.font)
-                entry.setFixedHeight(33)
-                
-                entry.clicked.connect(lambda event, key=key, entry = entry : self.select(key, entry))
-                
-
-                self.scroll_layout.addWidget(entry)
+                    self.scroll_layout.addWidget(entry)
 
     def select(self, key, label):
         for i in range(self.scroll_layout.count()):
@@ -191,6 +186,8 @@ class TrainMenuController(QWidget):
             os.chmod(path, stat.S_IWRITE)  # Eltávolítja az írásvédettséget
             func(path)
 
+
+        print('Mentés előtti adat', self.data)
         with open('Config\\UserSettings.json', 'w', encoding='UTF-8') as f:
             json.dump(self.data, f, ensure_ascii=False, indent=4)
         print('JSON dumped')
@@ -232,8 +229,8 @@ class TrainMenuController(QWidget):
     def finishTraining(self):
         print('sikeres tanítás')
         if self.trainer.trained:
-            self.updateList()
             self.save()
+            self.updateList()
             self.stacked_widget.setCurrentIndex(2)
         else:
             self.stacked_widget.setCurrentIndex(3)
