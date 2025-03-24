@@ -23,24 +23,41 @@ class Trainer(QThread):
         self.filename = 'Images.zip'
     
     def run(self):
-        make_archive('Images', 'zip', 'Data\\Samples')
-        with open(self.filename, 'rb') as file:
-            files = {'file': file}
-            response = requests.post('http://' + self.ip + ':' + self.port + '/upload', headers={'X-API-KEY' : 'secret'}, files=files)
-            if(response.status_code == 200):
-                self.progress.emit('Fájlok sikeresen feltöltve')
-                response = requests.get('http://' + self.ip + ':' + self.port + '/status', headers={'X-API-KEY': 'secret'})
-                if response.json()['status'] == 'busy':
-                    self.progress.emit('Tanítás folyamatban')
-            
-        os.remove(self.filename)
+        try:
+            response = requests.get('http://' + self.ip + ':' + self.port + '/status', headers={'X-API-KEY': 'secret'})
+            if response.status_code == 200:
+                if response.json()['status'] == 'idle':
+                    make_archive('Images', 'zip', 'Data\\Samples')
+                    with open(self.filename, 'rb') as file:
+                        files = {'file': file}
+                        response = requests.post('http://' + self.ip + ':' + self.port + '/upload', headers={'X-API-KEY' : 'secret'}, files=files)
+                    if(response.status_code == 200):
+                        self.progress.emit('Fájlok sikeresen feltöltve')
+                        #response = requests.get('http://' + self.ip + ':' + self.port + '/status', headers={'X-API-KEY': 'secret'})
+                        sleep(1)
+                        os.remove(self.filename)
+                else:
+                    self.progress.emit('A kiszolgáló elfoglalt')
+
+            else:
+                self.progress.emit('Kiszolgálóhiba')
+                print('Kiszolgálóhiba')
+                sleep(1)
+                return
+        except requests.exceptions.ConnectionError:
+            print('Kiszolgáló nem elérhető')
+            self.progress.emit('Kiszolgáló nem elérhető')
+            sleep(1)
+            return
+
         trained = False
         while not trained:
             response = requests.get('http://' + self.ip + ':' + self.port + '/status', headers={'X-API-KEY': 'secret'})
             if response.json()['status'] == 'idle':
                 trained = True
                 self.progress.emit('Tanítás kész')
-            else:
+            elif response.json()['status'] == 'busy':
+                self.progress.emit('Tanítás folyamatban')
                 sleep(5)
 
         if trained:

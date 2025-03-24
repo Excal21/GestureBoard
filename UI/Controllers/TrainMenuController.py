@@ -149,7 +149,7 @@ class TrainMenuController(QWidget):
         if self.data is None:
             with open('Config\\UserSettings.json', 'r', encoding='UTF-8') as f:
                 self.data = dict(json.load(f))
-        print('listaadat: ', self.data)
+        #print('listaadat: ', self.data)
 
         while self.scroll_layout.count():
             child = self.scroll_layout.takeAt(0)

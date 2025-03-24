@@ -7,9 +7,9 @@
     },
     "2": {
         "gesture": "Nyílt tenyér",
-        "action": "pyautogui.hotkey('w')",
-        "description": "W",
-        "highlight": 1
+        "action": "pyautogui.hotkey('win', 'd')",
+        "description": "Asztal megjelenítése",
+        "highlight": 0
     },
     "4": {
         "gesture": "Force",
