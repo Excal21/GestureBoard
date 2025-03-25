@@ -32,7 +32,7 @@ class TrainMenuController(QWidget):
         self.selected_gesture = None
         self.rec = Recorder()
         self.data = None
-
+        self.previous_page = 2
 #region Alapbeállítások
 
         #Gesztusok listája
@@ -48,11 +48,13 @@ class TrainMenuController(QWidget):
 #region Lista kezelése
 
     def onReturn(self, index):
-        if index == 3:
+        if index == 3 and self.previous_page != 4:
+            print(self.previous_page)
             with open('Config\\UserSettings.json', 'r', encoding='UTF-8') as f:
                 self.data = dict(json.load(f))
             print('Gesztusok frissítve')
-            self.updateList()
+        
+        self.updateList()
 
     def updateList(self):
 
@@ -111,6 +113,14 @@ class TrainMenuController(QWidget):
             if key not in self.data.keys():
                 shutil.rmtree('Data\\Samples\\' + key, onerror=remove_readonly)
 
+    def startRecord(self):
+        self.previous_page = 4
+        self.stacked_widget.setCurrentIndex(4)
+
+    def back(self):
+        self.previous_page = 2
+        self.stacked_widget.setCurrentIndex(2)
+
 #endregion
 
 #region Tanítás kezelése
@@ -146,6 +156,7 @@ class TrainMenuController(QWidget):
         if self.trainer.trained:
             self.save()
             self.updateList()
+            self.previous_page = 2
             self.stacked_widget.setCurrentIndex(2)
         else:
             self.stacked_widget.setCurrentIndex(3)
@@ -157,22 +168,18 @@ class TrainMenuController(QWidget):
     def setEventHandlers(self):
         self.stacked_widget.currentChanged.connect(self.onReturn)
 
-        self.ui.btnBack.clicked.connect(lambda event: self.stacked_widget.setCurrentIndex(2))
+        self.ui.btnBack.clicked.connect(self.back)
         self.ui.btnBack.enterEvent = lambda event: self.ui.btnBack.setStyleSheet(options_button_hover_style)
         self.ui.btnBack.leaveEvent = lambda event: self.ui.btnBack.setStyleSheet(options_button_style)
 
         
 
-        #Gombok kinézete
-        self.ui.btnRecord.setStyleSheet(options_button_style)
-        self.ui.btnDelete.setStyleSheet(options_button_style)
-        self.ui.btnTrain.setStyleSheet(options_button_style)
 
 
         #Gombeventek
         self.ui.btnRecord.enterEvent = lambda event: self.ui.btnRecord.setStyleSheet(options_button_hover_style)
         self.ui.btnRecord.leaveEvent = lambda event: self.ui.btnRecord.setStyleSheet(options_button_style)
-        self.ui.btnRecord.clicked.connect(lambda event: self.stacked_widget.setCurrentIndex(4))
+        self.ui.btnRecord.clicked.connect(self.startRecord)
         
         self.ui.btnDelete.enterEvent = lambda event: self.ui.btnDelete.setStyleSheet(options_button_hover_style)
         self.ui.btnDelete.leaveEvent = lambda event: self.ui.btnDelete.setStyleSheet(options_button_style)
@@ -212,6 +219,10 @@ class TrainMenuController(QWidget):
         self.ui.txtinputServer.setStyleSheet(train_input_style)
         self.ui.lblDescription.setStyleSheet(description_style)
         self.ui.btnBack.setStyleSheet(options_button_style)
+        self.ui.btnRecord.setStyleSheet(options_button_style)
+        self.ui.btnDelete.setStyleSheet(options_button_style)
+        self.ui.btnTrain.setStyleSheet(options_button_style)
+
 
     def setLayoutSettings(self):
         #Kék alapú díszítősáv elrendezése

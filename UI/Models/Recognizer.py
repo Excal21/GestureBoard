@@ -176,6 +176,7 @@ class Recognizer:
 
     return annotated_image
 
+
 #region Konfigurációs fájlok betöltése
   def loadGestures(self):
     with open(self.__configpath, "r") as file:
@@ -253,7 +254,7 @@ class Recognizer:
             print(last_gestures[0])
             exec(gesture_mappings[last_gestures[0]]['action'])
             print("last_gesture: {0}, confidence: {1:2f}".format(last_gestures[0], gesture[0].score))
-          last_gesture_time = datetime.now()
+            last_gesture_time = datetime.now()
         last_gestures.clear()
 
       if self.__camerafeed:

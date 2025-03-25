@@ -1,8 +1,20 @@
 {
-    "2": {
-        "gesture": "Nyílt tenyér",
-        "action": "pyautogui.hotkey('g')",
-        "description": "G",
+    "5": {
+        "gesture": "FY",
+        "action": "os.system('start http://www.gmail.com')",
+        "description": "Gmail megnyitása",
+        "highlight": 0
+    },
+    "6": {
+        "gesture": "Force",
+        "action": "pyautogui.hotkey('ctrl', 'j')",
+        "description": "ctrl + J",
         "highlight": 1
+    },
+    "7": {
+        "gesture": "Nyílt tenyér",
+        "action": "pyautogui.hotkey('win', 'd')",
+        "description": "Asztal megjelenítése",
+        "highlight": 0
     }
 }
