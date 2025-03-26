@@ -15,8 +15,8 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QFrame, QLabel, QPushButton,
-    QScrollArea, QSizePolicy, QWidget)
+from PySide6.QtWidgets import (QApplication, QFrame, QLabel, QLineEdit,
+    QPushButton, QScrollArea, QSizePolicy, QWidget)
 
 class Ui_OptionsForm(object):
     def setupUi(self, OptionsForm):
@@ -35,7 +35,7 @@ class Ui_OptionsForm(object):
         self.lblTitle.setStyleSheet(u"")
         self.lblDescription = QLabel(self.frameBlue)
         self.lblDescription.setObjectName(u"lblDescription")
-        self.lblDescription.setGeometry(QRect(10, 130, 251, 16))
+        self.lblDescription.setGeometry(QRect(20, 130, 231, 20))
         self.frameButtons = QFrame(OptionsForm)
         self.frameButtons.setObjectName(u"frameButtons")
         self.frameButtons.setGeometry(QRect(280, 0, 520, 410))
@@ -75,6 +75,12 @@ class Ui_OptionsForm(object):
         self.lblUserGuide = QLabel(self.frameHide)
         self.lblUserGuide.setObjectName(u"lblUserGuide")
         self.lblUserGuide.setGeometry(QRect(8, 20, 221, 81))
+        self.txtinputCommand = QLineEdit(self.frameHide)
+        self.txtinputCommand.setObjectName(u"txtinputCommand")
+        self.txtinputCommand.setGeometry(QRect(20, 60, 161, 28))
+        self.btnCommandOk = QPushButton(self.frameHide)
+        self.btnCommandOk.setObjectName(u"btnCommandOk")
+        self.btnCommandOk.setGeometry(QRect(190, 60, 31, 29))
 
         self.retranslateUi(OptionsForm)
 
@@ -89,5 +95,6 @@ class Ui_OptionsForm(object):
         self.btnReset.setText(QCoreApplication.translate("OptionsForm", u"Alaphelyzet", None))
         self.btnTeach.setText(QCoreApplication.translate("OptionsForm", u"Gesztusok kezel\u00e9se", None))
         self.lblUserGuide.setText(QCoreApplication.translate("OptionsForm", u"TextLabel", None))
+        self.btnCommandOk.setText(QCoreApplication.translate("OptionsForm", u"PushButton", None))
     # retranslateUi
 

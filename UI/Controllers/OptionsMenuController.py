@@ -29,6 +29,7 @@ class OptionsMenuController(QWidget):
 
         self.sub_menu_active = False
         self.keycapture_active = False
+        self.command_input_active = False
         self.key_command = ''
 
         self.data = None
@@ -96,6 +97,7 @@ class OptionsMenuController(QWidget):
 
             btnCombo.clicked.connect(lambda event, key=key: self.showSubSelection(key))
             btnKey.clicked.connect(lambda event, key=key: self.startKeyCapture(key))
+            btnConsole.clicked.connect(lambda event, key=key: self.showCommandInput(key))
 
             gesture_entry_layout.addWidget(label)
             gesture_entry_layout.addWidget(btnContainer)
@@ -109,6 +111,8 @@ class OptionsMenuController(QWidget):
 
 #region Előtanított műveletek
     def showSubSelection(self, JSONkey):
+        self.keycapture_active = False
+        self.command_input_active = False
         self.hideEverything()
         if self.sub_menu_active == False:
             self.sub_menu_active = True
@@ -159,6 +163,7 @@ class OptionsMenuController(QWidget):
 
 #region Billentyűszimuláció
     def startKeyCapture(self, JSONkey):
+        self.command_input_active = False
         self.hideEverything()
         if self.keycapture_active:
             self.keycapture_active = False
@@ -238,8 +243,34 @@ class OptionsMenuController(QWidget):
             self.ui.lblUserGuide.setText('Billentyűkombináció')
 
 
+#region Parancs megadása
+    def showCommandInput(self, key):
+        self.hideEverything()
+        self.keycapture_active = False
+        if self.command_input_active:
+            self.command_input_active = False
+            self.ui.frameHide.hide()
+        else:
+            self.command_input_active = True
+            self.clicked = key
+            self.ui.frameHide.show()
+            self.ui.txtinputCommand.show()
+            self.ui.btnCommandOk.show()
+            self.ui.txtinputCommand.setFocus()
+            self.ui.lblUserGuide.setText('Parancs megadása')
 
-
+    def saveCommand(self):
+        action = f'os.system(\'{self.ui.txtinputCommand.text()}\')'
+        self.data[self.clicked]['action'] = action
+        self.data[self.clicked]['highlight'] = 2
+        self.data[self.clicked]['description'] = self.ui.txtinputCommand.text()
+        self.ui.txtinputCommand.clear()
+        self.ui.txtinputCommand.hide()
+        self.ui.btnCommandOk.hide()
+        self.ui.frameHide.hide()
+        self.command_input_active = False
+        self.updateEntries()
+#endregion
 
 #region Mentés, reset, stb.
     def loadConfig(self):
@@ -286,6 +317,8 @@ class OptionsMenuController(QWidget):
     def hideEverything(self):
         self.ui.scrollCombo.hide()
         self.ui.frameHide.hide()
+        self.ui.txtinputCommand.hide()
+        self.ui.btnCommandOk.hide()
 
     def onReturn(self, index):
         if index == 2:
@@ -308,6 +341,9 @@ class OptionsMenuController(QWidget):
         self.ui.btnReset.enterEvent = lambda event: self.ui.btnReset.setStyleSheet(options_button_hover_style)
         self.ui.btnReset.leaveEvent = lambda event: self.ui.btnReset.setStyleSheet(options_button_style)
 
+        self.ui.btnCommandOk.clicked.connect(lambda: self.saveCommand())
+        self.ui.btnCommandOk.enterEvent = lambda event: self.ui.btnCommandOk.setStyleSheet(options_button_hover_style)
+        self.ui.btnCommandOk.leaveEvent = lambda event: self.ui.btnCommandOk.setStyleSheet(options_button_style)
 
 #endregion
 
@@ -324,6 +360,8 @@ class OptionsMenuController(QWidget):
         self.ui.btnTeach.setStyleSheet(options_button_style)
         self.ui.scrollCombo.setStyleSheet(scrollbar_style)
         self.ui.lblUserGuide.setStyleSheet(train_label_style)
+        self.ui.txtinputCommand.setStyleSheet(train_input_style)
+        self.ui.btnCommandOk.setStyleSheet(options_button_style)
 
 
 
@@ -333,6 +371,7 @@ class OptionsMenuController(QWidget):
         self.ui.btnSave.setFont(self.font)
         self.ui.btnTeach.setFont(self.font)
         self.ui.lblUserGuide.setFont(self.font)
+        self.ui.txtinputCommand.setFont(self.font)
 
 
     def setLayoutSettings(self):
@@ -369,8 +408,18 @@ class OptionsMenuController(QWidget):
         self.ui.scrollCombo.hide()
 
         #Keylog
+        self.ui.btnCommandOk.hide()
+        self.ui.txtinputCommand.hide()
         self.ui.frameHide.hide()
         self.ui.lblUserGuide.setAlignment(Qt.AlignHCenter)
+
+
+        self.ui.btnCommandOk.setText('')
+        self.ui.btnCommandOk.setIcon(QIcon('Resources\\Icons\\check.png'))
+        self.ui.btnCommandOk.setIconSize(QSize(30, 30))
+
+        self.ui.lblDescription.setContentsMargins(15, 0, 15, 0)
+
 
 #endregion
 

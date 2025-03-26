@@ -145,7 +145,7 @@ class TrainMenuController(QWidget):
 
                 
         self.trainer = Trainer()
-        self.trainer.ip = self.ui.txtinputServer.text().strip()
+        self.trainer.ip = self.ui.txtinputServer.text().strip() if self.ui.txtinputServer.text() != '' else '127.0.0.1:5000'
         self.trainer.finished.connect(self.finishTraining)
         self.trainer.progress.connect(lambda text: info_widget.setText(text))
         self.trainer.start()

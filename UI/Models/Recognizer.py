@@ -252,7 +252,10 @@ class Recognizer:
           print(last_gestures[0])
           if last_gestures[0] in gesture_mappings.keys():
             print(last_gestures[0])
-            exec(gesture_mappings[last_gestures[0]]['action'])
+            try:
+              exec(gesture_mappings[last_gestures[0]]['action'])
+            except:
+              print("Hiba történt a parancs végrehajtásakor")
             print("last_gesture: {0}, confidence: {1:2f}".format(last_gestures[0], gesture[0].score))
             last_gesture_time = datetime.now()
         last_gestures.clear()

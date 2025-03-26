@@ -142,7 +142,8 @@ class NewGestureWizardController(QWidget):
 
 #region Eseménykezelők
     def setEventHandlers(self):
-        pass
+        self.ui.btnNameOK.enterEvent = lambda event: self.ui.btnNameOK.setStyleSheet(options_button_hover_style)
+        self.ui.btnNameOK.leaveEvent = lambda event: self.ui.btnNameOK.setStyleSheet(options_button_style)
 
 #endregion
 
@@ -165,8 +166,6 @@ class NewGestureWizardController(QWidget):
         self.ui.lblGestureInputLabel.setStyleSheet(train_label_style)
         self.ui.txtinputGestureName.setStyleSheet(train_input_style)
         self.ui.btnNameOK.setStyleSheet(options_button_style)
-        self.ui.btnNameOK.enterEvent = lambda event: self.ui.btnNameOK.setStyleSheet(options_button_hover_style)
-        self.ui.btnNameOK.leaveEvent = lambda event: self.ui.btnNameOK.setStyleSheet(options_button_style)
         self.ui.lblUserGuide.setStyleSheet(guide_style)
 
     def setLayoutSettings(self):

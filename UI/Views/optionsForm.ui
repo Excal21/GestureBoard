@@ -50,10 +50,10 @@
    <widget class="QLabel" name="lblDescription">
     <property name="geometry">
      <rect>
-      <x>10</x>
+      <x>20</x>
       <y>130</y>
-      <width>251</width>
-      <height>16</height>
+      <width>231</width>
+      <height>20</height>
      </rect>
     </property>
     <property name="text">
@@ -190,6 +190,29 @@
      </property>
      <property name="text">
       <string>TextLabel</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="txtinputCommand">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>60</y>
+       <width>161</width>
+       <height>28</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btnCommandOk">
+     <property name="geometry">
+      <rect>
+       <x>190</x>
+       <y>60</y>
+       <width>31</width>
+       <height>29</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>PushButton</string>
      </property>
     </widget>
    </widget>
