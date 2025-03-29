@@ -47,7 +47,7 @@ class NewGestureWizardController(QWidget):
         self.rec.cap.set(cv2.CAP_PROP_BUFFERSIZE, 1)
         self.rec.cap.set(cv2.CAP_PROP_FPS, 60)
         print('Train meghívva')
-        self.__gesture_id = int(max(self.stacked_widget.widget(3).data.keys())) + 1 if self.stacked_widget.widget(3).data else 0
+        self.__gesture_id = max(map(int, self.stacked_widget.widget(3).data.keys())) + 1 if self.stacked_widget.widget(3).data else 0
         if self.recording_stage == 0:
             self.gesture_name = self.ui.txtinputGestureName.text()
 

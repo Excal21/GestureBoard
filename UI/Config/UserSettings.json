@@ -1,14 +1,20 @@
 {
+    "4": {
+        "gesture": "Nyílt tenyér",
+        "action": "pyautogui.press('playpause')",
+        "description": "Lejátszás/ szünet",
+        "highlight": 0
+    },
     "6": {
-        "gesture": "Force",
-        "action": null,
-        "description": null,
-        "highlight": -1
+        "gesture": "Két ujjal oldalra",
+        "action": "pyautogui.hotkey('pageup')",
+        "description": "pageup",
+        "highlight": 1
     },
     "7": {
-        "gesture": "Nyílt tenyér",
-        "action": null,
-        "description": null,
-        "highlight": -1
+        "gesture": "Force",
+        "action": "pyautogui.hotkey('space')",
+        "description": "space",
+        "highlight": 1
     }
 }

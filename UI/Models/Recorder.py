@@ -25,14 +25,13 @@ class Recorder():
         self.loadJSONSettings()
 
         self.cap = cv2.VideoCapture(self.camera, cv2.CAP_DSHOW)
-        self.__gesture_id = int(max(data.keys())) + 1 if len(data) > 0 else 0
         print('loaded')
 
 
     def record_batch(self, gesture_name, imgcnt):
         self.img_counter
 
-        gesture_dir = os.path.join('Data/Samples', str(self.__gesture_id))
+        gesture_dir = os.path.join('Data/Samples', str(gesture_name))
         if not os.path.exists(gesture_dir):
             os.makedirs(gesture_dir)
 

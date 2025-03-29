@@ -164,6 +164,7 @@ class OptionsMenuController(QWidget):
 #region Billentyűszimuláció
     def startKeyCapture(self, JSONkey):
         self.command_input_active = False
+        self.sub_menu_active = False
         self.hideEverything()
         if self.keycapture_active:
             self.keycapture_active = False
@@ -185,7 +186,7 @@ class OptionsMenuController(QWidget):
             if event.modifiers() & Qt.ShiftModifier:
                 modifiers.append('shift')
             key = event.nativeVirtualKey()
-
+            print(key)
             key_map = {
                 222: 'Á',
                 226: 'Í',
@@ -195,7 +196,18 @@ class OptionsMenuController(QWidget):
                 219: 'Ő',
                 221: 'Ú',
                 191: 'Ü',
-                220: 'Ű'
+                220: 'Ű',
+                34: 'pagedown',
+                33: 'pageup',
+                36: 'home',
+                35: 'end',
+                45: 'insert',
+                46: 'delete',
+                37: 'balra',
+                38: 'fel',
+                39: 'jobbra',
+                40: 'le',
+
             }
 
             keystr = ''
@@ -216,6 +228,8 @@ class OptionsMenuController(QWidget):
             elif 32 <= key <= 126:
                 valid = True
                 keystr = chr(key)
+                if keystr == ' ':
+                    keystr = 'space'
             
             self.ui.lblUserGuide.setText(f'Billentyűkombináció\n {combination.replace(',', '+') + (' + ' if combination else '') + keystr}')
             
