@@ -24,15 +24,12 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle('GestureBoard')
-        # self.setGeometry(100, 100, 800, 410)
         self.setFixedSize(800, 410)
-        self.setStyleSheet('background-color: white;')  # Alap háttérszín
+        self.setStyleSheet('background-color: white;')
 
-        # QStackedWidget létrehozása
         self.stacked_widget = QStackedWidget()
         self.setCentralWidget(self.stacked_widget)
 
-        # Nézetek létrehozása és hozzáadása
         self.main_menu = Controllers.MainMenuController.MainMenuController(self.stacked_widget)
         self.options_menu = Controllers.OptionsMenuController.OptionsMenuController(self.stacked_widget)
         self.loading_screen = Controllers.LoadingScreenController.LoadingScreenController(self.stacked_widget)

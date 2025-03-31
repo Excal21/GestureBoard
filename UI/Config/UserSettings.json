@@ -1,20 +1,26 @@
 {
-    "4": {
+    "0": {
         "gesture": "Nyílt tenyér",
-        "action": "pyautogui.press('playpause')",
-        "description": "Lejátszás/ szünet",
-        "highlight": 0
+        "action": null,
+        "description": null,
+        "highlight": -1
     },
-    "6": {
-        "gesture": "Két ujjal oldalra",
-        "action": "pyautogui.hotkey('pageup')",
-        "description": "pageup",
-        "highlight": 1
+    "1": {
+        "gesture": "Zárt ököl",
+        "action": null,
+        "description": null,
+        "highlight": -1
     },
-    "7": {
-        "gesture": "Force",
-        "action": "pyautogui.hotkey('space')",
-        "description": "space",
-        "highlight": 1
+    "3": {
+        "gesture": "Felfelé mutatás",
+        "action": null,
+        "description": null,
+        "highlight": -1
+    },
+    "4": {
+        "gesture": "Két ujjal balra",
+        "action": null,
+        "description": null,
+        "highlight": -1
     }
 }
