@@ -4,6 +4,7 @@ import time
 
 from PySide6.QtWidgets import QApplication, QMainWindow, QStackedWidget
 from PySide6.QtCore import Qt, QThread, Signal
+from PySide6 import QtGui
 import Controllers.MainMenuController
 import Controllers.OptionsMenuController
 import Controllers.LoadingScreenController
@@ -26,6 +27,7 @@ class MainWindow(QMainWindow):
         self.setWindowTitle('GestureBoard')
         self.setFixedSize(800, 410)
         self.setStyleSheet('background-color: white;')
+        self.setWindowIcon(QtGui.QIcon('Resources/Icons/hand.ico'))
 
         self.stacked_widget = QStackedWidget()
         self.setCentralWidget(self.stacked_widget)

@@ -28,17 +28,18 @@ class ModelTrainer():
         train_data, rest_data = data.split(0.7)
         validation_data, test_data = rest_data.split(0.8)
 
+
         model_options = gesture_recognizer.ModelOptions(
-            dropout_rate = 0.1,
-            layer_widths = [256, 128, 64]
+            dropout_rate = 0.2,
+            layer_widths = [256, 256, 128, 64]
         )
 
-        hparams = gesture_recognizer.HParams(batch_size=2, 
+        hparams = gesture_recognizer.HParams(batch_size=10, 
                                              epochs=8, 
                                              shuffle= True ,
                                              export_dir='exported_model'
                                              )
-        options = gesture_recognizer.GestureRecognizerOptions(hparams=hparams,model_options=model_options)
+        options = gesture_recognizer.GestureRecognizerOptions(hparams=hparams, model_options=model_options)
 
         model = gesture_recognizer.GestureRecognizer.create(
             train_data=train_data,
