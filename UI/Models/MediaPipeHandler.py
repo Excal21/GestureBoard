@@ -2,7 +2,7 @@ from PySide6.QtCore import Qt, QThread, Signal
 
 class MediapipeLoader(QThread):
     def run(self):
-        print("Mediapipe betöltése...")
+        print('Mediapipe betöltése...')
         import os
         import cv2
         from mediapipe import solutions, Image, ImageFormat
@@ -13,4 +13,4 @@ class MediapipeLoader(QThread):
         import shutil
         import pyautogui
 
-        print("Mediapipe betöltve!")
+        print('Mediapipe betöltve!')

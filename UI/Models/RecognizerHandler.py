@@ -22,7 +22,7 @@ class RecognizerHandler(QThread):
     def load(self):
         if not self.__recognizer:
             from Models.Recognizer import Recognizer
-            self.__recognizer = Recognizer('Config\\gesture_recognizer.task', 'Config\\UserSettings.json')
+            self.__recognizer = Recognizer('Config/gesture_recognizer.task', 'Config/UserSettings.json')
             print('Recognizer loaded')
         self.finished.emit()
 

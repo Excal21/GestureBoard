@@ -63,7 +63,7 @@ class Trainer(QThread):
                 sleep(1)
             elif response.json()['status'] == 'busy':
                 self.progress.emit('Tanítás folyamatban')
-                sleep(5)
+                sleep(1)
 
         if self.trained:
             response = requests.get('http://' + self.ip + '/download',

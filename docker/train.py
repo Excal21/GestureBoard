@@ -34,7 +34,7 @@ class ModelTrainer():
             layer_widths = [256, 256, 128, 64]
         )
 
-        hparams = gesture_recognizer.HParams(batch_size=10, 
+        hparams = gesture_recognizer.HParams(batch_size=8, 
                                              epochs=8, 
                                              shuffle= True ,
                                              export_dir='exported_model'
