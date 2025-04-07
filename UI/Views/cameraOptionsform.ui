@@ -148,7 +148,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Hue eltolás</string>
+     <string>Színeltolás</string>
     </property>
    </widget>
    <widget class="QLabel" name="lblFrameCnt">

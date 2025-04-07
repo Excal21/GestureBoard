@@ -101,7 +101,7 @@ class Ui_Form(object):
         self.lblCamera.setText(QCoreApplication.translate("Form", u"Kamera", None))
         self.btnStartCam.setText(QCoreApplication.translate("Form", u"Kamerateszt", None))
         self.btnBack.setText(QCoreApplication.translate("Form", u"Vissza", None))
-        self.lblHue.setText(QCoreApplication.translate("Form", u"Hue eltol\u00e1s", None))
+        self.lblHue.setText(QCoreApplication.translate("Form", u"Sz\u00edneltol\u00e1s", None))
         self.lblFrameCnt.setText(QCoreApplication.translate("Form", u"K\u00e9pkocka gesztusonk\u00e9nt", None))
         self.lblDelay.setText(QCoreApplication.translate("Form", u"Sz\u00fcnet gesztusok k\u00f6z\u00f6tt", None))
         self.lblConfidence.setText(QCoreApplication.translate("Form", u"Magabiztoss\u00e1g", None))
