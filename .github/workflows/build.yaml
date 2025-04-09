@@ -1,0 +1,71 @@
+name: Build
+
+on: [workflow_dispatch, pull_request]
+
+jobs:
+  Win64_Build:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.9'
+
+      - name: Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r ./UI/requirements.txt
+          pip install pyinstaller
+
+      - name: PyInstaller
+        shell: cmd
+        run: |
+          pyinstaller ./UI/main.py ^
+            --windowed ^
+            --icon=./UI/Resources/Icons/hand.ico ^
+            --hidden-import=tensorflow ^
+            --noconfirm ^
+            --clean ^
+            --distpath ./build_dist
+
+      - name: Config, Data, Resource
+        run: |
+          mkdir ./build_dist/Config
+          mkdir ./build_dist/Data
+          mkdir ./build_dist/Resources
+          xcopy /E /I /Y .\UI\Config .\build_dist\Config
+          xcopy /E /I /Y .\UI\Data .\build_dist\Data
+          xcopy /E /I /Y .\UI\Resources .\build_dist\Resources
+
+      - name: Folder cleanup
+        shell: cmd
+        run: |
+          xcopy /E /I /Y build_dist\main\* build_dist\
+          rmdir /S /Q build_dist\main
+          
+      - name: Create Executable
+        shell: cmd
+        run: |
+          rename build_dist\main.exe GestureBoard.exe
+
+      - name: Sign Executable
+        uses: skymatic/code-sign-action@v3
+        with:
+          certificate: '${{ secrets.CERTIFICATE }}'
+          password: '${{ secrets.PASSWORD }}'
+          certificatesha1: '${{ secrets.CERTIFICATESHA1 }}'
+          timestampUrl: 'http://timestamp.digicert.com'
+          folder: 'build_dist'
+          recursive: false
+
+
+
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: GestureBoard_Windows64
+          path: ./build_dist
