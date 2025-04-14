@@ -12,13 +12,13 @@ if QApplication.instance() is None:
 
 stacked_widget = QStackedWidget()
 
-from UI.Controllers.OptionsMenuController import CameraOptionsController
+from UI.Controllers.OptionsMenuController import OptionsMenuController
 from UI.Resources.Stylesheets import *
 
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'UI'))
 os.chdir(project_root)
 
-options_menu = CameraOptionsController(stacked_widget)
+options_menu = OptionsMenuController(stacked_widget)
 
 def test_loadConfig():
     stacked_widget.addWidget(options_menu)
