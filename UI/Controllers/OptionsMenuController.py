@@ -69,6 +69,10 @@ class OptionsMenuController(QWidget):
             btnKey.setIcon(QIcon('Resources\\Icons\\keyboard.png'))
             btnKey.setIconSize(QSize(60, 60))
 
+            #Windows világos téma miatt
+            btnCombo.setStyleSheet(noborder)
+            btnKey.setStyleSheet(noborder)
+            btnConsole.setStyleSheet(noborder)
 
             if(entry['highlight'] == 0):
                 btnCombo.setIcon(QIcon('Resources\\Icons\\widget_green.png'))

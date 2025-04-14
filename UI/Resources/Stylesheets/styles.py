@@ -209,3 +209,8 @@ camera_combo_style = '''
             width: 0px;
         }
 '''
+
+noborder='''
+            border: none;
+            background: transparent;
+'''
