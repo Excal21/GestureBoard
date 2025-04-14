@@ -19,8 +19,8 @@
     },
     "4": {
         "gesture": "Két ujjal balra",
-        "action": "pyautogui.press('playpause')",
-        "description": "Lejátszás/ szünet",
-        "highlight": 0
+        "action": null,
+        "description": null,
+        "highlight": -1
     }
 }

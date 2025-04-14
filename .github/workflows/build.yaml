@@ -1,9 +1,32 @@
-name: Build
+name: Test and Build
 
 on: [workflow_dispatch, pull_request]
 
 jobs:
+  Test:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.9'
+
+      - name: Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r ./UI/requirements.txt
+          pip install pyinstaller
+
+      - name: Run Pytest
+        run: pip install pytest-github-actions-annotate-failures
+
+      - run: pytest --disable-warnings
+
   Win64_Build:
+    needs: Test
     runs-on: windows-latest
     steps:
       - name: Checkout repository
@@ -60,7 +83,6 @@ jobs:
           timestampUrl: 'http://timestamp.digicert.com'
           folder: 'build_dist'
           recursive: false
-
 
 
 
