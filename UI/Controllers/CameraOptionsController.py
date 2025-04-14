@@ -74,7 +74,7 @@ class CameraOptionsController(QWidget):
             self.timer.timeout.connect(self.updateFrame)
             self.timer.start(10)
             self.is_camera_on = True
-            self.ui.btnStartCam.setStyleSheet(options_button_active_style)
+            self.ui.btnStartCam.setStyleSheet(options_button_active_style + 'background-color: rgb(201, 97, 97)')
             self.ui.btnStartCam.setText('Kamera leállítása')
         else:
             self.timer.stop()
@@ -249,7 +249,8 @@ class CameraOptionsController(QWidget):
         return '''<html>
             <style>
                 p { line-height: 1.2;
-                    font-size: 12pt; }
+                    font-size: 12pt;
+                    color: white; }
             </style>
             <body>
                 <p align='justify'>'''+ text +'''</p>

@@ -69,7 +69,7 @@ class TrainMenuController(QWidget):
             if len(self.data) > 0:
                 for key, value in self.data.items():
                     entry = QPushButton(value['gesture'])
-                    entry.setStyleSheet(predefined_label_style)
+                    entry.setStyleSheet(predefined_label_style + noborder)
                     entry.setFont(self.font)
                     entry.setFixedHeight(33)
                     
@@ -82,12 +82,12 @@ class TrainMenuController(QWidget):
         for i in range(self.scroll_layout.count()):
             item = self.scroll_layout.itemAt(i).widget()
             if item != None:
-                item.setStyleSheet(predefined_label_style)
+                item.setStyleSheet(predefined_label_style + noborder)
         if self.selected_gesture != key:
             self.selected_gesture = key
             label.setStyleSheet(predefined_hover_label_style)
         else:
-            label.setStyleSheet(predefined_label_style)
+            label.setStyleSheet(predefined_label_style + noborder)
             self.selected_gesture = None
         
     def delete(self):
