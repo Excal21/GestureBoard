@@ -1,10 +1,4 @@
 {
-    "0": {
-        "gesture": "Nyílt tenyér",
-        "action": null,
-        "description": null,
-        "highlight": -1
-    },
     "1": {
         "gesture": "Zárt ököl",
         "action": null,
@@ -19,6 +13,12 @@
     },
     "4": {
         "gesture": "Két ujjal balra",
+        "action": null,
+        "description": null,
+        "highlight": -1
+    },
+    "5": {
+        "gesture": "Nyílt tenyér",
         "action": null,
         "description": null,
         "highlight": -1
