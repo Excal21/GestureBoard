@@ -8,17 +8,17 @@ A gesztusfelismerés és a kézpozíciók megtanulása neurális háló segíts�
 A kliens futtatható a release verziókban található futtathatók segítségével, vagy közvetlen a <i>UI</i> mappában található main.pyw elindításával.
 
 
+## Alapgesztusok
 <div align="center">
 
-## Alapgesztusok
 
-| **Nyílt tenyér** | **Zárt ököl** |
-|:----------------:|:-------------:|
-| <img src="img/Nyilt_tenyer.png" alt="Nyílt tenyér" width="200"/> | <img src="img/Zart_okol.png" alt="Zárt ököl" width="200"/> |
+| **Nyílt tenyér** | **Zárt ököl** | **Felfelé mutatás** | **Két ujjal balra** |
+|:-------------------:|:------------------:|:-------------------:|:------------------:|
+| <img src="img/Nyilt_tenyer.png" alt="Nyílt tenyér" width="225"/> | <img src="img/Zart_okol.png" alt="Zárt ököl" width="225"/> | <img src="img/Mutatas_fel.png" alt="Felfelé mutatás" width="225"/> | <img src="img/Ket_ujjal_oldalra.png" alt="Két ujjal balra" width="225"/> |
 
-| **Felfelé mutatás** | **Két ujjal balra** |
-|:-------------------:|:------------------:|
-| <img src="img/Mutatas_fel.png" alt="Felfelé mutatás" width="200"/> | <img src="img/Ket_ujjal_oldalra.png" alt="Két ujjal balra" width="200"/> |
+
+
+
 
 </div>
 
