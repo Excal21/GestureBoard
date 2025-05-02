@@ -190,6 +190,7 @@ class OptionsMenuController(QWidget):
             if event.modifiers() & Qt.ShiftModifier:
                 modifiers.append('shift')
             key = event.nativeVirtualKey()
+
             print(key)
             key_map = {
                 222: 'Á',
@@ -207,11 +208,10 @@ class OptionsMenuController(QWidget):
                 35: 'end',
                 45: 'insert',
                 46: 'delete',
-                37: 'balra',
-                38: 'fel',
-                39: 'jobbra',
-                40: 'le',
-
+                37: ['balra', 'left'],
+                38: ['fel', 'up'],
+                39: ['jobbra', 'right'],
+                40: ['le', 'down']
             }
 
             keystr = ''
@@ -227,14 +227,22 @@ class OptionsMenuController(QWidget):
             valid = False
 
             if key in key_map:
-                keystr = key_map[key]
-                valid = True
+                if len(key_map[key]) == 2:
+                    print('keymap: ', key_map[key])
+                    keystr = key_map[key][1]
+                    valid = True
+                else:
+                    keystr = key_map[key]
+                    valid = True
+                
             elif 32 <= key <= 126:
                 valid = True
-                keystr = chr(key)
                 if keystr == ' ':
                     keystr = 'space'
+                else:
+                    keystr = chr(key)
             
+            print('Keystring: ', keystr)
             self.ui.lblUserGuide.setText(f'Billentyűkombináció\n {combination.replace(',', '+') + (' + ' if combination else '') + keystr}')
             
             if valid:
@@ -242,14 +250,17 @@ class OptionsMenuController(QWidget):
                 for modifier in modifiers:
                     key_command += f'\'{modifier}\', '
 
+                print('Keystr: ', keystr)
                 key_command += f'\'{keystr.lower()}\')'
 
                 self.data[self.clicked]['action'] = key_command
-                self.data[self.clicked]['description'] = f'{combination.replace(',', '+') + (' + ' if combination else '') + keystr}'
+                #A ternary alkalmazza az aliast, ahol lehet
+                self.data[self.clicked]['description'] = f'{combination.replace(',', '+') + (' + ' if combination else '') + (keystr if len(key_map[key]) == 1 else key_map[key][0])}'
                 self.data[self.clicked]['highlight'] = 1
 
                 print(f'Billentyűkombináció\n {combination.replace(',', '+') + (' + ' if combination else '') + keystr}')
-                self.ui.lblUserGuide.setText(f'Billentyűkombináció\n {combination.replace(',', '+') + (' + ' if combination else '') + keystr}')
+                # self.ui.lblUserGuide.setText(f'Billentyűkombináció\n {combination.replace(',', '+') + (' + ' if combination else '') + keystr}')
+                self.ui.lblUserGuide.setText(f'Billentyűkombináció\n {self.data[self.clicked]["description"]}')
                 QApplication.processEvents()
                 sleep(0.5)
                 self.ui.frameHide.hide()
