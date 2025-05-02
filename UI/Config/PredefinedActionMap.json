@@ -1,6 +1,6 @@
 {
     "Böngésző elindítása": "os.system('start http://www.google.com')",
-    "Képernyőkép készítése": "os.screenshot()",
+    "Képernyőkép készítése": "pyautogui.press('printscreen')",
     "Számológép indítása": "os.system('start calc')",
     "Gmail megnyitása": "os.system('start http://www.gmail.com')",
     "Lejátszás/ szünet": "pyautogui.press('playpause')",
@@ -9,5 +9,11 @@
     "Hangerő növelése": "pyautogui.press('volumeup')",
     "Hangerő csökkentése": "pyautogui.press('volumedown')",
     "Alt + Tab": "pyautogui.hotkey('alt', 'tab')",
-    "Asztal megjelenítése": "pyautogui.hotkey('win', 'd')"
+    "Asztal megjelenítése": "pyautogui.hotkey('win', 'd')",
+    "Windows + Jobbra": "pyautogui.hotkey('win', 'right')",
+    "Windows + Balra": "pyautogui.hotkey('win', 'left')",
+    "Windows + Fel": "pyautogui.hotkey('win', 'up')",
+    "Windows + Le": "pyautogui.hotkey('win', 'down')",
+    "Windows + Shift + Jobbra": "pyautogui.hotkey('win', 'shift', 'right')",
+    "Windows + Shift + Balra": "pyautogui.hotkey('win', 'shift', 'left')"
 }
