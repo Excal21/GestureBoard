@@ -14,16 +14,25 @@ jobs:
         with:
           python-version: '3.12.9'
 
-      - name: Dependencies
+      - name: Cache virtual environment
+        id: cache-venv
+        uses: actions/cache@v4
+        with:
+          path: .venv
+          key: ${{ runner.os }}-venv-${{ hashFiles('./UI/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-venv-
+
+      - name: Set up virtual environment
         run: |
-          python -m pip install --upgrade pip
-          pip install -r ./UI/requirements.txt
-          pip install pyinstaller
+          python -m venv .venv
+          .venv\Scripts\python.exe -m pip install --upgrade pip
+          .venv\Scripts\pip.exe install -r ./UI/requirements.txt
+          .venv\Scripts\pip.exe install pyinstaller pytest-github-actions-annotate-failures
+        if: steps.cache-venv.outputs.cache-hit != 'true'
 
-      - name: Run Pytest
-        run: pip install pytest-github-actions-annotate-failures
-
-      - run: pytest --disable-warnings
+      - name: Run tests
+        run: .venv\Scripts\pytest.exe --disable-warnings
 
   Win64_Build:
     needs: Test
@@ -37,16 +46,27 @@ jobs:
         with:
           python-version: '3.12.9'
 
-      - name: Dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r ./UI/requirements.txt
-          pip install pyinstaller
+      - name: Restore virtual environment
+        id: cache-venv
+        uses: actions/cache@v4
+        with:
+          path: .venv
+          key: ${{ runner.os }}-venv-${{ hashFiles('./UI/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-venv-
 
-      - name: PyInstaller
+      - name: Set up virtual environment
+        run: |
+          python -m venv .venv
+          .venv\Scripts\python.exe -m pip install --upgrade pip
+          .venv\Scripts\pip.exe install -r ./UI/requirements.txt
+          .venv\Scripts\pip.exe install pyinstaller
+        if: steps.cache-venv.outputs.cache-hit != 'true'
+
+      - name: Build with PyInstaller
         shell: cmd
         run: |
-          pyinstaller ./UI/main.py ^
+          .venv\Scripts\pyinstaller ./UI/main.py ^
             --windowed ^
             --icon=./UI/Resources/Icons/hand.ico ^
             --hidden-import=tensorflow ^
@@ -54,7 +74,7 @@ jobs:
             --clean ^
             --distpath ./build_dist
 
-      - name: Config, Data, Resource
+      - name: Copy config/data/resources
         run: |
           mkdir ./build_dist/Config
           mkdir ./build_dist/Data
@@ -63,16 +83,15 @@ jobs:
           xcopy /E /I /Y .\UI\Data .\build_dist\Data
           xcopy /E /I /Y .\UI\Resources .\build_dist\Resources
 
-      - name: Folder cleanup
+      - name: Clean up folder structure
         shell: cmd
         run: |
           xcopy /E /I /Y build_dist\main\* build_dist\
           rmdir /S /Q build_dist\main
-          
-      - name: Create Executable
+
+      - name: Rename executable
         shell: cmd
-        run: |
-          rename build_dist\main.exe GestureBoard.exe
+        run: rename build_dist\main.exe GestureBoard.exe
 
       - name: Sign Executable
         uses: skymatic/code-sign-action@v3
@@ -83,8 +102,6 @@ jobs:
           timestampUrl: 'http://timestamp.digicert.com'
           folder: 'build_dist'
           recursive: false
-
-
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
