@@ -202,6 +202,7 @@ class OptionsMenuController(QWidget):
                 221: 'Ú',
                 191: 'Ü',
                 220: 'Ű',
+                13: 'enter',
                 34: 'pagedown',
                 33: 'pageup',
                 36: 'home',
