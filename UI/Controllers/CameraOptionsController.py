@@ -1,16 +1,19 @@
 import os
 import sys
+import cv2
+import json
+
 
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton
 from PySide6.QtCore import Qt, QTimer, QSize
-from PySide6.QtGui import QFontDatabase, QFont, QImage, QPixmap, QRegion, QPainterPath, QIcon
-import cv2
+from PySide6.QtGui import QFontDatabase, QFont, QImage, QPixmap, QRegion, QPainterPath, QIcon, QPainter, QColor
+
+
 from Resources.Stylesheets.styles import *
 from Views.ui_cameraOptionsForm import Ui_Form
 from Models.RecognizerHandler import RecognizerHandler
 from Models.Recorder import Recorder
 from time import sleep
-import json
 
 class CameraOptionsController(QWidget):
     def __init__(self, stacked_widget):
@@ -28,6 +31,7 @@ class CameraOptionsController(QWidget):
         self.rec = Recorder()
         self.is_camera_on = False
         self.data = {}
+        self.gesturedata = {}
 
         self.timer = None
 
@@ -87,7 +91,8 @@ class CameraOptionsController(QWidget):
     def updateFrame(self):
         frame = self.rec.getFrame(self.ui.sliderHue.value())
 
-        frame = RecognizerHandler.getInstance().annotate(frame)
+        frame, gesture = RecognizerHandler.getInstance().annotate(frame, True)
+
 
         if frame is not None:
             h, w, _ = frame.shape
@@ -104,9 +109,22 @@ class CameraOptionsController(QWidget):
 
             resized_frame = cv2.resize(cropped_frame, (resize_width, resize_height), interpolation=cv2.INTER_AREA)
 
+            if gesture is not None:
+                gesture_text = f"{self.gesturedata[gesture[0]]['gesture']}   {int(gesture[1])}%"
+            else:
+                gesture_text = ''
+
             h, w, ch = resized_frame.shape
             bytes_per_line = ch * w
             q_image = QImage(resized_frame.data, w, h, bytes_per_line, QImage.Format_RGB888).rgbSwapped()
+
+            #Gesztusvisszajelzés a képre
+            p = QPainter(q_image)
+            p.setFont(self.font)
+            p.setPen(QColor(156, 220, 254))
+            p.drawText(30, 40, gesture_text)
+            p.end()
+
 
 
             path = QPainterPath()
@@ -221,6 +239,9 @@ class CameraOptionsController(QWidget):
             self.ui.spinConfidence.setValue(self.data['Confidence']*100)
             self.ui.spinFrameCnt.setValue(self.data['FrameCount'])
             self.ui.spinDelay.setValue(self.data['Delay'])
+
+        with open('Config\\UserSettings.json', 'r', encoding='utf-8') as file:
+            self.gesturedata = json.load(file)
     
     def saveSettings(self):
         self.data['Camera'] = self.ui.comboCamera.currentIndex()
@@ -262,7 +283,7 @@ class CameraOptionsController(QWidget):
         font_id = QFontDatabase.addApplicationFont('Resources\\Fonts\\Ubuntu-R.ttf')
         if font_id != -1:
             font_family = QFontDatabase.applicationFontFamilies(font_id)[0]
-            self.font = QFont(font_family, 16)
+            self.font = QFont(font_family, 12)
             self.ui.lblTitle.setFont(self.font)
             self.ui.lblDescription.setFont(self.font)
         else:
