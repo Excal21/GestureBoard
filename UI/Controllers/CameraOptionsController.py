@@ -69,6 +69,9 @@ class CameraOptionsController(QWidget):
 
 #region Kamerakép
     def startCamera(self):
+        with open('Config\\UserSettings.json', 'r', encoding='utf-8') as file:
+            self.gesturedata = json.load(file)
+
         if not self.is_camera_on:
             self.rec.loadCameraOnly(self.data['Camera'])
             self.rec.cap.set(cv2.CAP_PROP_BUFFERSIZE, 1)
@@ -240,8 +243,7 @@ class CameraOptionsController(QWidget):
             self.ui.spinFrameCnt.setValue(self.data['FrameCount'])
             self.ui.spinDelay.setValue(self.data['Delay'])
 
-        with open('Config\\UserSettings.json', 'r', encoding='utf-8') as file:
-            self.gesturedata = json.load(file)
+
     
     def saveSettings(self):
         self.data['Camera'] = self.ui.comboCamera.currentIndex()
