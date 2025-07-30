@@ -54,7 +54,7 @@ class TrainMenuController(QWidget):
                 self.data = dict(json.load(f))
             print('Gesztusok frissítve')
         
-        self.updateList()
+            self.updateList()
 
     def updateList(self):
 
