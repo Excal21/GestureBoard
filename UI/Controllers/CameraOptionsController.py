@@ -1,16 +1,19 @@
 import os
 import sys
+import cv2
+import json
+
 
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton
 from PySide6.QtCore import Qt, QTimer, QSize
-from PySide6.QtGui import QFontDatabase, QFont, QImage, QPixmap, QRegion, QPainterPath, QIcon
-import cv2
+from PySide6.QtGui import QFontDatabase, QFont, QImage, QPixmap, QRegion, QPainterPath, QIcon, QPainter, QColor
+
+
 from Resources.Stylesheets.styles import *
 from Views.ui_cameraOptionsForm import Ui_Form
 from Models.RecognizerHandler import RecognizerHandler
 from Models.Recorder import Recorder
 from time import sleep
-import json
 
 class CameraOptionsController(QWidget):
     def __init__(self, stacked_widget):
@@ -28,6 +31,7 @@ class CameraOptionsController(QWidget):
         self.rec = Recorder()
         self.is_camera_on = False
         self.data = {}
+        self.gesturedata = {}
 
         self.timer = None
 
@@ -49,6 +53,8 @@ class CameraOptionsController(QWidget):
         self.ui.spinConfidence.setRange(0, 100)
         self.ui.spinFrameCnt.setRange(1, 30)
         self.ui.spinDelay.setRange(0, 5)
+        self.ui.spinDelay.setSingleStep(0.1)
+        self.ui.spinDelay.setDecimals(1)
 
         self.ui.spinConfidence.setAlignment(Qt.AlignCenter)
         self.ui.spinFrameCnt.setAlignment(Qt.AlignCenter)
@@ -61,10 +67,14 @@ class CameraOptionsController(QWidget):
         self.ui.lblCvImg.setAlignment(Qt.AlignCenter)
         self.ui.lblCvImg.setPixmap(QPixmap('Resources\\Icons\\camera.png').scaled(100, 70, Qt.KeepAspectRatio, Qt.SmoothTransformation))
 
-        self.loadSettings()
+        # self.loadSettings()
+        self.loadCameraCombo()
 
 #region Kamerakép
     def startCamera(self):
+        with open('Config\\UserSettings.json', 'r', encoding='utf-8') as file:
+            self.gesturedata = json.load(file)
+
         if not self.is_camera_on:
             self.rec.loadCameraOnly(self.data['Camera'])
             self.rec.cap.set(cv2.CAP_PROP_BUFFERSIZE, 1)
@@ -87,7 +97,8 @@ class CameraOptionsController(QWidget):
     def updateFrame(self):
         frame = self.rec.getFrame(self.ui.sliderHue.value())
 
-        frame = RecognizerHandler.getInstance().annotate(frame)
+        frame, gesture = RecognizerHandler.getInstance().annotate(frame, True)
+
 
         if frame is not None:
             h, w, _ = frame.shape
@@ -104,9 +115,22 @@ class CameraOptionsController(QWidget):
 
             resized_frame = cv2.resize(cropped_frame, (resize_width, resize_height), interpolation=cv2.INTER_AREA)
 
+            if gesture is not None:
+                gesture_text = f"{self.gesturedata[gesture[0]]['gesture']}   {int(gesture[1])}%"
+            else:
+                gesture_text = ''
+
             h, w, ch = resized_frame.shape
             bytes_per_line = ch * w
             q_image = QImage(resized_frame.data, w, h, bytes_per_line, QImage.Format_RGB888).rgbSwapped()
+
+            #Gesztusvisszajelzés a képre
+            p = QPainter(q_image)
+            p.setFont(self.font)
+            p.setPen(QColor(156, 220, 254))
+            p.drawText(30, 40, gesture_text)
+            p.end()
+
 
 
             path = QPainterPath()
@@ -168,6 +192,8 @@ class CameraOptionsController(QWidget):
         self.data['Camera'] = index
     
     def setEventHandlers(self):
+        self.stacked_widget.currentChanged.connect(self.loadSettings)  # Beállítások betöltése, ha a kamera beállítások menü aktív
+
         self.ui.comboCamera.currentIndexChanged.connect(self.updateCameraIndex)
     
 
@@ -196,6 +222,7 @@ class CameraOptionsController(QWidget):
         self.ui.lblConfidence.leaveEvent = lambda event: self.ui.lblDescription.setText('')
 
         self.ui.lblFrameCnt.enterEvent = lambda event: self.ui.lblDescription.setText(self.textToHTML('A program ennyi képkockán keresztül figyeli a gesztust a művelet végrehajtása előtt. Növelésével pontosabb, de lassabb lesz a felismerés.'))
+        self.ui.lblFrameCnt.leaveEvent = lambda event: self.ui.lblDescription.setText('')
 
         self.ui.lblDelay.enterEvent = lambda event: self.ui.lblDescription.setText(self.textToHTML('Két gesztus közt eltelt idő másodpercben. Csökkentésével gyorsabban tudod kiadni a parancsokat.'))
 
@@ -205,15 +232,21 @@ class CameraOptionsController(QWidget):
 #region Beállítások kezelése
     def loadCameraCombo(self):
         self.ui.comboCamera.clear()
-        for cameraIDX in self.rec.getCameras():
-            if cameraIDX == 0:
-                self.ui.comboCamera.addItem('Beépített kamera')
-            else:
-                self.ui.comboCamera.addItem(f'{cameraIDX + 1}. kamera')
+        cameras = self.rec.getCameras()
+        if cameras == []:
+            self.ui.comboCamera.addItem('Nem található')
+            self.ui.comboCamera.setEnabled(False)
+            self.ui.btnStartCam.setEnabled(False)
+            return
+        else:
+            for cameraIDX in self.rec.getCameras():
+                if cameraIDX == 0:
+                    self.ui.comboCamera.addItem('Beépített kamera')
+                else:
+                    self.ui.comboCamera.addItem(f'{cameraIDX + 1}. kamera')
 
 
     def loadSettings(self):
-        self.loadCameraCombo()
         with open('Config\\CameraSettings.json', 'r') as file:
             self.data = json.load(file)
             self.ui.comboCamera.setCurrentIndex(self.data['Camera'])
@@ -221,6 +254,8 @@ class CameraOptionsController(QWidget):
             self.ui.spinConfidence.setValue(self.data['Confidence']*100)
             self.ui.spinFrameCnt.setValue(self.data['FrameCount'])
             self.ui.spinDelay.setValue(self.data['Delay'])
+
+
     
     def saveSettings(self):
         self.data['Camera'] = self.ui.comboCamera.currentIndex()
@@ -262,7 +297,7 @@ class CameraOptionsController(QWidget):
         font_id = QFontDatabase.addApplicationFont('Resources\\Fonts\\Ubuntu-R.ttf')
         if font_id != -1:
             font_family = QFontDatabase.applicationFontFamilies(font_id)[0]
-            self.font = QFont(font_family, 16)
+            self.font = QFont(font_family, 12)
             self.ui.lblTitle.setFont(self.font)
             self.ui.lblDescription.setFont(self.font)
         else:

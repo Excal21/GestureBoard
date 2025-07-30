@@ -30,8 +30,8 @@ class RecognizerHandler(QThread):
         self.__recognizer.reloadModel()
         print('Reloaded')
 
-    def annotate(self, frame):
-        return self.__recognizer.annotateImage(frame)
+    def annotate(self, frame, gestures = False):
+        return self.__recognizer.annotateImage(frame, gestures)
 
     def start(self):
         self.__recognizer.camerafeed = False

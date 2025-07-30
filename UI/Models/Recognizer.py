@@ -164,8 +164,8 @@ class Recognizer:
     return annotated_image
 #endregion
 
-
-  def annotateImage(self, image):
+#region Annotate
+  def annotateImage(self, image, gestures=False):
     #img = cv2.flip(img, 1)
     img = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
     mp_image = Image(image_format=ImageFormat.SRGB, data=img)
@@ -174,8 +174,16 @@ class Recognizer:
     annotated_image = self.draw_landmarks_on_image(mp_image.numpy_view(), result)
     annotated_image = cv2.cvtColor(annotated_image, cv2.COLOR_BGR2RGB)
 
-    return annotated_image
+    if gestures:
+      if len(result.gestures) >= 1:
+        gestureidx = result.gestures[0][0].category_name
+        if gestureidx and gestureidx != 'NONE':
+          return annotated_image, (gestureidx, round(result.gestures[0][0].score * 100, 2))
+      
+      return annotated_image, None
 
+    return annotated_image
+#endregion
 
 #region Konfigurációs fájlok betöltése
   def loadGestures(self):

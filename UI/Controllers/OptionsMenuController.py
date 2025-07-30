@@ -63,12 +63,11 @@ class OptionsMenuController(QWidget):
             btnCombo.setIcon(QIcon('Resources\\Icons\\widget.png'))
             btnCombo.setIconSize(QSize(40, 40))
 
-            btnConsole.setIcon(QIcon('Resources\\Icons\\console.png'))
-            btnConsole.setIconSize(QSize(50, 45))
-
             btnKey.setIcon(QIcon('Resources\\Icons\\keyboard.png'))
             btnKey.setIconSize(QSize(60, 60))
 
+            btnConsole.setIcon(QIcon('Resources\\Icons\\console.png'))
+            btnConsole.setIconSize(QSize(50, 45))
             #Windows világos téma miatt
             btnCombo.setStyleSheet(noborder)
             btnKey.setStyleSheet(noborder)
@@ -361,9 +360,9 @@ class OptionsMenuController(QWidget):
     def setEventHandlers(self):
         self.stacked_widget.currentChanged.connect(self.onReturn)
 
-        self.ui.btnTeach.clicked.connect(lambda event: self.stacked_widget.setCurrentIndex(3))
-        self.ui.btnTeach.enterEvent = lambda event: self.ui.btnTeach.setStyleSheet(options_button_hover_style)
-        self.ui.btnTeach.leaveEvent = lambda event: self.ui.btnTeach.setStyleSheet(options_button_style)
+        self.ui.btnManager.clicked.connect(lambda event: self.stacked_widget.setCurrentIndex(3))
+        self.ui.btnManager.enterEvent = lambda event: self.ui.btnManager.setStyleSheet(options_button_hover_style)
+        self.ui.btnManager.leaveEvent = lambda event: self.ui.btnManager.setStyleSheet(options_button_style)
 
         self.ui.btnSave.clicked.connect(lambda: self.saveMappings())
         self.ui.btnSave.enterEvent = lambda event: self.ui.btnSave.setStyleSheet(options_button_hover_style)
@@ -389,7 +388,7 @@ class OptionsMenuController(QWidget):
         self.ui.scrollArea.verticalScrollBar().setStyleSheet(scrollbar_style)
         self.ui.btnReset.setStyleSheet(options_button_style)
         self.ui.btnSave.setStyleSheet(options_button_style)
-        self.ui.btnTeach.setStyleSheet(options_button_style)
+        self.ui.btnManager.setStyleSheet(options_button_style)
         self.ui.scrollCombo.setStyleSheet(scrollbar_style)
         self.ui.lblUserGuide.setStyleSheet(train_label_style)
         self.ui.txtinputCommand.setStyleSheet(train_input_style)
@@ -401,7 +400,7 @@ class OptionsMenuController(QWidget):
         self.loadFont()
         self.ui.btnReset.setFont(self.font)
         self.ui.btnSave.setFont(self.font)
-        self.ui.btnTeach.setFont(self.font)
+        self.ui.btnManager.setFont(self.font)
         self.ui.lblUserGuide.setFont(self.font)
         self.ui.txtinputCommand.setFont(self.font)
 

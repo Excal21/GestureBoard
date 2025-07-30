@@ -47,9 +47,13 @@ class Recorder():
 
                 cropped_frame = frame[y1:y2, x1:x2].copy()  # C-contiguous hiba elkerülése miatt
 
-                img_name = os.path.join(gesture_dir, f'{gesture_name}_{self.img_counter}.png')
-                cv2.imwrite(img_name, cropped_frame)
-                self.img_counter += 1
+                ret, buf = cv2.imencode('.png', cropped_frame)
+                if ret:
+                    img_name = os.path.join(gesture_dir, f'{gesture_name}_{self.img_counter}')  # Nincs kiterjesztés
+                    with open(img_name, 'wb') as f:
+                        f.write(buf.tobytes())
+                    self.img_counter += 1
+
 
                 sleep(0.02)
 
