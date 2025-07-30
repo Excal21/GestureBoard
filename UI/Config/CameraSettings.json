@@ -1,6 +1,6 @@
 {
     "Camera": 0,
-    "HueOffset": 255,
+    "HueOffset": 0,
     "Confidence": 0.8,
     "FrameCount": 10,
     "Delay": 5.0
