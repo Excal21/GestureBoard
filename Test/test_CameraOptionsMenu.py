@@ -167,6 +167,7 @@ def test_hover_and_leave_events_trigger_styles_and_labels():
         QApplication.sendEvent(label, leave_event)
         assert camera_options_menu.ui.lblDescription.text() == '', f"{label.objectName()} leírása nem törlődik hover után"
 
+
 def test_user_input_boundaries():
     # Confidence SpinBox: 0 alá és 100 fölé próbálunk beállítani
     spin = camera_options_menu.ui.spinConfidence

@@ -151,7 +151,7 @@
      <string>Alaphelyzet</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="btnTeach">
+   <widget class="QPushButton" name="btnManager">
     <property name="geometry">
      <rect>
       <x>20</x>
