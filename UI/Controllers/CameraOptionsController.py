@@ -4,7 +4,7 @@ import cv2
 import json
 
 
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton
+from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout
 from PySide6.QtCore import Qt, QTimer, QSize
 from PySide6.QtGui import QFontDatabase, QFont, QImage, QPixmap, QRegion, QPainterPath, QIcon, QPainter, QColor
 
@@ -45,9 +45,7 @@ class CameraOptionsController(QWidget):
 
         self.ui.lblDescription.setText('')
 
-        self.ui.spinConfidence.setFixedWidth(60)
-        self.ui.spinFrameCnt.setFixedWidth(60)
-        self.ui.spinDelay.setFixedWidth(60)
+
 
         self.ui.sliderHue.setRange(0, 255)
         self.ui.spinConfidence.setRange(0, 100)
@@ -56,12 +54,7 @@ class CameraOptionsController(QWidget):
         self.ui.spinDelay.setSingleStep(0.1)
         self.ui.spinDelay.setDecimals(1)
 
-        self.ui.spinConfidence.setAlignment(Qt.AlignCenter)
-        self.ui.spinFrameCnt.setAlignment(Qt.AlignCenter)
-        self.ui.spinDelay.setAlignment(Qt.AlignCenter)
-        self.ui.spinConfidence.setContentsMargins(0, 0, 0, 0)
-        self.ui.spinFrameCnt.setContentsMargins(0, 0, 0, 0)
-        self.ui.spinDelay.setContentsMargins(0, 0, 0, 0)
+
 
 
         self.ui.lblCvImg.setAlignment(Qt.AlignCenter)
@@ -69,7 +62,7 @@ class CameraOptionsController(QWidget):
 
         # self.loadSettings()
         self.loadCameraCombo()
-
+        self.setLayoutSettings()
 #region Kamerakép
     def startCamera(self):
         with open('Config\\UserSettings.json', 'r', encoding='utf-8') as file:
@@ -162,6 +155,15 @@ class CameraOptionsController(QWidget):
         self.ui.spinConfidence.setStyleSheet(train_input_style)
         self.ui.spinFrameCnt.setStyleSheet(train_input_style)
         self.ui.spinDelay.setStyleSheet(train_input_style)
+        self.ui.lblSensitivity.setStyleSheet(train_label_style)
+        self.ui.sliderSensitivity.setStyleSheet(slider_style)
+        self.ui.spinRadius.setStyleSheet(train_input_style)
+        self.ui.lblRadius.setStyleSheet(train_label_style)
+        
+
+        self.ui.scrollArea.verticalScrollBar().setStyleSheet(scrollbar_style)
+
+
 
     def setFonts(self):
         self.loadFont()
@@ -176,6 +178,8 @@ class CameraOptionsController(QWidget):
         self.ui.lblConfidence.setFont(self.font)
         self.ui.lblFrameCnt.setFont(self.font)
         self.ui.lblDelay.setFont(self.font)
+        self.ui.lblSensitivity.setFont(self.font)
+        self.ui.lblRadius.setFont(self.font)
 
         self.ui.btnBack.setFont(self.font)
         self.ui.btnSave.setFont(self.font)
@@ -184,6 +188,77 @@ class CameraOptionsController(QWidget):
         self.ui.spinConfidence.setFont(self.font)
         self.ui.spinFrameCnt.setFont(self.font)
         self.ui.spinDelay.setFont(self.font)
+        self.ui.spinRadius.setFont(self.font)
+
+    def setLayoutSettings(self):
+        self.scroll_area = self.ui.scrollArea
+        self.scroll_area.setWidgetResizable(True)
+        self.scroll_layout = QVBoxLayout(self.ui.scrollAreaWidgetContents)
+        self.scroll_area.setWidget(self.ui.scrollAreaWidgetContents)
+
+        self.ui.scrollArea.verticalScrollBar().setContextMenuPolicy(Qt.NoContextMenu)
+        self.ui.scrollArea.horizontalScrollBar().setContextMenuPolicy(Qt.NoContextMenu)
+
+
+        self.scroll_layout.addWidget(self.ui.lblCamera)
+        self.scroll_layout.addWidget(self.ui.comboCamera)
+        self.scroll_layout.addWidget(self.ui.lblHue)
+        self.scroll_layout.addWidget(self.ui.sliderHue)
+        self.scroll_layout.addWidget(self.ui.lblConfidence)
+        self.scroll_layout.addWidget(self.ui.spinConfidence)
+        self.scroll_layout.addWidget(self.ui.lblFrameCnt)
+        self.scroll_layout.addWidget(self.ui.spinFrameCnt)
+        self.scroll_layout.addWidget(self.ui.lblDelay)
+        self.scroll_layout.addWidget(self.ui.spinDelay)
+
+
+
+
+        self.ui.spinConfidence.setAlignment(Qt.AlignCenter)
+        self.ui.spinFrameCnt.setAlignment(Qt.AlignCenter)
+        self.ui.spinDelay.setAlignment(Qt.AlignCenter)
+        self.ui.spinRadius.setAlignment(Qt.AlignCenter)
+        self.ui.spinConfidence.setContentsMargins(0, 0, 0, 0)
+        self.ui.spinFrameCnt.setContentsMargins(0, 0, 0, 0)
+        self.ui.spinDelay.setContentsMargins(0, 0, 0, 0)
+
+        
+        pairs = [
+                (self.ui.lblCamera, self.ui.comboCamera),
+                (self.ui.lblHue, self.ui.sliderHue),
+                (self.ui.lblConfidence, self.ui.spinConfidence),
+                (self.ui.lblFrameCnt, self.ui.spinFrameCnt),
+                (self.ui.lblDelay, self.ui.spinDelay),
+                (self.ui.lblSensitivity, self.ui.sliderSensitivity),
+                (self.ui.lblRadius, self.ui.spinRadius)
+            ]
+
+        for widget1, widget2 in pairs:
+            line = QHBoxLayout()
+            if widget1: line.addWidget(widget1)
+            line.addStretch()  # opcionális, ha igazítani szeretnéd
+            if widget2: line.addWidget(widget2)
+            self.scroll_layout.addLayout(line)
+    
+        self.ui.spinConfidence.setFixedWidth(60)
+        self.ui.spinFrameCnt.setFixedWidth(60)
+        self.ui.spinDelay.setFixedWidth(60)
+        self.ui.spinRadius.setFixedWidth(60)
+
+        self.ui.sliderHue.setFixedWidth(200)
+        self.ui.sliderSensitivity.setFixedWidth(200)
+
+        self.ui.lblCamera.setFixedHeight(40)
+        self.ui.comboCamera.setFixedHeight(40)
+        self.ui.lblHue.setFixedHeight(40)
+        self.ui.lblConfidence.setFixedHeight(40)
+        self.ui.lblFrameCnt.setFixedHeight(40)
+        self.ui.lblDelay.setFixedHeight(40)
+        self.ui.lblSensitivity.setFixedHeight(40)
+        self.ui.lblRadius.setFixedHeight(40)
+        self.ui.btnStartCam.setFixedHeight(40)
+        
+
 
 #endregion
 
