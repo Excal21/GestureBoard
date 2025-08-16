@@ -58,14 +58,14 @@ class CameraOptionsController(QWidget):
 
 
         self.ui.lblCvImg.setAlignment(Qt.AlignCenter)
-        self.ui.lblCvImg.setPixmap(QPixmap('Resources\\Icons\\camera.png').scaled(100, 70, Qt.KeepAspectRatio, Qt.SmoothTransformation))
+        self.ui.lblCvImg.setPixmap(QPixmap('Resources/Icons/camera.png').scaled(100, 70, Qt.KeepAspectRatio, Qt.SmoothTransformation))
 
         # self.loadSettings()
         self.loadCameraCombo()
         self.setLayoutSettings()
 #region Kamerakép
     def startCamera(self):
-        with open('Config\\UserSettings.json', 'r', encoding='utf-8') as file:
+        with open('Config/UserSettings.json', 'r', encoding='utf-8') as file:
             self.gesturedata = json.load(file)
 
         if not self.is_camera_on:
@@ -82,7 +82,7 @@ class CameraOptionsController(QWidget):
         else:
             self.timer.stop()
             self.rec.cap.release()
-            self.ui.lblCvImg.setPixmap(QPixmap('Resources\\Icons\\camera.png').scaled(100, 70, Qt.KeepAspectRatio, Qt.SmoothTransformation))
+            self.ui.lblCvImg.setPixmap(QPixmap('Resources/Icons/camera.png').scaled(100, 70, Qt.KeepAspectRatio, Qt.SmoothTransformation))
             self.is_camera_on = False
             self.ui.btnStartCam.setText('Kamera tesztelése')
             self.ui.btnStartCam.setStyleSheet(options_button_style)
@@ -322,7 +322,7 @@ class CameraOptionsController(QWidget):
 
 
     def loadSettings(self):
-        with open('Config\\CameraSettings.json', 'r') as file:
+        with open('Config/CameraSettings.json', 'r') as file:
             self.data = json.load(file)
             self.ui.comboCamera.setCurrentIndex(self.data['Camera'])
             self.ui.sliderHue.setValue(self.data['HueOffset'])
@@ -339,7 +339,7 @@ class CameraOptionsController(QWidget):
         self.data['FrameCount'] = self.ui.spinFrameCnt.value()
         self.data['Delay'] = self.ui.spinDelay.value()
 
-        with open('Config\\CameraSettings.json', 'w') as file:
+        with open('Config/CameraSettings.json', 'w') as file:
             json.dump(self.data, file, indent=4)
         
 
@@ -369,7 +369,7 @@ class CameraOptionsController(QWidget):
 
 
     def loadFont(self):
-        font_id = QFontDatabase.addApplicationFont('Resources\\Fonts\\Ubuntu-R.ttf')
+        font_id = QFontDatabase.addApplicationFont('Resources/Fonts/Ubuntu-R.ttf')
         if font_id != -1:
             font_family = QFontDatabase.applicationFontFamilies(font_id)[0]
             self.font = QFont(font_family, 12)

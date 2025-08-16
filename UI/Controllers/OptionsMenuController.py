@@ -60,13 +60,13 @@ class OptionsMenuController(QWidget):
             btnConsole = QPushButton()                
 
             #Gombok ikonjainak beállítása
-            btnCombo.setIcon(QIcon('Resources\\Icons\\widget.png'))
+            btnCombo.setIcon(QIcon('Resources/Icons/widget.png'))
             btnCombo.setIconSize(QSize(40, 40))
 
-            btnKey.setIcon(QIcon('Resources\\Icons\\keyboard.png'))
+            btnKey.setIcon(QIcon('Resources/Icons/keyboard.png'))
             btnKey.setIconSize(QSize(60, 60))
 
-            btnConsole.setIcon(QIcon('Resources\\Icons\\console.png'))
+            btnConsole.setIcon(QIcon('Resources/Icons/console.png'))
             btnConsole.setIconSize(QSize(50, 45))
             #Windows világos téma miatt
             btnCombo.setStyleSheet(noborder)
@@ -74,11 +74,11 @@ class OptionsMenuController(QWidget):
             btnConsole.setStyleSheet(noborder)
 
             if(entry['highlight'] == 0):
-                btnCombo.setIcon(QIcon('Resources\\Icons\\widget_green.png'))
+                btnCombo.setIcon(QIcon('Resources/Icons/widget_green.png'))
             elif(entry['highlight'] == 1):
-                btnKey.setIcon(QIcon('Resources\\Icons\\keyboard_green.png'))
+                btnKey.setIcon(QIcon('Resources/Icons/keyboard_green.png'))
             elif(entry['highlight'] == 2):
-                btnConsole.setIcon(QIcon('Resources\\Icons\\console_green.png'))
+                btnConsole.setIcon(QIcon('Resources/Icons/console_green.png'))
 
             #Gombok helyének beállítása
             btnContainer = QWidget()
@@ -134,7 +134,7 @@ class OptionsMenuController(QWidget):
         combo_layout = QVBoxLayout(self.ui.scrollComboWidgetContents)
         combo_layout.setSpacing(10)
 
-        with open('Config\\PredefinedActionMap.json', 'r', encoding='utf-8') as file:
+        with open('Config/PredefinedActionMap.json', 'r', encoding='utf-8') as file:
             predefined_actions_data = dict(json.load(file))
 
         for predefined_action in predefined_actions_data.items():
@@ -305,13 +305,13 @@ class OptionsMenuController(QWidget):
 
 #region Mentés, reset, stb.
     def loadConfig(self):
-        config_path = ('Config\\UserSettings.json')
+        config_path = ('Config/UserSettings.json')
         with open(config_path, 'r', encoding='utf-8') as file:
             self.data = dict(json.load(file))
         print('UserSettings JSON betöltve')
 
     def saveMappings(self):
-        with open('Config\\UserSettings.json', 'w', encoding='utf-8') as file:
+        with open('Config/UserSettings.json', 'w', encoding='utf-8') as file:
             json.dump(self.data, file, ensure_ascii=False, indent=4)
         print('Beállítások mentve')
         
@@ -446,7 +446,7 @@ class OptionsMenuController(QWidget):
 
 
         self.ui.btnCommandOk.setText('')
-        self.ui.btnCommandOk.setIcon(QIcon('Resources\\Icons\\check.png'))
+        self.ui.btnCommandOk.setIcon(QIcon('Resources/Icons/check.png'))
         self.ui.btnCommandOk.setIconSize(QSize(30, 30))
 
         self.ui.lblDescription.setContentsMargins(15, 0, 15, 0)
@@ -458,7 +458,7 @@ class OptionsMenuController(QWidget):
 
     def loadFont(self):
 
-        font_id = QFontDatabase.addApplicationFont('Resources\\Fonts\\Ubuntu-R.ttf')
+        font_id = QFontDatabase.addApplicationFont('Resources/Fonts/Ubuntu-R.ttf')
         if font_id != -1:
             font_family = QFontDatabase.applicationFontFamilies(font_id)[0]
             self.font = QFont(font_family, 16)

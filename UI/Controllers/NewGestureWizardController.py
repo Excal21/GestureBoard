@@ -100,6 +100,8 @@ class NewGestureWizardController(QWidget):
             self.stacked_widget.widget(3).data[str(self.__gesture_id)] = gesture_entry
             print(self.stacked_widget.widget(3).data)
 
+            self.ui.btnNameOK.clearFocus()
+            self.ui.txtinputGestureName.setText('')
             self.stacked_widget.setCurrentIndex(3)
 
 
@@ -203,7 +205,7 @@ class NewGestureWizardController(QWidget):
         vertical_layout.addWidget(self.ui.txtinputGestureName, alignment=Qt.AlignCenter)
         vertical_layout.addWidget(self.ui.btnNameOK, alignment=Qt.AlignCenter)
 
-        self.ui.btnNameOK.setIcon(QIcon('Resources\\Icons\\check.png'))
+        self.ui.btnNameOK.setIcon(QIcon('Resources/Icons/check.png'))
         self.ui.btnNameOK.setIconSize(QSize(30, 30))
 
         #Középre igazított usert segítő szövegdoboz
@@ -216,7 +218,7 @@ class NewGestureWizardController(QWidget):
 
 
     def loadFont(self):
-        font_id = QFontDatabase.addApplicationFont('Resources\\Fonts\\Ubuntu-R.ttf')
+        font_id = QFontDatabase.addApplicationFont('Resources/Fonts/Ubuntu-R.ttf')
         if font_id != -1:
             font_family = QFontDatabase.applicationFontFamilies(font_id)[0]
             self.font = QFont(font_family, 16)
