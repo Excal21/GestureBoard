@@ -17,7 +17,7 @@ class LoadingScreenController(QWidget):
         self.ui = Ui_Form()
         self.ui.setupUi(self)
 
-        font_id = QFontDatabase.addApplicationFont("Resources\\Fonts\\Ubuntu-R.ttf")
+        font_id = QFontDatabase.addApplicationFont("Resources/Fonts/Ubuntu-R.ttf")
         if font_id != -1:
             font_family = QFontDatabase.applicationFontFamilies(font_id)[0]
             font = QFont(font_family, 16)
@@ -44,7 +44,7 @@ class LoadingScreenController(QWidget):
         self.ui.lblLoading.setFont(font)
         self.ui.lblLoading.setStyleSheet(info_label_style)
         
-        self.movie = QMovie("Resources\\Icons\\loading.gif")
+        self.movie = QMovie("Resources/Icons/loading.gif")
         self.ui.lblLoadingSpinner.setMovie(self.movie)
         self.movie.setScaledSize(QSize(70,70))
 
