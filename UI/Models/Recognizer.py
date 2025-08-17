@@ -10,6 +10,7 @@ from mediapipe.framework.formats import landmark_pb2
 from mediapipe.tasks import python
 import numpy as np
 from datetime import datetime
+from collections import Counter
 import shutil
 import pyautogui
 import json
@@ -44,7 +45,7 @@ class Recognizer:
       self.recognizer = python.vision.GestureRecognizer.create_from_options(self.options)
 
       self.__camera = 0
-      self.__confidence = 0.5
+      self.__confidence = 0.7
       self.__stop = False
       self.__commands = {}
       self.__camerafeed = True
@@ -251,22 +252,32 @@ class Recognizer:
             if gesture[0].category_name != 'NONE' and gesture[0].category_name != '':
               if gesture[0].score > self.confidence:
                 last_gestures.append(gesture[0].category_name)
+                print(result.handedness[0][0].category_name)
 
 
 
       #Ha a halmozás eredménye az, hogy self.__framecount db ugyanolyan gesztus van, akkor biztos, hogy valamit akar a user
       if len(last_gestures) >= self.__framecount:
-        if all(gesture == last_gestures[0] for gesture in last_gestures) and (datetime.now() - last_gesture_time).total_seconds() > self.__delay and last_gestures[0]  != '':
-          print(last_gestures[0])
-          if last_gestures[0] in gesture_mappings.keys():
-            print(last_gestures[0])
-            try:
-              exec(gesture_mappings[last_gestures[0]]['action'])
-            except:
-              print("Hiba történt a parancs végrehajtásakor")
-            print("last_gesture: {0}, confidence: {1:2f}".format(last_gestures[0], gesture[0].score))
-            last_gesture_time = datetime.now()
-        last_gestures.clear()
+          # megszámoljuk, melyik gesztus fordult elő legtöbbször
+          counts = Counter(last_gestures)
+          majority_gesture, majority_count = counts.most_common(1)[0]
+
+          # threshold: pl. a gesztus legalább 60%-ban jelen legyen
+          if (majority_count / self.__framecount) >= 0.8 \
+            and (datetime.now() - last_gesture_time).total_seconds() > self.__delay \
+            and majority_gesture != '':
+
+              print(majority_gesture)
+              if majority_gesture in gesture_mappings.keys():
+                  print(majority_gesture)
+                  try:
+                      exec(gesture_mappings[majority_gesture]['action'])
+                  except:
+                      print("Hiba történt a parancs végrehajtásakor")
+                  print("last_gesture: {0}, confidence: {1:2f}".format(
+                        majority_gesture, gesture[0].score))
+                  last_gesture_time = datetime.now()
+          last_gestures.clear()
 
       if self.__camerafeed:
         annotated_image = self.draw_landmarks_on_image(mp_image.numpy_view(), result)
