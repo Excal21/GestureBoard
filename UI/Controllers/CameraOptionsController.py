@@ -48,6 +48,7 @@ class CameraOptionsController(QWidget):
 
 
         self.ui.sliderHue.setRange(0, 255)
+        self.ui.sliderDistance.setRange(100, 500)
         self.ui.spinConfidence.setRange(0, 100)
         self.ui.spinFrameCnt.setRange(1, 30)
         self.ui.spinDelay.setRange(0, 5)
@@ -90,7 +91,7 @@ class CameraOptionsController(QWidget):
     def updateFrame(self):
         frame = self.rec.getFrame(self.ui.sliderHue.value())
 
-        frame, gesture = RecognizerHandler.getInstance().annotate(frame, True)
+        frame, gesture = RecognizerHandler.getInstance().annotate(frame, True, self.ui.sliderDistance.value())
 
 
         if frame is not None:
@@ -149,9 +150,11 @@ class CameraOptionsController(QWidget):
         self.ui.lblConfidence.setStyleSheet(train_label_style)
         self.ui.lblFrameCnt.setStyleSheet(train_label_style)
         self.ui.lblDelay.setStyleSheet(train_label_style)
-        self.ui.sliderHue.setStyleSheet(slider_style)
-        self.ui.comboCamera.setStyleSheet(camera_combo_style)
         self.ui.lblCvImg.setStyleSheet(camera_label_style)
+        self.ui.comboCamera.setStyleSheet(camera_combo_style)
+        self.ui.sliderHue.setStyleSheet(slider_style)
+        self.ui.lblDistance.setStyleSheet(train_label_style)
+        self.ui.sliderDistance.setStyleSheet(slider_style)
         self.ui.spinConfidence.setStyleSheet(train_input_style)
         self.ui.spinFrameCnt.setStyleSheet(train_input_style)
         self.ui.spinDelay.setStyleSheet(train_input_style)
@@ -175,6 +178,7 @@ class CameraOptionsController(QWidget):
         self.ui.lblCamera.setFont(self.font)
         
         self.ui.lblHue.setFont(self.font)
+        self.ui.lblDistance.setFont(self.font)
         self.ui.lblConfidence.setFont(self.font)
         self.ui.lblFrameCnt.setFont(self.font)
         self.ui.lblDelay.setFont(self.font)
@@ -189,7 +193,9 @@ class CameraOptionsController(QWidget):
         self.ui.spinFrameCnt.setFont(self.font)
         self.ui.spinDelay.setFont(self.font)
         self.ui.spinRadius.setFont(self.font)
+#endregion
 
+#region Layout beállítások
     def setLayoutSettings(self):
         self.scroll_area = self.ui.scrollArea
         self.scroll_area.setWidgetResizable(True)
@@ -198,19 +204,6 @@ class CameraOptionsController(QWidget):
 
         self.ui.scrollArea.verticalScrollBar().setContextMenuPolicy(Qt.NoContextMenu)
         self.ui.scrollArea.horizontalScrollBar().setContextMenuPolicy(Qt.NoContextMenu)
-
-
-        self.scroll_layout.addWidget(self.ui.lblCamera)
-        self.scroll_layout.addWidget(self.ui.comboCamera)
-        self.scroll_layout.addWidget(self.ui.lblHue)
-        self.scroll_layout.addWidget(self.ui.sliderHue)
-        self.scroll_layout.addWidget(self.ui.lblConfidence)
-        self.scroll_layout.addWidget(self.ui.spinConfidence)
-        self.scroll_layout.addWidget(self.ui.lblFrameCnt)
-        self.scroll_layout.addWidget(self.ui.spinFrameCnt)
-        self.scroll_layout.addWidget(self.ui.lblDelay)
-        self.scroll_layout.addWidget(self.ui.spinDelay)
-
 
 
 
@@ -226,6 +219,7 @@ class CameraOptionsController(QWidget):
         pairs = [
                 (self.ui.lblCamera, self.ui.comboCamera),
                 (self.ui.lblHue, self.ui.sliderHue),
+                (self.ui.lblDistance, self.ui.sliderDistance),
                 (self.ui.lblConfidence, self.ui.spinConfidence),
                 (self.ui.lblFrameCnt, self.ui.spinFrameCnt),
                 (self.ui.lblDelay, self.ui.spinDelay),
@@ -246,11 +240,13 @@ class CameraOptionsController(QWidget):
         self.ui.spinRadius.setFixedWidth(60)
 
         self.ui.sliderHue.setFixedWidth(200)
+        self.ui.sliderDistance.setFixedWidth(200)
         self.ui.sliderSensitivity.setFixedWidth(200)
 
         self.ui.lblCamera.setFixedHeight(40)
         self.ui.comboCamera.setFixedHeight(40)
         self.ui.lblHue.setFixedHeight(40)
+        self.ui.lblDistance.setFixedHeight(40)
         self.ui.lblConfidence.setFixedHeight(40)
         self.ui.lblFrameCnt.setFixedHeight(40)
         self.ui.lblDelay.setFixedHeight(40)
@@ -287,19 +283,28 @@ class CameraOptionsController(QWidget):
 
 
 
-        self.ui.lblCamera.enterEvent = lambda event: self.ui.lblDescription.setText(self.textToHTML('Válaszd ki a kamerát, amivel a gesztusokat tudja érzékelni a program!'))
+        self.ui.lblCamera.enterEvent = lambda event: self.ui.lblDescription.setText(
+            self.textToHTML('Válaszd ki a kamerát, amivel a gesztusokat tudja érzékelni a program!'))
         self.ui.lblCamera.leaveEvent = lambda event: self.ui.lblDescription.setText('')
 
-        self.ui.lblHue.enterEvent = lambda event: self.ui.lblDescription.setText(self.textToHTML('A színek eltolásával beállíthatod, hogy kesztyűben is felismerje a kezedet a program. Kapcsold be a kamerát és állítsd be óvatosan a csúszkával!'))
+        self.ui.lblHue.enterEvent = lambda event: self.ui.lblDescription.setText(
+            self.textToHTML('A színek eltolásával beállíthatod, hogy kesztyűben is felismerje a kezedet a program. Kapcsold be a kamerát és állítsd be óvatosan a csúszkával!'))
         self.ui.lblHue.leaveEvent = lambda event: self.ui.lblDescription.setText('')
 
-        self.ui.lblConfidence.enterEvent = lambda event: self.ui.lblDescription.setText(self.textToHTML('Növelésével csökkenthető a véletlen felismerések száma, de csökken a felismerés érzékenysége.'))
+        self.ui.lblDistance.enterEvent = lambda event: self.ui.lblDescription.setText(
+            self.textToHTML('A csúszka segítségével állítsd be a kezed távolságát a kamerától! Túl nagy távolság esetén előfordulhat, hogy más ember kezét érzékeli a GestureBoard.'))
+        self.ui.lblDistance.leaveEvent = lambda event: self.ui.lblDescription.setText('')
+
+        self.ui.lblConfidence.enterEvent = lambda event: self.ui.lblDescription.setText(
+            self.textToHTML('Növelésével csökkenthető a véletlen felismerések száma, de csökken a felismerés érzékenysége.'))
         self.ui.lblConfidence.leaveEvent = lambda event: self.ui.lblDescription.setText('')
 
-        self.ui.lblFrameCnt.enterEvent = lambda event: self.ui.lblDescription.setText(self.textToHTML('A program ennyi képkockán keresztül figyeli a gesztust a művelet végrehajtása előtt. Növelésével pontosabb, de lassabb lesz a felismerés.'))
+        self.ui.lblFrameCnt.enterEvent = lambda event: self.ui.lblDescription.setText(
+            self.textToHTML('A program ennyi képkockán keresztül figyeli a gesztust a művelet végrehajtása előtt. Növelésével pontosabb, de lassabb lesz a felismerés.'))
         self.ui.lblFrameCnt.leaveEvent = lambda event: self.ui.lblDescription.setText('')
 
-        self.ui.lblDelay.enterEvent = lambda event: self.ui.lblDescription.setText(self.textToHTML('Két gesztus közt eltelt idő másodpercben. Csökkentésével gyorsabban tudod kiadni a parancsokat.'))
+        self.ui.lblDelay.enterEvent = lambda event: self.ui.lblDescription.setText(
+            self.textToHTML('Két gesztus közt eltelt idő másodpercben. Csökkentésével gyorsabban tudod kiadni a parancsokat.'))
 
         self.ui.lblDelay.leaveEvent = lambda event: self.ui.lblDescription.setText('')
 #endregion
@@ -326,6 +331,7 @@ class CameraOptionsController(QWidget):
             self.data = json.load(file)
             self.ui.comboCamera.setCurrentIndex(self.data['Camera'])
             self.ui.sliderHue.setValue(self.data['HueOffset'])
+            self.ui.sliderDistance.setValue(self.data['Distance'])
             self.ui.spinConfidence.setValue(self.data['Confidence']*100)
             self.ui.spinFrameCnt.setValue(self.data['FrameCount'])
             self.ui.spinDelay.setValue(self.data['Delay'])
@@ -335,6 +341,7 @@ class CameraOptionsController(QWidget):
     def saveSettings(self):
         self.data['Camera'] = self.ui.comboCamera.currentIndex()
         self.data['HueOffset'] = self.ui.sliderHue.value()
+        self.data['Distance'] = self.ui.sliderDistance.value()
         self.data['Confidence'] = self.ui.spinConfidence.value()/100
         self.data['FrameCount'] = self.ui.spinFrameCnt.value()
         self.data['Delay'] = self.ui.spinDelay.value()

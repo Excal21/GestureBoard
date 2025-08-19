@@ -51,6 +51,7 @@ class Recognizer:
       self.__camerafeed = True
       self.__framecount = 5
       self.__hueoffset = 0
+      self.__distance = 500
       self.__delay = 1
       self.__error = False
       self.__configpath = config_path
@@ -166,31 +167,40 @@ class Recognizer:
 #endregion
 
 #region Annotate
-  def annotateImage(self, image, gestures=False):
+  def annotateImage(self, image, gestures=False, distance=500):
     #img = cv2.flip(img, 1)
     img = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
     mp_image = Image(image_format=ImageFormat.SRGB, data=img)
 
     result = self.recognizer.recognize(mp_image)
-    annotated_image = self.draw_landmarks_on_image(mp_image.numpy_view(), result)
-    annotated_image = cv2.cvtColor(annotated_image, cv2.COLOR_BGR2RGB)
 
-    if gestures:
-      if len(result.gestures) >= 1:
-        gestureidx = result.gestures[0][0].category_name
-        if gestureidx and gestureidx != 'NONE':
-          lm0 = result.hand_landmarks[0][0]   # 0. markpont
-          lm9 = result.hand_landmarks[0][9]   # 9. markpont
+    if result.handedness:
+      lm0 = result.hand_landmarks[0][0]   # 0. markpont
+      lm9 = result.hand_landmarks[0][9]   # 9. markpont
 
-          distance_2d = ((lm0.x - lm9.x)**2 + (lm0.y - lm9.y)**2)**0.5
-          print(f"távolság: {500 - int(distance_2d * 1000)}")
-          return annotated_image, (gestureidx, round(result.gestures[0][0].score * 100, 2))
-      
+      distance_2d = ((lm0.x - lm9.x)**2 + (lm0.y - lm9.y)**2)**0.5
+      distance_2d = 500 - int(distance_2d * 1000)
+
+      print(f'Távolság: {distance_2d}')
+
+      if distance_2d <= distance:
+        annotated_image = self.draw_landmarks_on_image(mp_image.numpy_view(), result)
+        annotated_image = cv2.cvtColor(annotated_image, cv2.COLOR_BGR2RGB)
+
+        if gestures:
+          if len(result.gestures) >= 1:
+            gestureidx = result.gestures[0][0].category_name
+            if gestureidx and gestureidx != 'NONE':
+              return annotated_image, (gestureidx, round(result.gestures[0][0].score * 100, 2))
           
+              
 
-      return annotated_image, None
-
-    return annotated_image
+          return annotated_image, None
+        
+        # else:
+        #   return annotated_image
+    
+    return cv2.cvtColor(img, cv2.COLOR_BGR2RGB), None
 #endregion
 
 #region Konfigurációs fájlok betöltése
@@ -206,6 +216,7 @@ class Recognizer:
       self.__framecount = data['FrameCount']
       self.__confidence = data['Confidence']
       self.__hueoffset = data['HueOffset']
+      self.__distance = data['Distance']
       self.__delay = data['Delay']
 #endregion
 

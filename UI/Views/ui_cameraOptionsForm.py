@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'cameraOptionsForm.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.8.2
+## Created by: Qt User Interface Compiler version 6.9.1
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -59,7 +59,7 @@ class Ui_Form(object):
         self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 479, 289))
         self.lblConfidence = QLabel(self.scrollAreaWidgetContents)
         self.lblConfidence.setObjectName(u"lblConfidence")
-        self.lblConfidence.setGeometry(QRect(20, 110, 191, 30))
+        self.lblConfidence.setGeometry(QRect(20, 150, 191, 30))
         self.lblHue = QLabel(self.scrollAreaWidgetContents)
         self.lblHue.setObjectName(u"lblHue")
         self.lblHue.setGeometry(QRect(20, 30, 161, 30))
@@ -75,21 +75,21 @@ class Ui_Form(object):
         self.sliderHue.setOrientation(Qt.Orientation.Horizontal)
         self.spinConfidence = QSpinBox(self.scrollAreaWidgetContents)
         self.spinConfidence.setObjectName(u"spinConfidence")
-        self.spinConfidence.setGeometry(QRect(400, 100, 60, 31))
+        self.spinConfidence.setGeometry(QRect(400, 130, 60, 31))
         self.spinConfidence.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.NoButtons)
         self.lblFrameCnt = QLabel(self.scrollAreaWidgetContents)
         self.lblFrameCnt.setObjectName(u"lblFrameCnt")
-        self.lblFrameCnt.setGeometry(QRect(20, 140, 301, 30))
+        self.lblFrameCnt.setGeometry(QRect(20, 170, 301, 30))
         self.spinFrameCnt = QSpinBox(self.scrollAreaWidgetContents)
         self.spinFrameCnt.setObjectName(u"spinFrameCnt")
-        self.spinFrameCnt.setGeometry(QRect(400, 140, 60, 31))
+        self.spinFrameCnt.setGeometry(QRect(400, 160, 60, 31))
         self.spinFrameCnt.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.NoButtons)
         self.lblDelay = QLabel(self.scrollAreaWidgetContents)
         self.lblDelay.setObjectName(u"lblDelay")
-        self.lblDelay.setGeometry(QRect(20, 180, 341, 30))
+        self.lblDelay.setGeometry(QRect(20, 190, 341, 30))
         self.spinDelay = QDoubleSpinBox(self.scrollAreaWidgetContents)
         self.spinDelay.setObjectName(u"spinDelay")
-        self.spinDelay.setGeometry(QRect(400, 180, 60, 25))
+        self.spinDelay.setGeometry(QRect(400, 190, 60, 25))
         self.spinDelay.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.NoButtons)
         self.lblSensitivity = QLabel(self.scrollAreaWidgetContents)
         self.lblSensitivity.setObjectName(u"lblSensitivity")
@@ -105,6 +105,13 @@ class Ui_Form(object):
         self.spinRadius.setObjectName(u"spinRadius")
         self.spinRadius.setGeometry(QRect(400, 240, 60, 31))
         self.spinRadius.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.NoButtons)
+        self.lblDistance = QLabel(self.scrollAreaWidgetContents)
+        self.lblDistance.setObjectName(u"lblDistance")
+        self.lblDistance.setGeometry(QRect(20, 100, 191, 30))
+        self.sliderDistance = QSlider(self.scrollAreaWidgetContents)
+        self.sliderDistance.setObjectName(u"sliderDistance")
+        self.sliderDistance.setGeometry(QRect(200, 100, 271, 31))
+        self.sliderDistance.setOrientation(Qt.Orientation.Horizontal)
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
         self.btnStartCam = QPushButton(self.frameButtons)
         self.btnStartCam.setObjectName(u"btnStartCam")
@@ -133,6 +140,7 @@ class Ui_Form(object):
         self.lblDelay.setText(QCoreApplication.translate("Form", u"Sz\u00fcnet gesztusok k\u00f6z\u00f6tt", None))
         self.lblSensitivity.setText(QCoreApplication.translate("Form", u"Eg\u00e9r \u00e9rz\u00e9kenys\u00e9g", None))
         self.lblRadius.setText(QCoreApplication.translate("Form", u"Sodr\u00f3d\u00e1smentes z\u00f3na sugara", None))
+        self.lblDistance.setText(QCoreApplication.translate("Form", u"T\u00e1vols\u00e1g", None))
         self.btnStartCam.setText(QCoreApplication.translate("Form", u"Kamerateszt", None))
     # retranslateUi
 
