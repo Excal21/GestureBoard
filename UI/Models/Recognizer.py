@@ -38,14 +38,14 @@ class Recognizer:
 
       self.options = python.vision.GestureRecognizerOptions(
           base_options=self.base_options,
-          min_tracking_confidence=0.7,
+          min_tracking_confidence=0.8,
           
           num_hands=4
           )
       self.recognizer = python.vision.GestureRecognizer.create_from_options(self.options)
 
       self.__camera = 0
-      self.__confidence = 0.7
+      self.__confidence = 0.5
       self.__stop = False
       self.__commands = {}
       self.__camerafeed = True
@@ -179,8 +179,15 @@ class Recognizer:
       if len(result.gestures) >= 1:
         gestureidx = result.gestures[0][0].category_name
         if gestureidx and gestureidx != 'NONE':
+          lm0 = result.hand_landmarks[0][0]   # 0. markpont
+          lm9 = result.hand_landmarks[0][9]   # 9. markpont
+
+          distance_2d = ((lm0.x - lm9.x)**2 + (lm0.y - lm9.y)**2)**0.5
+          print(f"távolság: {500 - int(distance_2d * 1000)}")
           return annotated_image, (gestureidx, round(result.gestures[0][0].score * 100, 2))
       
+          
+
       return annotated_image, None
 
     return annotated_image
@@ -245,38 +252,50 @@ class Recognizer:
       mp_image = Image(image_format=ImageFormat.SRGB, data=img)
 
 
-      #Ha lát valamit a program, akkor adott konfidencia felett elkezdi halmozni listába
+      # Ha lát valamit a program, akkor adott confidence felett elkezdi halmozni listába
       result = self.recognizer.recognize(mp_image)
       if len(result.gestures) >= 1:
-        for gesture in result.gestures:
-            if gesture[0].category_name != 'NONE' and gesture[0].category_name != '':
-              if gesture[0].score > self.confidence:
-                last_gestures.append(gesture[0].category_name)
-                print(result.handedness[0][0].category_name)
+          for i, gesture in enumerate(result.gestures):
+              name = gesture[0].category_name
+              score = gesture[0].score
+              if name != 'NONE' and name != '':
+                  if score > (self.confidence - 0.2):
+                      last_gestures.append((name, score))
+                      hand_label = result.handedness[i][0].category_name
 
+                      lm0 = result.hand_landmarks[i][0]
+                      lm9 = result.hand_landmarks[i][9]
 
+                      distance_2d = ((lm0.x - lm9.x)**2 + (lm0.y - lm9.y)**2)**0.5
+                      print(f"{hand_label} kéz: {name} ({score:.2f}), távolság: {500 - int(distance_2d * 1000)}")
+                  else:
+                      last_gestures.append(("NONE", 0.0))
+              else:
+                  last_gestures.append(("NONE", 0.0))
 
-      #Ha a halmozás eredménye az, hogy self.__framecount db ugyanolyan gesztus van, akkor biztos, hogy valamit akar a user
+      # Ha a halmozás eredménye elég elemszámú, akkor majority voting
       if len(last_gestures) >= self.__framecount:
-          # megszámoljuk, melyik gesztus fordult elő legtöbbször
-          counts = Counter(last_gestures)
+          counts = Counter([g[0] for g in last_gestures])
           majority_gesture, majority_count = counts.most_common(1)[0]
 
-          # threshold: pl. a gesztus legalább 60%-ban jelen legyen
-          if (majority_count / self.__framecount) >= 0.8 \
-            and (datetime.now() - last_gesture_time).total_seconds() > self.__delay \
-            and majority_gesture != '':
+          if (majority_count / self.__framecount) >= 0.8 and majority_gesture != 'NONE':
+              # Átlag confidence számítása a majority elemekre
+              majority_confidences = [g[1] for g in last_gestures if g[0] == majority_gesture]
+              avg_confidence = sum(majority_confidences) / len(majority_confidences)
 
-              print(majority_gesture)
-              if majority_gesture in gesture_mappings.keys():
+              if avg_confidence >= self.confidence \
+                  and (datetime.now() - last_gesture_time).total_seconds() > self.__delay:
+
                   print(majority_gesture)
-                  try:
-                      exec(gesture_mappings[majority_gesture]['action'])
-                  except:
-                      print("Hiba történt a parancs végrehajtásakor")
-                  print("last_gesture: {0}, confidence: {1:2f}".format(
-                        majority_gesture, gesture[0].score))
+                  if majority_gesture in gesture_mappings.keys():
+                      print(majority_gesture)
+                      try:
+                          exec(gesture_mappings[majority_gesture]['action'])
+                      except:
+                          print("Hiba történt a parancs végrehajtásakor")
+                      print(f"last_gesture: {majority_gesture}, avg confidence: {avg_confidence:.2f}")
                   last_gesture_time = datetime.now()
+
           last_gestures.clear()
 
       if self.__camerafeed:
