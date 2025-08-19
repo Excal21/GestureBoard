@@ -178,12 +178,18 @@ class Recognizer:
       lm0 = result.hand_landmarks[0][0]   # 0. markpont
       lm9 = result.hand_landmarks[0][9]   # 9. markpont
 
-      distance_2d = ((lm0.x - lm9.x)**2 + (lm0.y - lm9.y)**2)**0.5
-      distance_2d = 500 - int(distance_2d * 1000)
+      lm05 = result.hand_landmarks[0][5]  # 5. markpont
+      lm17 = result.hand_landmarks[0][17] # 17. markpont
 
-      print(f'Távolság: {distance_2d}')
+      distance_09 = ((lm0.x - lm9.x)**2 + (lm0.y - lm9.y)**2)**0.5
+      distance_09 = 500 - int(distance_09 * 1000)
 
-      if distance_2d <= distance:
+      distance_517 = ((lm05.x - lm17.x)**2 + (lm05.y - lm17.y)**2)**0.5
+      distance_517 = 460 - int(distance_517 * 1000)  #Az 5-17 távolság kisebb, mint a 0-9
+
+      print(f'Távolság: {distance_09}, 5-17 távolság: {distance_517}')
+
+      if distance_09 <= distance or distance_517 <= distance:
         annotated_image = self.draw_landmarks_on_image(mp_image.numpy_view(), result)
         annotated_image = cv2.cvtColor(annotated_image, cv2.COLOR_BGR2RGB)
 
@@ -271,18 +277,28 @@ class Recognizer:
               score = gesture[0].score
               if name != 'NONE' and name != '':
                   if score > (self.confidence - 0.2):
-                      last_gestures.append((name, score))
                       hand_label = result.handedness[i][0].category_name
 
-                      lm0 = result.hand_landmarks[i][0]
-                      lm9 = result.hand_landmarks[i][9]
+                      lm0 = result.hand_landmarks[0][0]   # 0. markpont
+                      lm9 = result.hand_landmarks[0][9]   # 9. markpont
 
-                      distance_2d = ((lm0.x - lm9.x)**2 + (lm0.y - lm9.y)**2)**0.5
-                      print(f"{hand_label} kéz: {name} ({score:.2f}), távolság: {500 - int(distance_2d * 1000)}")
+                      lm05 = result.hand_landmarks[0][5]  # 5. markpont
+                      lm17 = result.hand_landmarks[0][17] # 17. markpont
+
+                      distance_09 = ((lm0.x - lm9.x)**2 + (lm0.y - lm9.y)**2)**0.5
+                      distance_09 = 500 - int(distance_09 * 1000)
+
+                      distance_517 = ((lm05.x - lm17.x)**2 + (lm05.y - lm17.y)**2)**0.5
+                      distance_517 = 460 - int(distance_517 * 1000)  #Az 5-17 távolság kisebb, mint a 0-9
+
+                      if distance_09 <= self.__distance or distance_517 <= self.__distance:
+                        last_gestures.append((name, score))
+                        print(f"Gesture: {name}, Score: {score:.2f}, Distance: {distance_09}, 5-17 Distance: {distance_517}")
+
                   else:
                       last_gestures.append(("NONE", 0.0))
-              else:
-                  last_gestures.append(("NONE", 0.0))
+      else:
+        last_gestures.append(("NONE", 0.0))
 
       # Ha a halmozás eredménye elég elemszámú, akkor majority voting
       if len(last_gestures) >= self.__framecount:

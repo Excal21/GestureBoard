@@ -1,8 +1,8 @@
 {
     "Camera": 0,
     "HueOffset": 0,
-    "Distance": 369,
+    "Distance": 334,
     "Confidence": 0.65,
-    "FrameCount": 5,
-    "Delay": 0.7
+    "FrameCount": 7,
+    "Delay": 1.0
 }
