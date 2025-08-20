@@ -109,7 +109,7 @@ class NewGestureWizardController(QWidget):
 
 #region Kamerakép
     def updateFrame(self):
-        frame = RecognizerHandler.getInstance().annotate(self.rec.getFrame())
+        frame, gesture = RecognizerHandler.getInstance().annotate(self.rec.getFrame())
         if frame is not None:
             h, w, _ = frame.shape
 

@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'optionsForm.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.8.2
+## Created by: Qt User Interface Compiler version 6.9.1
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -63,10 +63,10 @@ class Ui_OptionsForm(object):
         self.btnSave.setGeometry(QRect(370, 340, 120, 40))
         self.btnReset = QPushButton(self.frameButtons)
         self.btnReset.setObjectName(u"btnReset")
-        self.btnReset.setGeometry(QRect(230, 340, 120, 40))
+        self.btnReset.setGeometry(QRect(240, 340, 120, 40))
         self.btnManager = QPushButton(self.frameButtons)
-        self.btnManager.setObjectName(u"btnTeach")
-        self.btnManager.setGeometry(QRect(20, 340, 191, 40))
+        self.btnManager.setObjectName(u"btnManager")
+        self.btnManager.setGeometry(QRect(30, 340, 191, 40))
         self.frameHide = QFrame(self.frameButtons)
         self.frameHide.setObjectName(u"frameHide")
         self.frameHide.setGeometry(QRect(20, 30, 221, 301))

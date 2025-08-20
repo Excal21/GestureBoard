@@ -201,7 +201,7 @@ class Recognizer:
           
               
 
-          return annotated_image, None
+        return annotated_image, None
         
         # else:
         #   return annotated_image

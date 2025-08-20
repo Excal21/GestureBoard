@@ -64,6 +64,14 @@ class CameraOptionsController(QWidget):
         # self.loadSettings()
         self.loadCameraCombo()
         self.setLayoutSettings()
+
+
+        #TOUCHLESSPAD
+        self.ui.lblRadius.setVisible(False)
+        self.ui.spinRadius.setVisible(False)
+        self.ui.lblSensitivity.setVisible(False)
+        self.ui.sliderSensitivity.setVisible(False)
+        
 #region Kamerakép
     def startCamera(self):
         with open('Config/UserSettings.json', 'r', encoding='utf-8') as file:
@@ -163,6 +171,10 @@ class CameraOptionsController(QWidget):
         self.ui.spinRadius.setStyleSheet(train_input_style)
         self.ui.lblRadius.setStyleSheet(train_label_style)
         
+        self.ui.spinConfidence.setContextMenuPolicy(Qt.NoContextMenu)
+        self.ui.spinFrameCnt.setContextMenuPolicy(Qt.NoContextMenu)
+        self.ui.spinDelay.setContextMenuPolicy(Qt.NoContextMenu)
+        self.ui.spinRadius.setContextMenuPolicy(Qt.NoContextMenu)
 
         self.ui.scrollArea.verticalScrollBar().setStyleSheet(scrollbar_style)
 

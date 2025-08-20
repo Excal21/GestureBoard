@@ -75,10 +75,16 @@ class OptionsMenuController(QWidget):
 
             if(entry['highlight'] == 0):
                 btnCombo.setIcon(QIcon('Resources/Icons/widget_green.png'))
+                btnCombo.setContextMenuPolicy(Qt.CustomContextMenu)
+                btnCombo.customContextMenuRequested.connect(lambda event, key=key: self.resetEntry(key))
             elif(entry['highlight'] == 1):
                 btnKey.setIcon(QIcon('Resources/Icons/keyboard_green.png'))
+                btnKey.setContextMenuPolicy(Qt.CustomContextMenu)
+                btnKey.customContextMenuRequested.connect(lambda event, key=key: self.resetEntry(key))
             elif(entry['highlight'] == 2):
                 btnConsole.setIcon(QIcon('Resources/Icons/console_green.png'))
+                btnConsole.setContextMenuPolicy(Qt.CustomContextMenu)
+                btnConsole.customContextMenuRequested.connect(lambda event, key=key: self.resetEntry(key))
 
             #Gombok helyének beállítása
             btnContainer = QWidget()
@@ -109,6 +115,12 @@ class OptionsMenuController(QWidget):
         
         self.scroll_layout.addStretch()
 
+    def resetEntry(self, key):
+        print('Resetting entry for key:', key)
+        self.data[key]['action'] = None
+        self.data[key]['highlight'] = -1
+        self.data[key]['description'] = None
+        self.updateEntries()
 
 #endregion
 
@@ -156,7 +168,7 @@ class OptionsMenuController(QWidget):
     def saveSubSelection(self, predefined_action):
         self.data[self.clicked]['action'] = predefined_action[1]
         self.data[self.clicked]['highlight'] = 0
-        self.data[self.clicked]['description'] = predefined_action[0]
+        self.data[self.clicked]['description'] = predefined_action[0] + '\n\n\n Törléshez kattints\njobb gombbal!'
         self.ui.scrollCombo.hide()
         self.ui.scrollArea.setDisabled(False)
         self.sub_menu_active = False
@@ -258,6 +270,7 @@ class OptionsMenuController(QWidget):
                 self.data[self.clicked]['description'] = f'{combination.replace(',', '+')
                                                             + (' + ' if combination else '') 
                                                             + (key_map[key][0] if (key in key_map and len(key_map[key]) == 2) else keystr)}'
+                self.data[self.clicked]['description'] += '\n\n\n Törléshez kattints\njobb gombbal!'
                 self.data[self.clicked]['highlight'] = 1
 
                 print(f'Billentyűkombináció\n {combination.replace(',', '+') + (' + ' if combination else '') + keystr}')
@@ -294,7 +307,7 @@ class OptionsMenuController(QWidget):
         action = f'os.system(\'{self.ui.txtinputCommand.text()}\')'
         self.data[self.clicked]['action'] = action
         self.data[self.clicked]['highlight'] = 2
-        self.data[self.clicked]['description'] = self.ui.txtinputCommand.text()
+        self.data[self.clicked]['description'] = self.ui.txtinputCommand.text() + '\n\n\n Törléshez kattints\njobb gombbal!'
         self.ui.txtinputCommand.clear()
         self.ui.txtinputCommand.hide()
         self.ui.btnCommandOk.hide()
@@ -415,6 +428,8 @@ class OptionsMenuController(QWidget):
         layout.addStretch()
 
         self.ui.lblDescription.setText('')
+        self.ui.lblDescription.setContentsMargins(15, 0, 15, 0)
+        self.ui.lblDescription.setAlignment(Qt.AlignCenter)
 
         #Görgethető terület
         self.scroll_area = self.ui.scrollArea
@@ -449,7 +464,6 @@ class OptionsMenuController(QWidget):
         self.ui.btnCommandOk.setIcon(QIcon('Resources/Icons/check.png'))
         self.ui.btnCommandOk.setIconSize(QSize(30, 30))
 
-        self.ui.lblDescription.setContentsMargins(15, 0, 15, 0)
 
 
 #endregion

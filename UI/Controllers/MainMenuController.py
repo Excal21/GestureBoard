@@ -71,7 +71,8 @@ class MainMenuController(QWidget):
         layout.addWidget(self.ui.btnCameraOptions, alignment=Qt.AlignCenter)
         layout.addStretch()
 
-        
+        #TOUCHLESSPAD
+        self.ui.btnCameraOptions.setText('Kamera-beállítások')
 
 
     def show_options(self):

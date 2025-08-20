@@ -141,7 +141,7 @@
    <widget class="QPushButton" name="btnReset">
     <property name="geometry">
      <rect>
-      <x>230</x>
+      <x>240</x>
       <y>340</y>
       <width>120</width>
       <height>40</height>
@@ -154,7 +154,7 @@
    <widget class="QPushButton" name="btnManager">
     <property name="geometry">
      <rect>
-      <x>20</x>
+      <x>30</x>
       <y>340</y>
       <width>191</width>
       <height>40</height>
