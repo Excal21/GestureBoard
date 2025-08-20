@@ -65,7 +65,7 @@ if __name__ == '__main__':
     ml.start()
     ml.finished.connect(rl.load)
     rl.finished.connect(lambda: window.stacked_widget.setCurrentIndex(1))
-    #window.stacked_widget.setCurrentIndex(1)
+    # window.stacked_widget.setCurrentIndex(1)
 
 
     sys.exit(app.exec())

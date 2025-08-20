@@ -26,7 +26,7 @@ class Trainer(QThread):
                 if response.json()['status'] == 'idle':
                     if os.path.exists(self.filename):
                         os.remove(self.filename)
-                    make_archive('Images', 'zip', 'Data\\Samples')
+                    make_archive('Images', 'zip', 'Data/Samples')
                     with open(self.filename, 'rb') as file:
                         files = {'file': file}
                         response = requests.post('http://' + self.ip + '/upload', headers={'X-API-KEY' : 'secret'}, files=files)
@@ -70,7 +70,7 @@ class Trainer(QThread):
                         headers={'X-API-KEY': 'secret'})
             
             if response.status_code == 200:
-                with open('Config\\gesture_recognizer.task', 'wb') as f:
+                with open('Config/gesture_recognizer.task', 'wb') as f:
                     f.write(response.content)
                 RecognizerHandler.getInstance().reload()
                 self.progress.emit('Modell elmentve')

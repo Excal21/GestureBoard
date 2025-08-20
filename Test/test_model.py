@@ -6,6 +6,7 @@ project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'UI
 os.chdir(project_root)
 
 @pytest.mark.filterwarnings('ignore::DeprecationWarning')
+
 def test_modelFile():
 
     config_path = os.path.abspath(os.path.join(project_root, 'Config', 'gesture_recognizer.task'))

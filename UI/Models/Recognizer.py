@@ -10,6 +10,7 @@ from mediapipe.framework.formats import landmark_pb2
 from mediapipe.tasks import python
 import numpy as np
 from datetime import datetime
+from collections import Counter
 import shutil
 import pyautogui
 import json
@@ -37,7 +38,7 @@ class Recognizer:
 
       self.options = python.vision.GestureRecognizerOptions(
           base_options=self.base_options,
-          min_tracking_confidence=0.7,
+          min_tracking_confidence=0.8,
           
           num_hands=4
           )
@@ -50,6 +51,7 @@ class Recognizer:
       self.__camerafeed = True
       self.__framecount = 5
       self.__hueoffset = 0
+      self.__distance = 500
       self.__delay = 1
       self.__error = False
       self.__configpath = config_path
@@ -165,24 +167,46 @@ class Recognizer:
 #endregion
 
 #region Annotate
-  def annotateImage(self, image, gestures=False):
+  def annotateImage(self, image, gestures=False, distance=500):
     #img = cv2.flip(img, 1)
     img = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
     mp_image = Image(image_format=ImageFormat.SRGB, data=img)
 
     result = self.recognizer.recognize(mp_image)
-    annotated_image = self.draw_landmarks_on_image(mp_image.numpy_view(), result)
-    annotated_image = cv2.cvtColor(annotated_image, cv2.COLOR_BGR2RGB)
 
-    if gestures:
-      if len(result.gestures) >= 1:
-        gestureidx = result.gestures[0][0].category_name
-        if gestureidx and gestureidx != 'NONE':
-          return annotated_image, (gestureidx, round(result.gestures[0][0].score * 100, 2))
-      
-      return annotated_image, None
+    if result.handedness:
+      lm0 = result.hand_landmarks[0][0]   # 0. markpont
+      lm9 = result.hand_landmarks[0][9]   # 9. markpont
 
-    return annotated_image
+      lm05 = result.hand_landmarks[0][5]  # 5. markpont
+      lm17 = result.hand_landmarks[0][17] # 17. markpont
+
+      distance_09 = ((lm0.x - lm9.x)**2 + (lm0.y - lm9.y)**2)**0.5
+      distance_09 = 500 - int(distance_09 * 1000)
+
+      distance_517 = ((lm05.x - lm17.x)**2 + (lm05.y - lm17.y)**2)**0.5
+      distance_517 = 460 - int(distance_517 * 1000)  #Az 5-17 távolság kisebb, mint a 0-9
+
+      print(f'Távolság: {distance_09}, 5-17 távolság: {distance_517}')
+
+      if distance_09 <= distance or distance_517 <= distance:
+        annotated_image = self.draw_landmarks_on_image(mp_image.numpy_view(), result)
+        annotated_image = cv2.cvtColor(annotated_image, cv2.COLOR_BGR2RGB)
+
+        if gestures:
+          if len(result.gestures) >= 1:
+            gestureidx = result.gestures[0][0].category_name
+            if gestureidx and gestureidx != 'NONE':
+              return annotated_image, (gestureidx, round(result.gestures[0][0].score * 100, 2))
+          
+              
+
+        return annotated_image, None
+        
+        # else:
+        #   return annotated_image
+    
+    return cv2.cvtColor(img, cv2.COLOR_BGR2RGB), None
 #endregion
 
 #region Konfigurációs fájlok betöltése
@@ -198,6 +222,7 @@ class Recognizer:
       self.__framecount = data['FrameCount']
       self.__confidence = data['Confidence']
       self.__hueoffset = data['HueOffset']
+      self.__distance = data['Distance']
       self.__delay = data['Delay']
 #endregion
 
@@ -244,29 +269,61 @@ class Recognizer:
       mp_image = Image(image_format=ImageFormat.SRGB, data=img)
 
 
-      #Ha lát valamit a program, akkor adott konfidencia felett elkezdi halmozni listába
+      # Ha lát valamit a program, akkor adott confidence felett elkezdi halmozni listába
       result = self.recognizer.recognize(mp_image)
       if len(result.gestures) >= 1:
-        for gesture in result.gestures:
-            if gesture[0].category_name != 'NONE' and gesture[0].category_name != '':
-              if gesture[0].score > self.confidence:
-                last_gestures.append(gesture[0].category_name)
+          for i, gesture in enumerate(result.gestures):
+              name = gesture[0].category_name
+              score = gesture[0].score
+              if name != 'NONE' and name != '':
+                  if score > (self.confidence - 0.2):
+                      hand_label = result.handedness[i][0].category_name
 
+                      lm0 = result.hand_landmarks[0][0]   # 0. markpont
+                      lm9 = result.hand_landmarks[0][9]   # 9. markpont
 
+                      lm05 = result.hand_landmarks[0][5]  # 5. markpont
+                      lm17 = result.hand_landmarks[0][17] # 17. markpont
 
-      #Ha a halmozás eredménye az, hogy self.__framecount db ugyanolyan gesztus van, akkor biztos, hogy valamit akar a user
+                      distance_09 = ((lm0.x - lm9.x)**2 + (lm0.y - lm9.y)**2)**0.5
+                      distance_09 = 500 - int(distance_09 * 1000)
+
+                      distance_517 = ((lm05.x - lm17.x)**2 + (lm05.y - lm17.y)**2)**0.5
+                      distance_517 = 460 - int(distance_517 * 1000)  #Az 5-17 távolság kisebb, mint a 0-9
+
+                      if distance_09 <= self.__distance or distance_517 <= self.__distance:
+                        last_gestures.append((name, score))
+                        print(f"Gesture: {name}, Score: {score:.2f}, Distance: {distance_09}, 5-17 Distance: {distance_517}")
+
+                  else:
+                      last_gestures.append(("NONE", 0.0))
+      else:
+        last_gestures.append(("NONE", 0.0))
+
+      # Ha a halmozás eredménye elég elemszámú, akkor majority voting
       if len(last_gestures) >= self.__framecount:
-        if all(gesture == last_gestures[0] for gesture in last_gestures) and (datetime.now() - last_gesture_time).total_seconds() > self.__delay and last_gestures[0]  != '':
-          print(last_gestures[0])
-          if last_gestures[0] in gesture_mappings.keys():
-            print(last_gestures[0])
-            try:
-              exec(gesture_mappings[last_gestures[0]]['action'])
-            except:
-              print("Hiba történt a parancs végrehajtásakor")
-            print("last_gesture: {0}, confidence: {1:2f}".format(last_gestures[0], gesture[0].score))
-            last_gesture_time = datetime.now()
-        last_gestures.clear()
+          counts = Counter([g[0] for g in last_gestures])
+          majority_gesture, majority_count = counts.most_common(1)[0]
+
+          if (majority_count / self.__framecount) >= 0.8 and majority_gesture != 'NONE':
+              # Átlag confidence számítása a majority elemekre
+              majority_confidences = [g[1] for g in last_gestures if g[0] == majority_gesture]
+              avg_confidence = sum(majority_confidences) / len(majority_confidences)
+
+              if avg_confidence >= self.confidence \
+                  and (datetime.now() - last_gesture_time).total_seconds() > self.__delay:
+
+                  print(majority_gesture)
+                  if majority_gesture in gesture_mappings.keys():
+                      print(majority_gesture)
+                      try:
+                          exec(gesture_mappings[majority_gesture]['action'])
+                      except:
+                          print("Hiba történt a parancs végrehajtásakor")
+                      print(f"last_gesture: {majority_gesture}, avg confidence: {avg_confidence:.2f}")
+                  last_gesture_time = datetime.now()
+
+          last_gestures.clear()
 
       if self.__camerafeed:
         annotated_image = self.draw_landmarks_on_image(mp_image.numpy_view(), result)

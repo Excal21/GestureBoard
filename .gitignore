@@ -87,3 +87,7 @@ CMakeLists.txt.user*
 /build*/
 
 .vscode
+.pytest_cache/
+.coverage
+*/.coverage
+/.qtcreator

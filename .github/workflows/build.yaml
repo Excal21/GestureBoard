@@ -12,7 +12,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.12.9'
+          python-version: '3.12.10'
 
       - name: Cache virtual environment
         id: cache-venv
@@ -44,7 +44,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.12.9'
+          python-version: '3.12.10'
 
       - name: Restore virtual environment
         id: cache-venv
@@ -62,6 +62,9 @@ jobs:
           .venv\Scripts\pip.exe install -r ./UI/requirements.txt
           .venv\Scripts\pip.exe install pyinstaller==6.14.2
         if: steps.cache-venv.outputs.cache-hit != 'true'
+
+      - name: Ensure correct PyInstaller version
+        run: .venv\Scripts\pip.exe install pyinstaller==6.14.2 --force-reinstall
 
       - name: Build with PyInstaller
         shell: cmd
@@ -108,3 +111,48 @@ jobs:
         with:
           name: GestureBoard_Windows64
           path: ./build_dist
+
+      - name: VirusTotal Scan
+        id: vt_scan
+        uses: cssnr/virustotal-action@v1
+        with:
+          vt_api_key: ${{ secrets.VIRUSTOTAL_API_KEY }}
+          file_globs: |
+            build_dist/GestureBoard.exe
+          rate_limit: 4
+          summary: false
+
+      - name: Wait for VirusTotal Analysis
+        shell: bash
+        run: sleep 120
+
+      - name: Check VirusTotal Result
+        shell: bash
+        run: |
+          FILE_PATH="build_dist/GestureBoard.exe"
+          FILE_HASH=$(sha256sum "$FILE_PATH" | awk '{ print $1 }')
+
+          echo "🔍 Checking VirusTotal results for hash: $FILE_HASH"
+
+          REPORT=$(curl -s --request GET \
+            --url "https://www.virustotal.com/api/v3/files/$FILE_HASH" \
+            --header "x-apikey: ${{ secrets.VIRUSTOTAL_API_KEY }}")
+
+          MALICIOUS=$(echo "$REPORT" | jq '.data.attributes.last_analysis_stats.malicious')
+          echo "⚠️ Malicious detections: $MALICIOUS"
+
+          # írás az Action Summary-ba
+          {
+            echo "## 🛡️ VirusTotal Report"
+            echo ""
+            echo "**Malicious detections:** $MALICIOUS"
+            echo ""
+            echo "| Engine | Category | Result |"
+            echo "|--------|----------|--------|"
+            echo "$REPORT" | jq -r '.data.attributes.last_analysis_results | to_entries[] | select(.value.category=="malicious") | "| " + .key + " | " + .value.category + " | " + .value.result + " |"'
+          } >> $GITHUB_STEP_SUMMARY
+
+          if [ "$MALICIOUS" -gt 5 ]; then
+            echo "❌ Too many detections ($MALICIOUS), failing build."
+            exit 1
+          fi

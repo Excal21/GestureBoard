@@ -50,11 +50,11 @@ class TrainMenuController(QWidget):
     def onReturn(self, index):
         if index == 3 and self.previous_page != 4:
             print(self.previous_page)
-            with open('Config\\UserSettings.json', 'r', encoding='UTF-8') as f:
+            with open('Config/UserSettings.json', 'r', encoding='UTF-8') as f:
                 self.data = dict(json.load(f))
-            print('Gesztusok frissítve')
-        
-            self.updateList()
+
+        print('Gesztusok frissítve')
+        self.updateList()
 
     def updateList(self):
 
@@ -105,13 +105,13 @@ class TrainMenuController(QWidget):
 
 
         print('Mentés előtti adat', self.data)
-        with open('Config\\UserSettings.json', 'w', encoding='UTF-8') as f:
+        with open('Config/UserSettings.json', 'w', encoding='UTF-8') as f:
             json.dump(self.data, f, ensure_ascii=False, indent=4)
         print('JSON dumped')
 
-        for key in os.listdir('Data\\Samples'):
+        for key in os.listdir('Data/Samples'):
             if key not in self.data.keys():
-                shutil.rmtree('Data\\Samples\\' + key, onerror=remove_readonly)
+                shutil.rmtree('Data/Samples/' + key, onerror=remove_readonly)
 
     def startRecord(self):
         self.previous_page = 4
@@ -131,9 +131,9 @@ class TrainMenuController(QWidget):
             func(path)
 
 
-        for key in os.listdir('Data\\Samples'):
+        for key in os.listdir('Data/Samples'):
             if key not in self.data.keys():
-                shutil.rmtree('Data\\Samples\\' + key, onerror=remove_readonly)
+                shutil.rmtree('Data/Samples/' + key, onerror=remove_readonly)
         
 
         loading_page = self.stacked_widget.widget(0)
@@ -266,7 +266,7 @@ class TrainMenuController(QWidget):
         self.scroll_layout.setSpacing(0)
 
     def loadFont(self):
-        font_id = QFontDatabase.addApplicationFont('Resources\\Fonts\\Ubuntu-R.ttf')
+        font_id = QFontDatabase.addApplicationFont('Resources/Fonts/Ubuntu-R.ttf')
         if font_id != -1:
             font_family = QFontDatabase.applicationFontFamilies(font_id)[0]
             self.font = QFont(font_family, 16)

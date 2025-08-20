@@ -4,7 +4,7 @@ import cv2
 import json
 
 
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton
+from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout
 from PySide6.QtCore import Qt, QTimer, QSize
 from PySide6.QtGui import QFontDatabase, QFont, QImage, QPixmap, QRegion, QPainterPath, QIcon, QPainter, QColor
 
@@ -45,34 +45,36 @@ class CameraOptionsController(QWidget):
 
         self.ui.lblDescription.setText('')
 
-        self.ui.spinConfidence.setFixedWidth(60)
-        self.ui.spinFrameCnt.setFixedWidth(60)
-        self.ui.spinDelay.setFixedWidth(60)
+
 
         self.ui.sliderHue.setRange(0, 255)
+        self.ui.sliderDistance.setRange(100, 500)
         self.ui.spinConfidence.setRange(0, 100)
         self.ui.spinFrameCnt.setRange(1, 30)
         self.ui.spinDelay.setRange(0, 5)
         self.ui.spinDelay.setSingleStep(0.1)
         self.ui.spinDelay.setDecimals(1)
 
-        self.ui.spinConfidence.setAlignment(Qt.AlignCenter)
-        self.ui.spinFrameCnt.setAlignment(Qt.AlignCenter)
-        self.ui.spinDelay.setAlignment(Qt.AlignCenter)
-        self.ui.spinConfidence.setContentsMargins(0, 0, 0, 0)
-        self.ui.spinFrameCnt.setContentsMargins(0, 0, 0, 0)
-        self.ui.spinDelay.setContentsMargins(0, 0, 0, 0)
+
 
 
         self.ui.lblCvImg.setAlignment(Qt.AlignCenter)
-        self.ui.lblCvImg.setPixmap(QPixmap('Resources\\Icons\\camera.png').scaled(100, 70, Qt.KeepAspectRatio, Qt.SmoothTransformation))
+        self.ui.lblCvImg.setPixmap(QPixmap('Resources/Icons/camera.png').scaled(100, 70, Qt.KeepAspectRatio, Qt.SmoothTransformation))
 
         # self.loadSettings()
         self.loadCameraCombo()
+        self.setLayoutSettings()
 
+
+        #TOUCHLESSPAD
+        self.ui.lblRadius.setVisible(False)
+        self.ui.spinRadius.setVisible(False)
+        self.ui.lblSensitivity.setVisible(False)
+        self.ui.sliderSensitivity.setVisible(False)
+        
 #region Kamerakép
     def startCamera(self):
-        with open('Config\\UserSettings.json', 'r', encoding='utf-8') as file:
+        with open('Config/UserSettings.json', 'r', encoding='utf-8') as file:
             self.gesturedata = json.load(file)
 
         if not self.is_camera_on:
@@ -89,7 +91,7 @@ class CameraOptionsController(QWidget):
         else:
             self.timer.stop()
             self.rec.cap.release()
-            self.ui.lblCvImg.setPixmap(QPixmap('Resources\\Icons\\camera.png').scaled(100, 70, Qt.KeepAspectRatio, Qt.SmoothTransformation))
+            self.ui.lblCvImg.setPixmap(QPixmap('Resources/Icons/camera.png').scaled(100, 70, Qt.KeepAspectRatio, Qt.SmoothTransformation))
             self.is_camera_on = False
             self.ui.btnStartCam.setText('Kamera tesztelése')
             self.ui.btnStartCam.setStyleSheet(options_button_style)
@@ -97,7 +99,7 @@ class CameraOptionsController(QWidget):
     def updateFrame(self):
         frame = self.rec.getFrame(self.ui.sliderHue.value())
 
-        frame, gesture = RecognizerHandler.getInstance().annotate(frame, True)
+        frame, gesture = RecognizerHandler.getInstance().annotate(frame, True, self.ui.sliderDistance.value())
 
 
         if frame is not None:
@@ -156,12 +158,27 @@ class CameraOptionsController(QWidget):
         self.ui.lblConfidence.setStyleSheet(train_label_style)
         self.ui.lblFrameCnt.setStyleSheet(train_label_style)
         self.ui.lblDelay.setStyleSheet(train_label_style)
-        self.ui.sliderHue.setStyleSheet(slider_style)
-        self.ui.comboCamera.setStyleSheet(camera_combo_style)
         self.ui.lblCvImg.setStyleSheet(camera_label_style)
+        self.ui.comboCamera.setStyleSheet(camera_combo_style)
+        self.ui.sliderHue.setStyleSheet(slider_style)
+        self.ui.lblDistance.setStyleSheet(train_label_style)
+        self.ui.sliderDistance.setStyleSheet(slider_style)
         self.ui.spinConfidence.setStyleSheet(train_input_style)
         self.ui.spinFrameCnt.setStyleSheet(train_input_style)
         self.ui.spinDelay.setStyleSheet(train_input_style)
+        self.ui.lblSensitivity.setStyleSheet(train_label_style)
+        self.ui.sliderSensitivity.setStyleSheet(slider_style)
+        self.ui.spinRadius.setStyleSheet(train_input_style)
+        self.ui.lblRadius.setStyleSheet(train_label_style)
+        
+        self.ui.spinConfidence.setContextMenuPolicy(Qt.NoContextMenu)
+        self.ui.spinFrameCnt.setContextMenuPolicy(Qt.NoContextMenu)
+        self.ui.spinDelay.setContextMenuPolicy(Qt.NoContextMenu)
+        self.ui.spinRadius.setContextMenuPolicy(Qt.NoContextMenu)
+
+        self.ui.scrollArea.verticalScrollBar().setStyleSheet(scrollbar_style)
+
+
 
     def setFonts(self):
         self.loadFont()
@@ -173,9 +190,12 @@ class CameraOptionsController(QWidget):
         self.ui.lblCamera.setFont(self.font)
         
         self.ui.lblHue.setFont(self.font)
+        self.ui.lblDistance.setFont(self.font)
         self.ui.lblConfidence.setFont(self.font)
         self.ui.lblFrameCnt.setFont(self.font)
         self.ui.lblDelay.setFont(self.font)
+        self.ui.lblSensitivity.setFont(self.font)
+        self.ui.lblRadius.setFont(self.font)
 
         self.ui.btnBack.setFont(self.font)
         self.ui.btnSave.setFont(self.font)
@@ -184,6 +204,69 @@ class CameraOptionsController(QWidget):
         self.ui.spinConfidence.setFont(self.font)
         self.ui.spinFrameCnt.setFont(self.font)
         self.ui.spinDelay.setFont(self.font)
+        self.ui.spinRadius.setFont(self.font)
+#endregion
+
+#region Layout beállítások
+    def setLayoutSettings(self):
+        self.scroll_area = self.ui.scrollArea
+        self.scroll_area.setWidgetResizable(True)
+        self.scroll_layout = QVBoxLayout(self.ui.scrollAreaWidgetContents)
+        self.scroll_area.setWidget(self.ui.scrollAreaWidgetContents)
+
+        self.ui.scrollArea.verticalScrollBar().setContextMenuPolicy(Qt.NoContextMenu)
+        self.ui.scrollArea.horizontalScrollBar().setContextMenuPolicy(Qt.NoContextMenu)
+
+
+
+        self.ui.spinConfidence.setAlignment(Qt.AlignCenter)
+        self.ui.spinFrameCnt.setAlignment(Qt.AlignCenter)
+        self.ui.spinDelay.setAlignment(Qt.AlignCenter)
+        self.ui.spinRadius.setAlignment(Qt.AlignCenter)
+        self.ui.spinConfidence.setContentsMargins(0, 0, 0, 0)
+        self.ui.spinFrameCnt.setContentsMargins(0, 0, 0, 0)
+        self.ui.spinDelay.setContentsMargins(0, 0, 0, 0)
+
+        
+        pairs = [
+                (self.ui.lblCamera, self.ui.comboCamera),
+                (self.ui.lblHue, self.ui.sliderHue),
+                (self.ui.lblDistance, self.ui.sliderDistance),
+                (self.ui.lblConfidence, self.ui.spinConfidence),
+                (self.ui.lblFrameCnt, self.ui.spinFrameCnt),
+                (self.ui.lblDelay, self.ui.spinDelay),
+                (self.ui.lblSensitivity, self.ui.sliderSensitivity),
+                (self.ui.lblRadius, self.ui.spinRadius)
+            ]
+
+        for widget1, widget2 in pairs:
+            line = QHBoxLayout()
+            if widget1: line.addWidget(widget1)
+            line.addStretch()  # opcionális, ha igazítani szeretnéd
+            if widget2: line.addWidget(widget2)
+            self.scroll_layout.addLayout(line)
+    
+        self.ui.spinConfidence.setFixedWidth(60)
+        self.ui.spinFrameCnt.setFixedWidth(60)
+        self.ui.spinDelay.setFixedWidth(60)
+        self.ui.spinRadius.setFixedWidth(60)
+
+        self.ui.sliderHue.setFixedWidth(200)
+        self.ui.sliderDistance.setFixedWidth(200)
+        self.ui.sliderSensitivity.setFixedWidth(200)
+
+        self.ui.lblCamera.setFixedHeight(40)
+        self.ui.comboCamera.setFixedHeight(40)
+        self.ui.lblHue.setFixedHeight(40)
+        self.ui.lblDistance.setFixedHeight(40)
+        self.ui.lblConfidence.setFixedHeight(40)
+        self.ui.lblFrameCnt.setFixedHeight(40)
+        self.ui.lblDelay.setFixedHeight(40)
+        self.ui.lblSensitivity.setFixedHeight(40)
+        self.ui.lblRadius.setFixedHeight(40)
+        self.ui.btnStartCam.setFixedHeight(40)
+        
+
 
 #endregion
 
@@ -212,19 +295,28 @@ class CameraOptionsController(QWidget):
 
 
 
-        self.ui.lblCamera.enterEvent = lambda event: self.ui.lblDescription.setText(self.textToHTML('Válaszd ki a kamerát, amivel a gesztusokat tudja érzékelni a program!'))
+        self.ui.lblCamera.enterEvent = lambda event: self.ui.lblDescription.setText(
+            self.textToHTML('Válaszd ki a kamerát, amivel a gesztusokat tudja érzékelni a program!'))
         self.ui.lblCamera.leaveEvent = lambda event: self.ui.lblDescription.setText('')
 
-        self.ui.lblHue.enterEvent = lambda event: self.ui.lblDescription.setText(self.textToHTML('A színek eltolásával beállíthatod, hogy kesztyűben is felismerje a kezedet a program. Kapcsold be a kamerát és állítsd be óvatosan a csúszkával!'))
+        self.ui.lblHue.enterEvent = lambda event: self.ui.lblDescription.setText(
+            self.textToHTML('A színek eltolásával beállíthatod, hogy kesztyűben is felismerje a kezedet a program. Kapcsold be a kamerát és állítsd be óvatosan a csúszkával!'))
         self.ui.lblHue.leaveEvent = lambda event: self.ui.lblDescription.setText('')
 
-        self.ui.lblConfidence.enterEvent = lambda event: self.ui.lblDescription.setText(self.textToHTML('Növelésével csökkenthető a véletlen felismerések száma, de csökken a felismerés érzékenysége.'))
+        self.ui.lblDistance.enterEvent = lambda event: self.ui.lblDescription.setText(
+            self.textToHTML('A csúszka segítségével állítsd be a kezed távolságát a kamerától! Túl nagy távolság esetén előfordulhat, hogy más ember kezét érzékeli a GestureBoard.'))
+        self.ui.lblDistance.leaveEvent = lambda event: self.ui.lblDescription.setText('')
+
+        self.ui.lblConfidence.enterEvent = lambda event: self.ui.lblDescription.setText(
+            self.textToHTML('Növelésével csökkenthető a véletlen felismerések száma, de csökken a felismerés érzékenysége.'))
         self.ui.lblConfidence.leaveEvent = lambda event: self.ui.lblDescription.setText('')
 
-        self.ui.lblFrameCnt.enterEvent = lambda event: self.ui.lblDescription.setText(self.textToHTML('A program ennyi képkockán keresztül figyeli a gesztust a művelet végrehajtása előtt. Növelésével pontosabb, de lassabb lesz a felismerés.'))
+        self.ui.lblFrameCnt.enterEvent = lambda event: self.ui.lblDescription.setText(
+            self.textToHTML('A program ennyi képkockán keresztül figyeli a gesztust a művelet végrehajtása előtt. Növelésével pontosabb, de lassabb lesz a felismerés.'))
         self.ui.lblFrameCnt.leaveEvent = lambda event: self.ui.lblDescription.setText('')
 
-        self.ui.lblDelay.enterEvent = lambda event: self.ui.lblDescription.setText(self.textToHTML('Két gesztus közt eltelt idő másodpercben. Csökkentésével gyorsabban tudod kiadni a parancsokat.'))
+        self.ui.lblDelay.enterEvent = lambda event: self.ui.lblDescription.setText(
+            self.textToHTML('Két gesztus közt eltelt idő másodpercben. Csökkentésével gyorsabban tudod kiadni a parancsokat.'))
 
         self.ui.lblDelay.leaveEvent = lambda event: self.ui.lblDescription.setText('')
 #endregion
@@ -247,10 +339,11 @@ class CameraOptionsController(QWidget):
 
 
     def loadSettings(self):
-        with open('Config\\CameraSettings.json', 'r') as file:
+        with open('Config/CameraSettings.json', 'r') as file:
             self.data = json.load(file)
             self.ui.comboCamera.setCurrentIndex(self.data['Camera'])
             self.ui.sliderHue.setValue(self.data['HueOffset'])
+            self.ui.sliderDistance.setValue(self.data['Distance'])
             self.ui.spinConfidence.setValue(self.data['Confidence']*100)
             self.ui.spinFrameCnt.setValue(self.data['FrameCount'])
             self.ui.spinDelay.setValue(self.data['Delay'])
@@ -260,11 +353,12 @@ class CameraOptionsController(QWidget):
     def saveSettings(self):
         self.data['Camera'] = self.ui.comboCamera.currentIndex()
         self.data['HueOffset'] = self.ui.sliderHue.value()
+        self.data['Distance'] = self.ui.sliderDistance.value()
         self.data['Confidence'] = self.ui.spinConfidence.value()/100
         self.data['FrameCount'] = self.ui.spinFrameCnt.value()
         self.data['Delay'] = self.ui.spinDelay.value()
 
-        with open('Config\\CameraSettings.json', 'w') as file:
+        with open('Config/CameraSettings.json', 'w') as file:
             json.dump(self.data, file, indent=4)
         
 
@@ -294,7 +388,7 @@ class CameraOptionsController(QWidget):
 
 
     def loadFont(self):
-        font_id = QFontDatabase.addApplicationFont('Resources\\Fonts\\Ubuntu-R.ttf')
+        font_id = QFontDatabase.addApplicationFont('Resources/Fonts/Ubuntu-R.ttf')
         if font_id != -1:
             font_family = QFontDatabase.applicationFontFamilies(font_id)[0]
             self.font = QFont(font_family, 12)

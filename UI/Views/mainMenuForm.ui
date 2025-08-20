@@ -76,7 +76,7 @@
      <string notr="true"/>
     </property>
     <property name="text">
-     <string>Kamerabeállítások</string>
+     <string>Kamera- és egérbeállítások</string>
     </property>
    </widget>
    <widget class="QPushButton" name="btnOptions">

@@ -36,6 +36,8 @@ docker compose up -d
 ## Tippek
 - Akkor fog a <i>GestureBoard</i> a legjobban működni, hogyha a kezed lazán tartod.
 
+- Használat előtt a kamera-beállításokban próbáld ki a gesztusokat! A kameraképen látni fogod, hogy a program hogyan érzékeli a kezedet, és milyen gesztusokat ismer fel. 
+
 - A program azokat a gesztusokat fogja a legjobban, legpontosabban felismerni, amiket Te tanítasz meg neki.
 
 -  Próbálj olyan kéztartásokat választani, ahol az ujjaid nem fedik egymást, vagy csak kis mértékben! Ha a program nem elég pontos a tanítás után, javasolt a tanítási folyamat újbóli futtatása, szükség esetén a minták újbóli felvétele.
