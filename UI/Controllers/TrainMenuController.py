@@ -12,9 +12,10 @@ from Models.Recorder import Recorder
 import json
 import shutil
 from Models.Trainer import Trainer
+from Controllers.BaseController import BaseController
+from Resources.Fonts.FontLoader import FontLoader
 
-
-class TrainMenuController(QWidget):
+class TrainMenuController(BaseController):
     def __init__(self, stacked_widget):
         super().__init__()
         self.stacked_widget = stacked_widget
@@ -22,8 +23,10 @@ class TrainMenuController(QWidget):
 
         self.ui = Ui_Form()
         self.ui.setupUi(self)
+        self.initUI(overrides={
+            'scrollArea': train_scrollBar_style
+        })
 
-        self.setStyles()
         self.setLayoutSettings()
         self.setEventHandlers()
 
@@ -33,16 +36,9 @@ class TrainMenuController(QWidget):
         self.rec = Recorder()
         self.data = None
         self.previous_page = 2
-#region Alapbeállítások
 
-        #Gesztusok listája
 
         self.updateList()
-
-
-    def showDescription(self, text):
-        self.ui.lblDescription.setText(text)
-
 #endregion
 
 #region Lista kezelése
@@ -70,7 +66,7 @@ class TrainMenuController(QWidget):
                 for key, value in self.data.items():
                     entry = QPushButton(value['gesture'])
                     entry.setStyleSheet(predefined_label_style + noborder)
-                    entry.setFont(self.font)
+                    entry.setFont(FontLoader.getFont())
                     entry.setFixedHeight(33)
                     
                     entry.clicked.connect(lambda event, key=key, entry = entry : self.select(key, entry))
@@ -195,45 +191,8 @@ class TrainMenuController(QWidget):
 
 
 #region Stílusállítók
-    def setFonts(self):
-        self.loadFont()
-        self.ui.lblServer.setFont(self.font)
-        self.ui.txtinputServer.setFont(self.font)
-        self.ui.lblDescription.setFont(self.font)
-        self.ui.btnBack.setFont(self.font)
-        self.ui.lblTitle.setFont(self.font)
-        self.ui.lblDescription.setFont(self.font)
-        self.ui.btnRecord.setFont(self.font)
-        self.ui.btnDelete.setFont(self.font)
-        self.ui.btnTrain.setFont(self.font)
-        self.ui.lblGestures.setFont(self.font)
-
-
-    def setStyles(self):
-        self.setFonts()
-        self.ui.frameBlue.setStyleSheet(sidebar_style)
-        self.ui.lblTitle.setStyleSheet(sidebar_title_style)
-        self.ui.lblGestures.setStyleSheet(train_label_style)
-        self.ui.scrollArea.setStyleSheet(train_scrollBar_style)
-        self.ui.lblServer.setStyleSheet(train_label_style)
-        self.ui.txtinputServer.setStyleSheet(train_input_style)
-        self.ui.lblDescription.setStyleSheet(description_style)
-        self.ui.btnBack.setStyleSheet(options_button_style)
-        self.ui.btnRecord.setStyleSheet(options_button_style)
-        self.ui.btnDelete.setStyleSheet(options_button_style)
-        self.ui.btnTrain.setStyleSheet(options_button_style)
-
-
     def setLayoutSettings(self):
-        #Kék alapú díszítősáv elrendezése
-        layout = QVBoxLayout(self.ui.frameBlue)
-        layout.setContentsMargins(0, 55, 0, 0)
-        layout.setSpacing(0)
-        layout.addWidget(self.ui.lblTitle, alignment=Qt.AlignCenter)
-        layout.addStretch()
-
          #Labelek és inputmezők elrendezése
-        layout = QVBoxLayout(self.ui.frameButtons)
 
 
         server_options_layout = QHBoxLayout() 
@@ -241,16 +200,7 @@ class TrainMenuController(QWidget):
         self.ui.txtinputServer.setPlaceholderText('127.0.0.1:5000')
         self.ui.txtinputServer.setContextMenuPolicy(Qt.NoContextMenu)
         self.ui.lblDescription.setText(
-        '''<html>
-        <style>
-                p { line-height: 1.2; }
-        </style>
-        <body>
-                <p align='justify'>
-        Add meg a tanítást végző kiszolgáló címét és portját, majd rögzítsd és tanítsd meg saját gesztusaidat!
-                </p>
-            </body>
-        </html>'''
+            self.textToHTML('Add meg a tanítást végző kiszolgáló címét és portját, majd rögzítsd és tanítsd meg saját gesztusaidat!')
         )
 
         self.ui.lblServer.setFixedHeight(30)
@@ -264,13 +214,4 @@ class TrainMenuController(QWidget):
         self.ui.scrollArea.verticalScrollBar().setContextMenuPolicy(Qt.NoContextMenu)
         self.scroll_layout.setAlignment(Qt.AlignTop)
         self.scroll_layout.setSpacing(0)
-
-    def loadFont(self):
-        font_id = QFontDatabase.addApplicationFont('Resources/Fonts/Ubuntu-R.ttf')
-        if font_id != -1:
-            font_family = QFontDatabase.applicationFontFamilies(font_id)[0]
-            self.font = QFont(font_family, 16)
-        else:
-            print('Hiba: Nem sikerült betölteni az Ubuntu fontot!')
-
 #endregion

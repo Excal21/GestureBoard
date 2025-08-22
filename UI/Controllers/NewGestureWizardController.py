@@ -13,17 +13,18 @@ import json
 import shutil
 import cv2
 from Models.RecognizerHandler import RecognizerHandler
+from Controllers.BaseController import BaseController
 
 
-class NewGestureWizardController(QWidget):
+class NewGestureWizardController(BaseController):
     def __init__(self, stacked_widget):
         super().__init__()
         self.stacked_widget = stacked_widget
 
         self.ui = Ui_Form()
         self.ui.setupUi(self)
-    
-        self.setStyles()
+        self.initUI()
+
         self.setLayoutSettings()
         self.setEventHandlers()
 
@@ -150,34 +151,7 @@ class NewGestureWizardController(QWidget):
 #endregion
 
 #region Stílusállítók
-    def setFonts(self):
-        self.loadFont()
-        self.ui.lblTitle.setFont(self.font)
-        self.ui.lblDescription.setFont(self.font)
-        self.ui.lblInfo.setFont(self.font)
-        self.ui.lblGestureInputLabel.setFont(self.font)
-        self.ui.txtinputGestureName.setFont(self.font)
-        self.ui.lblUserGuide.setFont(self.font)
-
-    def setStyles(self):
-        self.setFonts()
-        self.ui.lblInfo.setStyleSheet(info_label_style)
-        self.ui.frameBlue.setStyleSheet(sidebar_style)
-        self.ui.lblTitle.setStyleSheet(sidebar_title_style)
-        self.ui.lblCvImg.setStyleSheet(camera_label_style)
-        self.ui.lblGestureInputLabel.setStyleSheet(train_label_style)
-        self.ui.txtinputGestureName.setStyleSheet(train_input_style)
-        self.ui.btnNameOK.setStyleSheet(options_button_style)
-        self.ui.lblUserGuide.setStyleSheet(guide_style)
-
     def setLayoutSettings(self):
-        #Kék alapú díszítősáv elrendezése
-        layout = QVBoxLayout(self.ui.frameBlue)
-        layout.setContentsMargins(0, 55, 0, 0)
-        layout.setSpacing(0)
-        layout.addWidget(self.ui.lblTitle, alignment=Qt.AlignCenter)
-        layout.addStretch()
-
         #Felbukkanó új gesztus varázsló elrendezése
         self.ui.frameNewGesture_layout = QVBoxLayout(self.ui.frameNewGesture)
         horizontal_layout = QHBoxLayout()
@@ -215,16 +189,5 @@ class NewGestureWizardController(QWidget):
 
         self.ui.frameNewGesture_layout.addWidget(self.ui.lblUserGuide, alignment=Qt.AlignCenter)
         self.ui.frameNewGesture_layout.addStretch()
-
-
-    def loadFont(self):
-        font_id = QFontDatabase.addApplicationFont('Resources/Fonts/Ubuntu-R.ttf')
-        if font_id != -1:
-            font_family = QFontDatabase.applicationFontFamilies(font_id)[0]
-            self.font = QFont(font_family, 16)
-
-        else:
-            print('Hiba: Nem sikerült betölteni az Ubuntu fontot!')
-
 
 #endregion

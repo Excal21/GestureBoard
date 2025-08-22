@@ -33,8 +33,8 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(self.stacked_widget)
 
         self.main_menu = Controllers.MainMenuController.MainMenuController(self.stacked_widget)
-        self.options_menu = Controllers.OptionsMenuController.OptionsMenuController(self.stacked_widget)
         self.loading_screen = Controllers.LoadingScreenController.LoadingScreenController(self.stacked_widget)
+        self.options_menu = Controllers.OptionsMenuController.OptionsMenuController(self.stacked_widget)
         self.teach_menu = Controllers.TrainMenuController.TrainMenuController(self.stacked_widget)
         self.new_gesture_wizard = Controllers.NewGestureWizardController.NewGestureWizardController(self.stacked_widget)
         self.camera_options = Controllers.CameraOptionsController.CameraOptionsController(self.stacked_widget)

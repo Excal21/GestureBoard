@@ -14,8 +14,10 @@ from Views.ui_cameraOptionsForm import Ui_Form
 from Models.RecognizerHandler import RecognizerHandler
 from Models.Recorder import Recorder
 from time import sleep
+from Controllers.BaseController import BaseController
+from Resources.Fonts import FontLoader
 
-class CameraOptionsController(QWidget):
+class CameraOptionsController(BaseController):
     def __init__(self, stacked_widget):
         super().__init__()
         self.setAttribute(Qt.WA_TranslucentBackground)
@@ -23,9 +25,8 @@ class CameraOptionsController(QWidget):
 
         self.ui = Ui_Form()
         self.ui.setupUi(self)
-
-        self.setStyles()
-        self.setFonts()
+        self.initUI()
+        
         self.setEventHandlers()
 
         self.rec = Recorder()
@@ -35,18 +36,6 @@ class CameraOptionsController(QWidget):
 
         self.timer = None
 
-        #Kék alapú díszítősáv elrendezése
-        layout = QVBoxLayout(self.ui.frameBlue)
-        layout.setContentsMargins(0, 55, 0, 0)
-        layout.setSpacing(0)
-        layout.addWidget(self.ui.lblTitle, alignment=Qt.AlignCenter)
-        layout.addStretch()
-
-
-        self.ui.lblDescription.setText('')
-
-
-
         self.ui.sliderHue.setRange(0, 255)
         self.ui.sliderDistance.setRange(100, 500)
         self.ui.spinConfidence.setRange(0, 100)
@@ -54,8 +43,6 @@ class CameraOptionsController(QWidget):
         self.ui.spinDelay.setRange(0, 5)
         self.ui.spinDelay.setSingleStep(0.1)
         self.ui.spinDelay.setDecimals(1)
-
-
 
 
         self.ui.lblCvImg.setAlignment(Qt.AlignCenter)
@@ -128,7 +115,7 @@ class CameraOptionsController(QWidget):
 
             #Gesztusvisszajelzés a képre
             p = QPainter(q_image)
-            p.setFont(self.font)
+            p.setFont(FontLoader.getFont())
             p.setPen(QColor(156, 220, 254))
             p.drawText(30, 40, gesture_text)
             p.end()
@@ -145,78 +132,12 @@ class CameraOptionsController(QWidget):
 
 #endregion
 
-#region Stílusállítók
-
-    def setStyles(self):
-        self.ui.frameBlue.setStyleSheet(sidebar_style)
-        self.ui.lblTitle.setStyleSheet(sidebar_title_style)
-        self.ui.btnSave.setStyleSheet(options_button_style)
-        self.ui.btnBack.setStyleSheet(options_button_style)
-        self.ui.btnStartCam.setStyleSheet(options_button_style)
-        self.ui.lblCamera.setStyleSheet(train_label_style)
-        self.ui.lblHue.setStyleSheet(train_label_style)
-        self.ui.lblConfidence.setStyleSheet(train_label_style)
-        self.ui.lblFrameCnt.setStyleSheet(train_label_style)
-        self.ui.lblDelay.setStyleSheet(train_label_style)
-        self.ui.lblCvImg.setStyleSheet(camera_label_style)
-        self.ui.comboCamera.setStyleSheet(camera_combo_style)
-        self.ui.sliderHue.setStyleSheet(slider_style)
-        self.ui.lblDistance.setStyleSheet(train_label_style)
-        self.ui.sliderDistance.setStyleSheet(slider_style)
-        self.ui.spinConfidence.setStyleSheet(train_input_style)
-        self.ui.spinFrameCnt.setStyleSheet(train_input_style)
-        self.ui.spinDelay.setStyleSheet(train_input_style)
-        self.ui.lblSensitivity.setStyleSheet(train_label_style)
-        self.ui.sliderSensitivity.setStyleSheet(slider_style)
-        self.ui.spinRadius.setStyleSheet(train_input_style)
-        self.ui.lblRadius.setStyleSheet(train_label_style)
-        
-        self.ui.spinConfidence.setContextMenuPolicy(Qt.NoContextMenu)
-        self.ui.spinFrameCnt.setContextMenuPolicy(Qt.NoContextMenu)
-        self.ui.spinDelay.setContextMenuPolicy(Qt.NoContextMenu)
-        self.ui.spinRadius.setContextMenuPolicy(Qt.NoContextMenu)
-
-        self.ui.scrollArea.verticalScrollBar().setStyleSheet(scrollbar_style)
-
-
-
-    def setFonts(self):
-        self.loadFont()
-
-        self.ui.lblTitle.setFont(self.font)
-        self.ui.lblDescription.setFont(self.font)
-        self.ui.comboCamera.setFont(self.font)
-        
-        self.ui.lblCamera.setFont(self.font)
-        
-        self.ui.lblHue.setFont(self.font)
-        self.ui.lblDistance.setFont(self.font)
-        self.ui.lblConfidence.setFont(self.font)
-        self.ui.lblFrameCnt.setFont(self.font)
-        self.ui.lblDelay.setFont(self.font)
-        self.ui.lblSensitivity.setFont(self.font)
-        self.ui.lblRadius.setFont(self.font)
-
-        self.ui.btnBack.setFont(self.font)
-        self.ui.btnSave.setFont(self.font)
-        self.ui.btnStartCam.setFont(self.font)
-
-        self.ui.spinConfidence.setFont(self.font)
-        self.ui.spinFrameCnt.setFont(self.font)
-        self.ui.spinDelay.setFont(self.font)
-        self.ui.spinRadius.setFont(self.font)
-#endregion
-
 #region Layout beállítások
     def setLayoutSettings(self):
         self.scroll_area = self.ui.scrollArea
         self.scroll_area.setWidgetResizable(True)
         self.scroll_layout = QVBoxLayout(self.ui.scrollAreaWidgetContents)
         self.scroll_area.setWidget(self.ui.scrollAreaWidgetContents)
-
-        self.ui.scrollArea.verticalScrollBar().setContextMenuPolicy(Qt.NoContextMenu)
-        self.ui.scrollArea.horizontalScrollBar().setContextMenuPolicy(Qt.NoContextMenu)
-
 
 
         self.ui.spinConfidence.setAlignment(Qt.AlignCenter)
@@ -374,25 +295,4 @@ class CameraOptionsController(QWidget):
 
 #endregion
 
-    def textToHTML(self, text):
-        return '''<html>
-            <style>
-                p { line-height: 1.2;
-                    font-size: 12pt;
-                    color: white; }
-            </style>
-            <body>
-                <p align='justify'>'''+ text +'''</p>
-                </body>
-            </html>'''
-
-
-    def loadFont(self):
-        font_id = QFontDatabase.addApplicationFont('Resources/Fonts/Ubuntu-R.ttf')
-        if font_id != -1:
-            font_family = QFontDatabase.applicationFontFamilies(font_id)[0]
-            self.font = QFont(font_family, 12)
-            self.ui.lblTitle.setFont(self.font)
-            self.ui.lblDescription.setFont(self.font)
-        else:
-            print('Hiba: Nem sikerült betölteni az Ubuntu fontot!')
+    

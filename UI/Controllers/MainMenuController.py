@@ -7,8 +7,9 @@ from PySide6.QtGui import QFontDatabase, QFont
 from Resources.Stylesheets.styles import *
 from Views.ui_mainMenuForm import Ui_MainWindow
 from Models.RecognizerHandler import *
+from Controllers.BaseController import BaseController
 
-class MainMenuController(QWidget):
+class MainMenuController(BaseController):
     def __init__(self, stacked_widget):
         super().__init__()
         self.setAttribute(Qt.WA_TranslucentBackground)
@@ -17,33 +18,12 @@ class MainMenuController(QWidget):
 
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
+        self.initUI()
 
         self.recognizer_active = False
 
+        
         self.setEventHandlers()
-
-
-        font_id = QFontDatabase.addApplicationFont('Resources/Fonts/Ubuntu-R.ttf')
-        if font_id != -1:
-            font_family = QFontDatabase.applicationFontFamilies(font_id)[0]
-            font = QFont(font_family, 16)
-            self.ui.btnStart.setFont(font)
-            self.ui.btnOptions.setFont(font)
-            self.ui.btnCameraOptions.setFont(font)
-            self.ui.lblTitle.setFont(font)
-        else:
-            print('Hiba: Nem sikerült betölteni az Ubuntu fontot!')
-
-
-        #Kék alapú díszítősáv elrendezése
-        layout = QVBoxLayout(self.ui.frameBlue)
-        layout.setContentsMargins(0, 55, 0, 0)
-        layout.setSpacing(0)
-        layout.addWidget(self.ui.lblTitle, alignment=Qt.AlignCenter)
-        layout.addStretch()
-        self.ui.frameBlue.setStyleSheet(sidebar_style)
-        self.ui.lblTitle.setStyleSheet(sidebar_title_style)
-
         
 
         #Gombok elrendezése
