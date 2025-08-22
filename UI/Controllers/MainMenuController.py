@@ -18,7 +18,11 @@ class MainMenuController(BaseController):
 
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
-        self.initUI()
+        self.initUI({
+            'btnStart': button_style,
+            'btnOptions': button_style,
+            'btnCameraOptions': button_style
+        })
 
         self.recognizer_active = False
 
@@ -32,17 +36,12 @@ class MainMenuController(BaseController):
 
         self.ui.btnStart.setFixedWidth(420)
         self.ui.btnStart.setFixedHeight(80)
-        self.ui.btnStart.setStyleSheet(button_style)
-        
         
         self.ui.btnOptions.setFixedWidth(420)
         self.ui.btnOptions.setFixedHeight(80)
-        self.ui.btnOptions.setStyleSheet(button_style)
-
 
         self.ui.btnCameraOptions.setFixedWidth(420)
         self.ui.btnCameraOptions.setFixedHeight(80)
-        self.ui.btnCameraOptions.setStyleSheet(button_style)
 
 
         layout.setSpacing(30)
@@ -70,7 +69,7 @@ class MainMenuController(BaseController):
             self.ui.btnCameraOptions.setStyleSheet(button_hover_style)
             self.ui.btnOptions.enterEvent = lambda event: None
             self.ui.btnOptions.leaveEvent = lambda event: None
-
+    
             self.ui.btnCameraOptions.enterEvent = lambda event: None
             self.ui.btnCameraOptions.leaveEvent = lambda event: None
             self.recognizer.start()

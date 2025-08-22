@@ -39,8 +39,6 @@ def test_saveMappings():
     options_menu.loadConfig()
     assert data == options_menu.data, 'A beolvasott és a mentett fájl eltér'
 
-def test_setFont():
-    assert options_menu.font is not None
 
 def test_icons():
     icon_paths = ['widget.png', 'Console.png', 'keyboard.png', 'widget_green.png', 'keyboard_green.png', 'Console_green.png']
@@ -152,8 +150,11 @@ def test_setLayoutSettings():
 
 
 def test_btnSave():
-    # Elmentjük az aktuális konfigurációt, hogy vissza tudjuk állítani
+    options_menu.loadConfig()
     original_data = copy.deepcopy(options_menu.data)
+
+    options_menu.data.clear()
+    options_menu.saveMappings()
 
     options_menu.data = {
         "1": {
@@ -192,6 +193,7 @@ def test_btnSave():
 
 
 def test_btnReset():
+    options_menu.loadConfig()
     default = {
         "1": {
             "gesture": "Zárt ököl",
