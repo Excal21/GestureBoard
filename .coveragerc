@@ -1,0 +1,7 @@
+[run]
+source = UI
+relative_files = True
+
+[report]
+omit = Test/*
+include = UI/*
