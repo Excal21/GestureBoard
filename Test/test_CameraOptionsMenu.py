@@ -5,7 +5,6 @@ from PySide6.QtGui import QFont, QFontDatabase
 from PySide6.QtTest import QTest
 from PySide6.QtCore import Qt, QPoint, QEvent
 
-
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'UI')))
 
@@ -21,9 +20,7 @@ project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'UI
 os.chdir(project_root)
 
 camera_options_menu = CameraOptionsController(stacked_widget)
-
-def test_loadFont():
-    assert camera_options_menu.font is not None
+camera_options_menu.initUI()
 
 def test_icons():
     icon_paths = ['camera.png']
@@ -69,9 +66,8 @@ def test_setStyles():
     assert camera_options_menu.ui.spinFrameCnt.styleSheet() == train_input_style
     assert camera_options_menu.ui.spinDelay.styleSheet() == train_input_style
 
-def test_setFonts():
-    expected_family = camera_options_menu.font.family()
-
+def test_ubuntu_font_family():
+    expected_family = 'Ubuntu'
     widgets = [
         camera_options_menu.ui.lblTitle,
         camera_options_menu.ui.lblDescription,
@@ -88,10 +84,9 @@ def test_setFonts():
         camera_options_menu.ui.spinFrameCnt,
         camera_options_menu.ui.spinDelay
     ]
-
     for widget in widgets:
         actual_family = widget.font().family()
-        assert actual_family == expected_family, f"{widget.objectName()} fontja nem egyezik: {actual_family} ≠ {expected_family}"
+        assert actual_family == expected_family, f"{widget.objectName()} betűtípusa nem Ubuntu: {actual_family}"
 
 
 def test_setEventHandlers():

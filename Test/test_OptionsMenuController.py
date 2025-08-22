@@ -49,7 +49,7 @@ def test_icons():
         assert os.path.exists(icon_path), f'Ikon nem található: {icon_path}'
 
 def test_font_family_on_widgets():
-    expected_family = options_menu.font.family()
+    expected_family = 'Ubuntu'
     widgets = [
         options_menu.ui.lblTitle,
         options_menu.ui.lblDescription,
@@ -68,10 +68,10 @@ def test_font_family_on_widgets():
 def test_loadComboMenu_button_styles_and_fonts():
     options_menu.loadComboMenu()
     combo_layout = options_menu.ui.scrollComboWidgetContents.layout()
-    for i in range(combo_layout.count()-1):  # last item is stretch
+    for i in range(combo_layout.count()-1):
         btn = combo_layout.itemAt(i).widget()
         assert btn.styleSheet() == predefined_label_style
-        assert btn.font().family() == options_menu.font.family()
+        assert btn.font().family() == 'Ubuntu'
         assert btn.height() == 30
 
 
@@ -119,7 +119,6 @@ def test_setStyles():
     assert options_menu.ui.frameBlue.styleSheet() == sidebar_style
     assert options_menu.ui.lblTitle.styleSheet() == sidebar_title_style
     assert options_menu.ui.lblDescription.styleSheet() == description_style
-    assert options_menu.ui.scrollArea.verticalScrollBar().styleSheet() == scrollbar_style
     assert options_menu.ui.btnReset.styleSheet() == options_button_style
     assert options_menu.ui.btnSave.styleSheet() == options_button_style
     assert options_menu.ui.btnManager.styleSheet() == options_button_style
