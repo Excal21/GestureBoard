@@ -152,6 +152,8 @@ def test_setLayoutSettings():
 
 
 def test_btnSave():
+    # Elmentjük az aktuális konfigurációt, hogy vissza tudjuk állítani
+    original_data = copy.deepcopy(options_menu.data)
 
     options_menu.data = {
         "1": {
@@ -183,6 +185,10 @@ def test_btnSave():
 
     options_menu.loadConfig()
     assert options_menu.data != {}, "Mentés után üres maradt a konfigfájl"
+
+    # Visszaállítjuk az eredeti konfigurációt
+    options_menu.data = original_data
+    options_menu.saveMappings()
 
 
 def test_btnReset():

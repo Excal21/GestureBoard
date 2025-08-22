@@ -34,6 +34,9 @@ def test_loadConfig():
 
 def test_saveConfig():
     #Kameraindexet azért nem nézünk, mert ha nincs kamera, akkor -1 -re visszaáll
+    camera_options_menu.loadSettings()
+    previous_data = camera_options_menu.data.copy()
+
     camera_options_menu.ui.sliderHue.setValue(255)
     camera_options_menu.ui.spinConfidence.setValue(80)
     camera_options_menu.ui.spinFrameCnt.setValue(10)
@@ -46,6 +49,13 @@ def test_saveConfig():
     assert camera_options_menu.ui.spinConfidence.value() == 80, 'A magabiztosság értéke nem mentődött el'
     assert camera_options_menu.ui.spinFrameCnt.value() == 10, 'A frame count nem mentődött el'
     assert camera_options_menu.ui.spinDelay.value() == 5 , 'A delay értéke nem mentődött el'
+
+    #Hogy a teszt ne változtasson a beállításokon
+    camera_options_menu.ui.sliderHue.setValue(previous_data['HueOffset'])
+    camera_options_menu.ui.spinConfidence.setValue(previous_data['Confidence']*100)
+    camera_options_menu.ui.spinFrameCnt.setValue(previous_data['FrameCount'])
+    camera_options_menu.ui.spinDelay.setValue(previous_data['Delay'])
+    camera_options_menu.saveSettings()
 
 def test_setStyles():
     camera_options_menu.setStyles()
