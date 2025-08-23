@@ -46,26 +46,24 @@ class MainWindow(QMainWindow):
         self.stacked_widget.addWidget(self.new_gesture_wizard)
         self.stacked_widget.addWidget(self.camera_options)
 
+        # Ide költözik a loader és a handler példányosítása és a signalok
+        self.ml = MediapipeLoader()
+        self.rl = RecognizerHandler.getInstance()
+
+        self.ml.finished.connect(self.rl.load)
+        self.rl.finished.connect(lambda: self.stacked_widget.setCurrentIndex(1))
+
+    def start_background(self):
+        self.ml.start()
+
     def closeEvent(self, event):
-        rl.stop()
+        self.rl.stop()
         event.accept()
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-  
-
     window = MainWindow()
     window.show()
     QApplication.processEvents()
-
-
-    ml = MediapipeLoader()
-    rl = RecognizerHandler.getInstance()
-
-    ml.start()
-    ml.finished.connect(rl.load)
-    rl.finished.connect(lambda: window.stacked_widget.setCurrentIndex(1))
-    # window.stacked_widget.setCurrentIndex(1)
-
-
+    window.start_background()
     sys.exit(app.exec())
