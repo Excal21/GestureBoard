@@ -39,8 +39,6 @@ def test_saveMappings():
     options_menu.loadConfig()
     assert data == options_menu.data, 'A beolvasott és a mentett fájl eltér'
 
-def test_setFont():
-    assert options_menu.font is not None
 
 def test_icons():
     icon_paths = ['widget.png', 'Console.png', 'keyboard.png', 'widget_green.png', 'keyboard_green.png', 'Console_green.png']
@@ -49,7 +47,7 @@ def test_icons():
         assert os.path.exists(icon_path), f'Ikon nem található: {icon_path}'
 
 def test_font_family_on_widgets():
-    expected_family = options_menu.font.family()
+    expected_family = 'Ubuntu'
     widgets = [
         options_menu.ui.lblTitle,
         options_menu.ui.lblDescription,
@@ -68,10 +66,10 @@ def test_font_family_on_widgets():
 def test_loadComboMenu_button_styles_and_fonts():
     options_menu.loadComboMenu()
     combo_layout = options_menu.ui.scrollComboWidgetContents.layout()
-    for i in range(combo_layout.count()-1):  # last item is stretch
+    for i in range(combo_layout.count()-1):
         btn = combo_layout.itemAt(i).widget()
         assert btn.styleSheet() == predefined_label_style
-        assert btn.font().family() == options_menu.font.family()
+        assert btn.font().family() == 'Ubuntu'
         assert btn.height() == 30
 
 
@@ -119,7 +117,6 @@ def test_setStyles():
     assert options_menu.ui.frameBlue.styleSheet() == sidebar_style
     assert options_menu.ui.lblTitle.styleSheet() == sidebar_title_style
     assert options_menu.ui.lblDescription.styleSheet() == description_style
-    assert options_menu.ui.scrollArea.verticalScrollBar().styleSheet() == scrollbar_style
     assert options_menu.ui.btnReset.styleSheet() == options_button_style
     assert options_menu.ui.btnSave.styleSheet() == options_button_style
     assert options_menu.ui.btnManager.styleSheet() == options_button_style
@@ -153,6 +150,11 @@ def test_setLayoutSettings():
 
 
 def test_btnSave():
+    options_menu.loadConfig()
+    original_data = copy.deepcopy(options_menu.data)
+
+    options_menu.data.clear()
+    options_menu.saveMappings()
 
     options_menu.data = {
         "1": {
@@ -185,8 +187,13 @@ def test_btnSave():
     options_menu.loadConfig()
     assert options_menu.data != {}, "Mentés után üres maradt a konfigfájl"
 
+    # Visszaállítjuk az eredeti konfigurációt
+    options_menu.data = original_data
+    options_menu.saveMappings()
+
 
 def test_btnReset():
+    options_menu.loadConfig()
     default = {
         "1": {
             "gesture": "Zárt ököl",

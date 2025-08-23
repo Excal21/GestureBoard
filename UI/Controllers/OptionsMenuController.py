@@ -10,9 +10,10 @@ from PySide6.QtGui import QFontDatabase, QFont, QIcon, QKeyEvent, QKeySequence
 from PySide6.QtWidgets import QApplication, QStackedWidget
 from Resources.Stylesheets.styles import *
 from Views.ui_optionsForm import Ui_OptionsForm
+from Controllers.BaseController import BaseController
+from Resources.Fonts.FontLoader import FontLoader
 
-
-class OptionsMenuController(QWidget):
+class OptionsMenuController(BaseController):
     def __init__(self, stacked_widget):
         super().__init__()
         self.setAttribute(Qt.WA_TranslucentBackground)
@@ -20,9 +21,8 @@ class OptionsMenuController(QWidget):
         self.ui = Ui_OptionsForm()
 
         self.ui.setupUi(self)
+        self.initUI()
 
-        self.font = None
-        self.setStyles()
         self.setLayoutSettings()
         self.setEventHandlers()
 
@@ -34,7 +34,7 @@ class OptionsMenuController(QWidget):
 
         self.data = None
 
-        self.loadConfig()
+        #self.loadConfig()
 
 
 #region Válaszhatók menüje
@@ -53,7 +53,7 @@ class OptionsMenuController(QWidget):
 
             label = QLabel(entry['gesture'])
             label.setStyleSheet(entry_label_style)
-            label.setFont(self.font)
+            label.setFont(FontLoader.getFont())
 
             btnCombo = QPushButton()
             btnKey = QPushButton()
@@ -153,7 +153,7 @@ class OptionsMenuController(QWidget):
             combo_entry = QPushButton(predefined_action[0])
             combo_entry.setFixedHeight(30)
             combo_entry.setStyleSheet(predefined_label_style)
-            combo_entry.setFont(self.font)
+            combo_entry.setFont(FontLoader.getFont())
             
             combo_entry.enterEvent = lambda event, entry=combo_entry: entry.setStyleSheet(predefined_hover_label_style)
             combo_entry.leaveEvent = lambda event, entry=combo_entry: entry.setStyleSheet(predefined_label_style)
@@ -321,7 +321,7 @@ class OptionsMenuController(QWidget):
         config_path = ('Config/UserSettings.json')
         with open(config_path, 'r', encoding='utf-8') as file:
             self.data = dict(json.load(file))
-        print('UserSettings JSON betöltve')
+        print('UserSettings JSON betöltve az OptionsMenuController-be')
 
     def saveMappings(self):
         with open('Config/UserSettings.json', 'w', encoding='utf-8') as file:
@@ -392,45 +392,10 @@ class OptionsMenuController(QWidget):
 #endregion
 
 
-#region Stílusállítók
-    def setStyles(self):
-        self.setFonts()
-        self.ui.frameBlue.setStyleSheet(sidebar_style)
-        self.ui.lblTitle.setStyleSheet(sidebar_title_style)
-        self.ui.lblDescription.setStyleSheet(description_style)
-        self.ui.scrollArea.verticalScrollBar().setStyleSheet(scrollbar_style)
-        self.ui.btnReset.setStyleSheet(options_button_style)
-        self.ui.btnSave.setStyleSheet(options_button_style)
-        self.ui.btnManager.setStyleSheet(options_button_style)
-        self.ui.scrollCombo.setStyleSheet(scrollbar_style)
-        self.ui.lblUserGuide.setStyleSheet(train_label_style)
-        self.ui.txtinputCommand.setStyleSheet(train_input_style)
-        self.ui.btnCommandOk.setStyleSheet(options_button_style)
-
-
-
-    def setFonts(self):
-        self.loadFont()
-        self.ui.btnReset.setFont(self.font)
-        self.ui.btnSave.setFont(self.font)
-        self.ui.btnManager.setFont(self.font)
-        self.ui.lblUserGuide.setFont(self.font)
-        self.ui.txtinputCommand.setFont(self.font)
-
+# #region Stílusállítók
 
     def setLayoutSettings(self):
-        #Kék alapú díszítősáv elrendezése
-        layout = QVBoxLayout(self.ui.frameBlue)
-        layout.setContentsMargins(0, 55, 0, 0)
-        layout.setSpacing(20)
-        layout.addWidget(self.ui.lblTitle, alignment=Qt.AlignCenter)
-        layout.addWidget(self.ui.lblDescription, alignment=Qt.AlignCenter)
-        layout.addStretch()
-
-        self.ui.lblDescription.setText('')
-        self.ui.lblDescription.setContentsMargins(15, 0, 15, 0)
-        self.ui.lblDescription.setAlignment(Qt.AlignCenter)
-
+        
         #Görgethető terület
         self.scroll_area = self.ui.scrollArea
         self.scroll_area.setWidgetResizable(True)
@@ -467,16 +432,3 @@ class OptionsMenuController(QWidget):
 
 
 #endregion
-
-
-
-    def loadFont(self):
-
-        font_id = QFontDatabase.addApplicationFont('Resources/Fonts/Ubuntu-R.ttf')
-        if font_id != -1:
-            font_family = QFontDatabase.applicationFontFamilies(font_id)[0]
-            self.font = QFont(font_family, 16)
-            self.ui.lblTitle.setFont(self.font)
-            self.ui.lblDescription.setFont(self.font)
-        else:
-            print('Hiba: Nem sikerült betölteni az Ubuntu fontot!')
