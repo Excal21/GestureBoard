@@ -258,8 +258,13 @@ class Recognizer:
 
     while not self.__stop and not self.__error: 
       #Beépített kamera
-      ret, img = cap.read()
       #img = cv2.flip(img, 1)
+      frame_index += 1
+      if skip_frames and frame_index % 2 != 0:
+        cv2.waitKey(int(1000 / 30))
+        continue
+      
+      ret, img = cap.read()
       img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
       
       if self.__hueoffset != 0:
@@ -271,10 +276,7 @@ class Recognizer:
           self.__stop = True
       mp_image = Image(image_format=ImageFormat.SRGB, data=img)
 
-      frame_index += 1
 
-      if skip_frames and frame_index % 3 != 0:
-          continue
 
       result = self.recognizer.recognize(mp_image)
       gesture_detected = False
