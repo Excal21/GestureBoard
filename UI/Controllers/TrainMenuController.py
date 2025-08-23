@@ -38,7 +38,7 @@ class TrainMenuController(BaseController):
         self.previous_page = 2
 
 
-        self.updateList()
+        #self.updateList()
 #endregion
 
 #region Lista kezelése
@@ -48,9 +48,12 @@ class TrainMenuController(BaseController):
             print(self.previous_page)
             with open('Config/UserSettings.json', 'r', encoding='UTF-8') as f:
                 self.data = dict(json.load(f))
+            
+            print('USerSettings JSON betöltve a TrainMenuController-be')
+            self.updateList()
 
-        print('Gesztusok frissítve')
-        self.updateList()
+        elif index == 3:
+            self.updateList()
 
     def updateList(self):
 

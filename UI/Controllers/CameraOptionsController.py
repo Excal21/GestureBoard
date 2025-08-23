@@ -15,7 +15,7 @@ from Models.RecognizerHandler import RecognizerHandler
 from Models.Recorder import Recorder
 from time import sleep
 from Controllers.BaseController import BaseController
-from Resources.Fonts import FontLoader
+from Resources.Fonts.FontLoader import FontLoader
 
 class CameraOptionsController(BaseController):
     def __init__(self, stacked_widget):

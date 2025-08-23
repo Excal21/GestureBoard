@@ -34,7 +34,7 @@ class OptionsMenuController(BaseController):
 
         self.data = None
 
-        self.loadConfig()
+        #self.loadConfig()
 
 
 #region Válaszhatók menüje
@@ -321,7 +321,7 @@ class OptionsMenuController(BaseController):
         config_path = ('Config/UserSettings.json')
         with open(config_path, 'r', encoding='utf-8') as file:
             self.data = dict(json.load(file))
-        print('UserSettings JSON betöltve')
+        print('UserSettings JSON betöltve az OptionsMenuController-be')
 
     def saveMappings(self):
         with open('Config/UserSettings.json', 'w', encoding='utf-8') as file:
