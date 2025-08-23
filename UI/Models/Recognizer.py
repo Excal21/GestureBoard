@@ -10,7 +10,7 @@ from mediapipe.framework.formats import landmark_pb2
 from mediapipe.tasks import python
 import numpy as np
 from datetime import datetime
-from collections import Counter
+from collections import Counter, deque
 import shutil
 import pyautogui
 import json
@@ -248,7 +248,7 @@ class Recognizer:
       self.__error = True
     
 
-    last_gestures = []
+    last_gestures = deque(maxlen=self.__framecount)
     last_gesture_time = datetime.now()
 
 
@@ -277,13 +277,12 @@ class Recognizer:
               score = gesture[0].score
               if name != 'NONE' and name != '':
                   if score > (self.confidence - 0.2):
-                      hand_label = result.handedness[i][0].category_name
-
-                      lm0 = result.hand_landmarks[0][0]   # 0. markpont
-                      lm9 = result.hand_landmarks[0][9]   # 9. markpont
-
-                      lm05 = result.hand_landmarks[0][5]  # 5. markpont
-                      lm17 = result.hand_landmarks[0][17] # 17. markpont
+                      landmarks = result.hand_landmarks[0]
+                      lm0 = landmarks[0]
+                      lm9 = landmarks[9]
+                    
+                      lm05 = landmarks[5]
+                      lm17 = landmarks[17]
 
                       distance_09 = ((lm0.x - lm9.x)**2 + (lm0.y - lm9.y)**2)**0.5
                       distance_09 = 500 - int(distance_09 * 1000)
