@@ -1,7 +1,14 @@
-name: Test and Build
+name: Test and Build 🧪
 
-on: [workflow_dispatch, pull_request]
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
 
+permissions:
+  contents: read
+  pull-requests: write
+  
 jobs:
   Test:
     runs-on: windows-latest
@@ -22,17 +29,25 @@ jobs:
           key: ${{ runner.os }}-venv-${{ hashFiles('./UI/requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-venv-
-
+#
       - name: Set up virtual environment
         run: |
           python -m venv .venv
           .venv\Scripts\python.exe -m pip install --upgrade pip
           .venv\Scripts\pip.exe install -r ./UI/requirements.txt
-          .venv\Scripts\pip.exe install pyinstaller pytest-github-actions-annotate-failures
+          .venv\Scripts\pip.exe install pyinstaller pytest-cov pytest-github-actions-annotate-failures
         if: steps.cache-venv.outputs.cache-hit != 'true'
 
-      - name: Run tests
-        run: .venv\Scripts\pytest.exe --disable-warnings
+      - name: Run tests with coverage
+        id: tests
+        run: .venv\Scripts\pytest.exe --disable-warnings --junitxml=pytest.xml --cov=UI --cov-report=xml:coverage.xml
+
+      - name: Pytest coverage comment
+        if: always()
+        uses: MishaKav/pytest-coverage-comment@main
+        with:
+          pytest-xml-coverage-path: ./coverage.xml
+          junitxml-path: ./pytest.xml
 
   Win64_Build:
     needs: Test
@@ -128,6 +143,8 @@ jobs:
 
       - name: Check VirusTotal Result
         shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           FILE_PATH="build_dist/GestureBoard.exe"
           FILE_HASH=$(sha256sum "$FILE_PATH" | awk '{ print $1 }')
@@ -141,16 +158,26 @@ jobs:
           MALICIOUS=$(echo "$REPORT" | jq '.data.attributes.last_analysis_stats.malicious')
           echo "⚠️ Malicious detections: $MALICIOUS"
 
+          # készítsük el a Markdown riportot változóba
+          SUMMARY_MD=$(cat <<EOF
+          ## 🛡️ VirusTotal Report
+
+          **Malicious detections:** $MALICIOUS
+
+          | Engine | Category | Result |
+          |--------|----------|--------|
+          $(echo "$REPORT" | jq -r '.data.attributes.last_analysis_results | to_entries[] | select(.value.category=="malicious") | "| " + .key + " | " + .value.category + " | " + .value.result + " |"')
+          EOF
+          )
+
           # írás az Action Summary-ba
-          {
-            echo "## 🛡️ VirusTotal Report"
-            echo ""
-            echo "**Malicious detections:** $MALICIOUS"
-            echo ""
-            echo "| Engine | Category | Result |"
-            echo "|--------|----------|--------|"
-            echo "$REPORT" | jq -r '.data.attributes.last_analysis_results | to_entries[] | select(.value.category=="malicious") | "| " + .key + " | " + .value.category + " | " + .value.result + " |"'
-          } >> $GITHUB_STEP_SUMMARY
+          echo "$SUMMARY_MD" >> $GITHUB_STEP_SUMMARY
+
+          # ha pull_request az event, írjuk ki kommentbe is
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            gh api repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/comments \
+              -f body="$SUMMARY_MD"
+          fi
 
           if [ "$MALICIOUS" -gt 5 ]; then
             echo "❌ Too many detections ($MALICIOUS), failing build."
