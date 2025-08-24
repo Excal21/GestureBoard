@@ -49,7 +49,7 @@ class CameraOptionsController(BaseController):
         self.ui.lblCvImg.setPixmap(QPixmap('Resources/Icons/camera.png').scaled(100, 70, Qt.KeepAspectRatio, Qt.SmoothTransformation))
 
         # self.loadSettings()
-        self.loadCameraCombo()
+        # self.loadCameraCombo()
         self.setLayoutSettings()
 
 
@@ -196,7 +196,7 @@ class CameraOptionsController(BaseController):
         self.data['Camera'] = index
     
     def setEventHandlers(self):
-        self.stacked_widget.currentChanged.connect(self.loadSettings)  # Beállítások betöltése, ha a kamera beállítások menü aktív
+        self.stacked_widget.currentChanged.connect(self.onReturn)  # Beállítások betöltése, ha a kamera beállítások menü aktív
 
         self.ui.comboCamera.currentIndexChanged.connect(self.updateCameraIndex)
     
@@ -258,6 +258,11 @@ class CameraOptionsController(BaseController):
                 else:
                     self.ui.comboCamera.addItem(f'{cameraIDX + 1}. kamera')
 
+    def onReturn(self, index):
+        if index == 0:
+            self.loadCameraCombo()
+        elif index == 5:
+            self.loadSettings()
 
     def loadSettings(self):
         with open('Config/CameraSettings.json', 'r') as file:
