@@ -392,10 +392,13 @@ class OptionsMenuController(BaseController):
 #endregion
 
 
-# #region Stílusállítók
+#region Layout beállítások
 
     def setLayoutSettings(self):
-        
+        self.ui.lblDescription.setAlignment(Qt.AlignTop | Qt.AlignHCenter)
+        self.ui.lblDescription.setFixedHeight(150)
+        self.setContentsMargins(15, 0, 15, 0)
+
         #Görgethető terület
         self.scroll_area = self.ui.scrollArea
         self.scroll_area.setWidgetResizable(True)
