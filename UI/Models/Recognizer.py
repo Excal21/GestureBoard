@@ -224,6 +224,7 @@ class Recognizer:
       self.__hueoffset = data['HueOffset']
       self.__distance = data['Distance']
       self.__delay = data['Delay']
+      self.__framethrottling = data['FrameThrottling']
 #endregion
 
 #region Gesztusfelismerés
@@ -260,7 +261,7 @@ class Recognizer:
       #Beépített kamera
       #img = cv2.flip(img, 1)
       frame_index += 1
-      if skip_frames and frame_index % 2 != 0:
+      if self.__framethrottling and skip_frames and frame_index % 2 != 0:
         cv2.waitKey(int(1000 / 30))
         continue
       
@@ -332,14 +333,15 @@ class Recognizer:
 
           last_gestures.clear()
 
-      # Skip logika frissítése
-      if gesture_detected:
-          no_gesture_count = 0
-          skip_frames = False
-      else:
-          no_gesture_count += 1
-          if no_gesture_count >= 3:
-              skip_frames = True
+      if self.__framethrottling:
+        # Skip logika frissítése
+        if gesture_detected:
+            no_gesture_count = 0
+            skip_frames = False
+        else:
+            no_gesture_count += 1
+            if no_gesture_count >= 3:
+                skip_frames = True
 
     
       if self.__camerafeed:
