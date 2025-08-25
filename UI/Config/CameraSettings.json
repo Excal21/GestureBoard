@@ -4,5 +4,6 @@
     "Distance": 354,
     "Confidence": 0.65,
     "FrameCount": 5,
-    "Delay": 1.0
+    "Delay": 1.0,
+    "FrameThrottling": false
 }

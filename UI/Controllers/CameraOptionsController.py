@@ -25,7 +25,11 @@ class CameraOptionsController(BaseController):
 
         self.ui = Ui_Form()
         self.ui.setupUi(self)
-        self.initUI()
+        self.initUI(
+            {
+                'checkFrameThrottling': checkbox_style
+            }
+        )
         
         self.setEventHandlers()
 
@@ -156,8 +160,9 @@ class CameraOptionsController(BaseController):
                 (self.ui.lblConfidence, self.ui.spinConfidence),
                 (self.ui.lblFrameCnt, self.ui.spinFrameCnt),
                 (self.ui.lblDelay, self.ui.spinDelay),
+                (self.ui.lblFrameThrottling, self.ui.checkFrameThrottling),
                 (self.ui.lblSensitivity, self.ui.sliderSensitivity),
-                (self.ui.lblRadius, self.ui.spinRadius)
+                (self.ui.lblRadius, self.ui.spinRadius),
             ]
 
         for widget1, widget2 in pairs:
@@ -167,10 +172,10 @@ class CameraOptionsController(BaseController):
             if widget2: line.addWidget(widget2)
             self.scroll_layout.addLayout(line)
     
-        self.ui.spinConfidence.setFixedWidth(60)
-        self.ui.spinFrameCnt.setFixedWidth(60)
-        self.ui.spinDelay.setFixedWidth(60)
-        self.ui.spinRadius.setFixedWidth(60)
+        self.ui.spinConfidence.setFixedWidth(50)
+        self.ui.spinFrameCnt.setFixedWidth(50)
+        self.ui.spinDelay.setFixedWidth(50)
+        self.ui.spinRadius.setFixedWidth(50)
 
         self.ui.sliderHue.setFixedWidth(200)
         self.ui.sliderDistance.setFixedWidth(200)
@@ -187,7 +192,9 @@ class CameraOptionsController(BaseController):
         self.ui.lblRadius.setFixedHeight(40)
         self.ui.btnStartCam.setFixedHeight(40)
         
-
+        self.ui.checkFrameThrottling.setFixedHeight(40) #Ezek csak a placeholderek!! QSS állítja a valósat
+        self.ui.checkFrameThrottling.setFixedWidth(50)
+        self.ui.checkFrameThrottling.setChecked(True)
 
 #endregion
 
@@ -240,6 +247,10 @@ class CameraOptionsController(BaseController):
             self.textToHTML('Két gesztus közt eltelt idő másodpercben. Csökkentésével gyorsabban tudod kiadni a parancsokat.'))
 
         self.ui.lblDelay.leaveEvent = lambda event: self.ui.lblDescription.setText('')
+
+        self.ui.lblFrameThrottling.enterEvent = lambda event: self.ui.lblDescription.setText(
+            self.textToHTML('Dinamikus képkocka-korlátozás. Csökkenti a CPU használatot, de nagyban növelheti a reakcióidőt.'))
+        self.ui.lblFrameThrottling.leaveEvent = lambda event: self.ui.lblDescription.setText('')
 #endregion
 
 #region Beállítások kezelése
@@ -273,6 +284,7 @@ class CameraOptionsController(BaseController):
             self.ui.spinConfidence.setValue(self.data['Confidence']*100)
             self.ui.spinFrameCnt.setValue(self.data['FrameCount'])
             self.ui.spinDelay.setValue(self.data['Delay'])
+            self.ui.checkFrameThrottling.setChecked(self.data['FrameThrottling'])
 
 
     
@@ -283,6 +295,7 @@ class CameraOptionsController(BaseController):
         self.data['Confidence'] = self.ui.spinConfidence.value()/100
         self.data['FrameCount'] = self.ui.spinFrameCnt.value()
         self.data['Delay'] = self.ui.spinDelay.value()
+        self.data['FrameThrottling'] = self.ui.checkFrameThrottling.isChecked()
 
         with open('Config/CameraSettings.json', 'w') as file:
             json.dump(self.data, file, indent=4)
