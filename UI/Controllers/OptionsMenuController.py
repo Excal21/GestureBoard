@@ -168,7 +168,7 @@ class OptionsMenuController(BaseController):
     def saveSubSelection(self, predefined_action):
         self.data[self.clicked]['action'] = predefined_action[1]
         self.data[self.clicked]['highlight'] = 0
-        self.data[self.clicked]['description'] = predefined_action[0] + '\n\n\n Törléshez kattints\njobb gombbal!'
+        self.data[self.clicked]['description'] = predefined_action[0] + '\n\n\nTörléshez kattints\njobb gombbal!'
         self.ui.scrollCombo.hide()
         self.ui.scrollArea.setDisabled(False)
         self.sub_menu_active = False
@@ -200,30 +200,30 @@ class OptionsMenuController(BaseController):
                 modifiers.append('alt')
             if event.modifiers() & Qt.ShiftModifier:
                 modifiers.append('shift')
-            key = event.nativeVirtualKey()
-
+            key = event.key()
             print(key)
             key_map = {
-                222: 'Á',
-                226: 'Í',
-                186: 'É',
-                187: 'Ó',
-                192: 'Ö',
-                219: 'Ő',
-                221: 'Ú',
-                191: 'Ü',
-                220: 'Ű',
-                13: 'enter',
-                34: 'pagedown',
-                33: 'pageup',
-                36: 'home',
-                35: 'end',
-                45: 'insert',
-                46: 'delete',
-                37: ['balra', 'left'],
-                38: ['fel', 'up'],
-                39: ['jobbra', 'right'],
-                40: ['le', 'down']
+                Qt.Key_Aacute: 'Á',
+                Qt.Key_Iacute: 'Í',
+                Qt.Key_Eacute: 'É',
+                Qt.Key_Oacute: 'Ó',
+                Qt.Key_Odiaeresis: 'Ö',
+                336: 'Ő',
+                Qt.Key_Uacute: 'Ú',
+                Qt.Key_Udiaeresis: 'Ü',
+                368: 'Ű',
+                Qt.Key_Return: 'enter',
+                Qt.Key_Enter: 'enter',
+                Qt.Key_PageDown: 'pagedown',
+                Qt.Key_PageUp: 'pageup',
+                Qt.Key_Home: 'home',
+                Qt.Key_End: 'end',
+                Qt.Key_Insert: 'insert',
+                Qt.Key_Delete: 'delete',
+                Qt.Key_Left: ['balra', 'left'],
+                Qt.Key_Up: ['fel', 'up'],
+                Qt.Key_Right: ['jobbra', 'right'],
+                Qt.Key_Down: ['le', 'down']
             }
 
             keystr = ''
@@ -270,7 +270,7 @@ class OptionsMenuController(BaseController):
                 self.data[self.clicked]['description'] = f'{combination.replace(',', '+')
                                                             + (' + ' if combination else '') 
                                                             + (key_map[key][0] if (key in key_map and len(key_map[key]) == 2) else keystr)}'
-                self.data[self.clicked]['description'] += '\n\n\n Törléshez kattints\njobb gombbal!'
+                self.data[self.clicked]['description'] += '\n\n\nTörléshez kattints\njobb gombbal!'
                 self.data[self.clicked]['highlight'] = 1
 
                 print(f'Billentyűkombináció\n {combination.replace(',', '+') + (' + ' if combination else '') + keystr}')
@@ -307,7 +307,7 @@ class OptionsMenuController(BaseController):
         action = f'os.system(\'{self.ui.txtinputCommand.text()}\')'
         self.data[self.clicked]['action'] = action
         self.data[self.clicked]['highlight'] = 2
-        self.data[self.clicked]['description'] = self.ui.txtinputCommand.text() + '\n\n\n Törléshez kattints\njobb gombbal!'
+        self.data[self.clicked]['description'] = self.ui.txtinputCommand.text() + '\n\n\nTörléshez kattints\njobb gombbal!'
         self.ui.txtinputCommand.clear()
         self.ui.txtinputCommand.hide()
         self.ui.btnCommandOk.hide()

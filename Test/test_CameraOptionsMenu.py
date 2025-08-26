@@ -100,22 +100,24 @@ def test_ubuntu_font_family():
 
 
 def test_setEventHandlers():
-    assert callable(camera_options_menu.ui.btnSave.enterEvent)
-    assert callable(camera_options_menu.ui.btnSave.leaveEvent)
-    assert callable(camera_options_menu.ui.btnBack.enterEvent)
-    assert callable(camera_options_menu.ui.btnBack.leaveEvent)
-    assert callable(camera_options_menu.ui.btnStartCam.enterEvent)
-    assert callable(camera_options_menu.ui.btnStartCam.leaveEvent)
+    assert isinstance(camera_options_menu.ui.btnBack.enterEvent, type(lambda: None))
+    assert isinstance(camera_options_menu.ui.btnBack.leaveEvent, type(lambda: None))
+    assert isinstance(camera_options_menu.ui.btnBack.enterEvent, type(lambda: None))
+    assert isinstance(camera_options_menu.ui.btnBack.leaveEvent, type(lambda: None))
+    assert isinstance(camera_options_menu.ui.btnStartCam.enterEvent, type(lambda: None))
+    assert isinstance(camera_options_menu.ui.btnStartCam.leaveEvent, type(lambda: None))
 
-    assert callable(camera_options_menu.ui.lblCamera.enterEvent)
-    assert callable(camera_options_menu.ui.lblCamera.leaveEvent)
-    assert callable(camera_options_menu.ui.lblHue.enterEvent)
-    assert callable(camera_options_menu.ui.lblHue.leaveEvent)
-    assert callable(camera_options_menu.ui.lblConfidence.enterEvent)
-    assert callable(camera_options_menu.ui.lblConfidence.leaveEvent)
-    assert callable(camera_options_menu.ui.lblFrameCnt.enterEvent)
-    assert callable(camera_options_menu.ui.lblDelay.enterEvent)
-    assert callable(camera_options_menu.ui.lblDelay.leaveEvent)
+    assert isinstance(camera_options_menu.ui.lblCamera.enterEvent, type(lambda: None))
+    assert isinstance(camera_options_menu.ui.lblCamera.leaveEvent, type(lambda: None))
+    assert isinstance(camera_options_menu.ui.lblHue.enterEvent, type(lambda: None))
+    assert isinstance(camera_options_menu.ui.lblHue.leaveEvent, type(lambda: None))
+    assert isinstance(camera_options_menu.ui.lblConfidence.enterEvent, type(lambda: None))
+    assert isinstance(camera_options_menu.ui.lblConfidence.leaveEvent, type(lambda: None))
+    assert isinstance(camera_options_menu.ui.lblFrameCnt.enterEvent, type(lambda: None))
+    assert isinstance(camera_options_menu.ui.lblDelay.enterEvent, type(lambda: None))
+    assert isinstance(camera_options_menu.ui.lblDelay.leaveEvent, type(lambda: None))
+    assert isinstance(camera_options_menu.ui.lblFrameThrottling.enterEvent, type(lambda: None))
+    assert isinstance(camera_options_menu.ui.lblFrameThrottling.leaveEvent, type(lambda: None))
 
 
 def test_hover_and_leave_events_trigger_styles_and_labels():

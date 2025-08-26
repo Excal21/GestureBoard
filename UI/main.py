@@ -46,7 +46,6 @@ class MainWindow(QMainWindow):
         self.stacked_widget.addWidget(self.new_gesture_wizard)
         self.stacked_widget.addWidget(self.camera_options)
 
-        # Ide költözik a loader és a handler példányosítása és a signalok
         self.ml = MediapipeLoader()
         self.rl = RecognizerHandler.getInstance()
 

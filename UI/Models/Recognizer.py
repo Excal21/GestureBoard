@@ -202,16 +202,13 @@ class Recognizer:
               
 
         return annotated_image, None
-        
-        # else:
-        #   return annotated_image
-    
+  
     return cv2.cvtColor(img, cv2.COLOR_BGR2RGB), None
 #endregion
 
 #region Konfigurációs fájlok betöltése
   def loadGestures(self):
-    with open(self.__configpath, "r") as file:
+    with open(self.__configpath, "r", encoding='UTF-8') as file:
       data = dict(json.load(file))
     return data
 

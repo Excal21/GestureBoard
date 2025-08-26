@@ -125,6 +125,14 @@ def test_setStyles():
     assert options_menu.ui.txtinputCommand.styleSheet() == train_input_style
     assert options_menu.ui.btnCommandOk.styleSheet() == options_button_style
 
+def test_eventHandlers():
+    assert isinstance(options_menu.ui.btnReset.enterEvent, type(lambda: None))
+    assert isinstance(options_menu.ui.btnReset.leaveEvent, type(lambda: None))
+    assert isinstance(options_menu.ui.btnSave.enterEvent, type(lambda: None))
+    assert isinstance(options_menu.ui.btnSave.leaveEvent, type(lambda: None))
+    assert isinstance(options_menu.ui.btnManager.enterEvent, type(lambda: None))
+    assert isinstance(options_menu.ui.btnManager.leaveEvent, type(lambda: None))
+
 def test_setLayoutSettings():
     assert options_menu.ui.lblDescription.text() == ''
 
