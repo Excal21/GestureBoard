@@ -282,9 +282,9 @@ class OptionsMenuController(BaseController):
                 self.keycapture_active = False
                 self.updateEntries()
 
-    def keyReleaseEvent(self, event):
-        if self.keycapture_active:
-            self.ui.lblUserGuide.setText('Billentyűkombináció')
+    # def keyReleaseEvent(self, event):   <== lol ezt minek raktam ide
+    #     if self.keycapture_active:
+    #         self.ui.lblUserGuide.setText('Billentyűkombináció')
 
 
 #region Parancs megadása

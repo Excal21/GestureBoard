@@ -2,7 +2,7 @@ import sys
 import pytest
 import os
 from PySide6.QtWidgets import QApplication, QWidget, QPushButton
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, QPoint
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'UI')))
@@ -20,7 +20,7 @@ def app(qtbot):
     return window
 
 
-def test_predefinedAction(app, qtbot):
+def test_predefinedAction(app: MainWindow, qtbot):
     qtbot.wait(100)
     app.stacked_widget.setCurrentIndex(2)
     qtbot.wait(100)
@@ -50,7 +50,20 @@ def test_predefinedAction(app, qtbot):
     assert options_menu.data['1']['description'] == 'Böngésző elindítása\n\n\nTörléshez kattints\njobb gombbal!'
     assert options_menu.data['1']['highlight'] == 0
 
-def test_keyCapture(app, qtbot):
+
+    gesture_entry = options_menu.scroll_layout.itemAt(0).widget()
+    btn_container = gesture_entry.findChildren(QWidget)[1]
+    btns = btn_container.findChildren(QPushButton)
+    btn_predef = btns[0]
+    btn_predef.setFocus()
+    qtbot.wait(500)
+    btn_predef.customContextMenuRequested.emit(QPoint(10, 10))
+
+
+    assert options_menu.data['1']['description'] == None
+    assert options_menu.data['1']['highlight'] == -1
+
+def test_keyCapture(app: MainWindow, qtbot):
     qtbot.wait(100)
     app.stacked_widget.setCurrentIndex(2)
     qtbot.wait(100)
@@ -87,3 +100,51 @@ def test_keyCapture(app, qtbot):
     assert options_menu.data['1']['description'] == 'alt + Q\n\n\nTörléshez kattints\njobb gombbal!'
     assert options_menu.data['1']['action'] == "pyautogui.hotkey('alt', 'q')"
     assert options_menu.data['1']['highlight'] == 1
+
+    gesture_entry = options_menu.scroll_layout.itemAt(0).widget()
+    btn_container = gesture_entry.findChildren(QWidget)[1]
+    btns = btn_container.findChildren(QPushButton)
+    btn_predef = btns[1]
+    btn_predef.setFocus()
+    qtbot.wait(500)
+    btn_predef.customContextMenuRequested.emit(QPoint(10, 10))
+
+
+    assert options_menu.data['1']['description'] == None
+    assert options_menu.data['1']['highlight'] == -1
+
+def test_commandInput(app: MainWindow, qtbot):
+    qtbot.wait(100)
+    app.stacked_widget.setCurrentIndex(2)
+    qtbot.wait(100)
+    options_menu = app.options_menu
+    app.activateWindow()
+    app.raise_()
+    app.setFocus()
+
+    gesture_entry = options_menu.scroll_layout.itemAt(0).widget()
+    btn_container = gesture_entry.findChildren(QWidget)[1]
+    btns = btn_container.findChildren(QPushButton)
+    btn_command = btns[2]
+    btn_command.setFocus()
+
+    qtbot.wait(500)
+    qtbot.mouseClick(btn_command, Qt.LeftButton)
+    options_menu.ui.txtinputCommand.setText('Test Command')
+    qtbot.mouseClick(options_menu.ui.btnCommandOk, Qt.LeftButton)
+
+    qtbot.wait(500)
+    assert options_menu.data['1']['action'] == "os.system('Test Command')"
+    assert options_menu.data['1']['highlight'] == 2
+    assert options_menu.data['1']['description'] == 'Test Command\n\n\nTörléshez kattints\njobb gombbal!'
+
+    gesture_entry = options_menu.scroll_layout.itemAt(0).widget()
+    btn_container = gesture_entry.findChildren(QWidget)[1]
+    btns = btn_container.findChildren(QPushButton)
+    btn_predef = btns[2]
+    btn_predef.setFocus()
+    qtbot.wait(500)
+    btn_predef.customContextMenuRequested.emit(QPoint(10, 10))
+
+    assert options_menu.data['1']['description'] == None
+    assert options_menu.data['1']['highlight'] == -1
