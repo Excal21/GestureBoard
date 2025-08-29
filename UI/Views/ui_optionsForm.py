@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'optionsForm.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.9.1
+## Created by: Qt User Interface Compiler version 6.8.2
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -50,11 +50,11 @@ class Ui_OptionsForm(object):
         self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 479, 309))
         self.scrollCombo = QScrollArea(self.scrollAreaWidgetContents)
         self.scrollCombo.setObjectName(u"scrollCombo")
-        self.scrollCombo.setGeometry(QRect(20, 10, 241, 321))
+        self.scrollCombo.setGeometry(QRect(20, 10, 245, 321))
         self.scrollCombo.setWidgetResizable(True)
         self.scrollComboWidgetContents = QWidget()
         self.scrollComboWidgetContents.setObjectName(u"scrollComboWidgetContents")
-        self.scrollComboWidgetContents.setGeometry(QRect(0, 0, 239, 319))
+        self.scrollComboWidgetContents.setGeometry(QRect(0, 0, 243, 319))
         self.scrollCombo.setWidget(self.scrollComboWidgetContents)
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
         self.btnSave = QPushButton(self.frameButtons)

@@ -294,7 +294,7 @@ class Recognizer:
 
             distances[i] = (distance_09, distance_517)
 
-        closest_hand = min(distances, key=lambda x: distances[x])
+        closest_hand = min(distances, key=lambda x: sum(distances[x]))
 
         if len(result.gestures) >= 1:
           gesture = result.gestures[closest_hand]
