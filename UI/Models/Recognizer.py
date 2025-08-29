@@ -232,7 +232,7 @@ class Recognizer:
 
 
     self.__stop = False
-    cap = cv2.VideoCapture()  # Próbálj meg csatlakozni a megadott IP-címhez
+    cap = cv2.VideoCapture()
     cap.setExceptionMode(True)
 
     try:
@@ -279,34 +279,39 @@ class Recognizer:
       result = self.recognizer.recognize(mp_image)
       gesture_detected = False
 
-      if len(result.gestures) >= 1:
-          for i, gesture in enumerate(result.gestures):
-              name = gesture[0].category_name
-              score = gesture[0].score
-              if name != 'NONE' and name != '':
-                  if score > (self.confidence - 0.2):
-                      landmarks = result.hand_landmarks[0]
-                      lm0 = landmarks[0]
-                      lm9 = landmarks[9]
-                      lm05 = landmarks[5]
-                      lm17 = landmarks[17]
+      if len(result.hand_landmarks) >= 1:
+        distances = {}
+        for i, landmarks in enumerate(result.hand_landmarks):
+            lm0 = landmarks[0]
+            lm9 = landmarks[9]
+            lm05 = landmarks[5]
+            lm17 = landmarks[17]
+            distance_09 = ((lm0.x - lm9.x)**2 + (lm0.y - lm9.y)**2)**0.5
+            distance_09 = 500 - int(distance_09 * 1000)
 
-                      distance_09 = ((lm0.x - lm9.x)**2 + (lm0.y - lm9.y)**2)**0.5
-                      distance_09 = 500 - int(distance_09 * 1000)
+            distance_517 = ((lm05.x - lm17.x)**2 + (lm05.y - lm17.y)**2)**0.5
+            distance_517 = 460 - int(distance_517 * 1000)
 
-                      distance_517 = ((lm05.x - lm17.x)**2 + (lm05.y - lm17.y)**2)**0.5
-                      distance_517 = 460 - int(distance_517 * 1000)
+            distances[i] = (distance_09, distance_517)
 
-                      if distance_09 <= self.__distance or distance_517 <= self.__distance:
-                          last_gestures.append((name, score))
-                          gesture_detected = True
-                          print(f"Gesture: {name}, Score: {score:.2f}, Distance: {distance_09}, 5-17 Distance: {distance_517}")
-                  else:
-                      last_gestures.append(("NONE", 0.0))
+        closest_hand = min(distances, key=lambda x: distances[x])
+
+        if len(result.gestures) >= 1:
+          gesture = result.gestures[closest_hand]
+          name = gesture[0].category_name
+          score = gesture[0].score
+          if name != 'NONE' and name != '':
+              if score > (self.confidence - 0.2):
+                  if distances[closest_hand][0] <= self.__distance or distances[closest_hand][1] <= self.__distance:
+                      last_gestures.append((name, score))
+                      gesture_detected = True
+                      print(f"Gesture: {name}, Score: {score:.2f}, Distance: {distance_09}, 5-17 Distance: {distance_517}")
               else:
                   last_gestures.append(("NONE", 0.0))
-      else:
-          last_gestures.append(("NONE", 0.0))
+          else:
+              last_gestures.append(("NONE", 0.0))
+        else:
+            last_gestures.append(("NONE", 0.0))
 
       # Majority voting
       if len(last_gestures) >= self.__framecount:
