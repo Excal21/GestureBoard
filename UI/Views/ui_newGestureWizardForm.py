@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'newGestureWizardForm.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.8.2
+## Created by: Qt User Interface Compiler version 6.9.1
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -40,7 +40,7 @@ class Ui_Form(object):
         self.lblGestureInputLabel.setGeometry(QRect(40, 320, 161, 31))
         self.txtinputGestureName = QLineEdit(self.frameNewGesture)
         self.txtinputGestureName.setObjectName(u"txtinputGestureName")
-        self.txtinputGestureName.setGeometry(QRect(210, 320, 231, 31))
+        self.txtinputGestureName.setGeometry(QRect(180, 320, 261, 31))
         self.btnNameOK = QPushButton(self.frameNewGesture)
         self.btnNameOK.setObjectName(u"btnNameOK")
         self.btnNameOK.setGeometry(QRect(450, 320, 31, 31))

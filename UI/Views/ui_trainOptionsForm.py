@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'trainOptionsForm.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.8.2
+## Created by: Qt User Interface Compiler version 6.9.1
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -48,13 +48,13 @@ class Ui_Form(object):
         self.txtinputServer.setGeometry(QRect(220, 30, 271, 21))
         self.btnRecord = QPushButton(self.frameButtons)
         self.btnRecord.setObjectName(u"btnRecord")
-        self.btnRecord.setGeometry(QRect(30, 130, 171, 41))
+        self.btnRecord.setGeometry(QRect(30, 130, 181, 41))
         self.btnTrain = QPushButton(self.frameButtons)
         self.btnTrain.setObjectName(u"btnTrain")
-        self.btnTrain.setGeometry(QRect(30, 270, 171, 41))
+        self.btnTrain.setGeometry(QRect(30, 270, 181, 41))
         self.btnDelete = QPushButton(self.frameButtons)
         self.btnDelete.setObjectName(u"btnDelete")
-        self.btnDelete.setGeometry(QRect(30, 200, 171, 41))
+        self.btnDelete.setGeometry(QRect(30, 200, 181, 41))
         self.scrollArea = QScrollArea(self.frameButtons)
         self.scrollArea.setObjectName(u"scrollArea")
         self.scrollArea.setGeometry(QRect(223, 130, 271, 181))

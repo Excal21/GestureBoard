@@ -202,16 +202,13 @@ class Recognizer:
               
 
         return annotated_image, None
-        
-        # else:
-        #   return annotated_image
-    
+  
     return cv2.cvtColor(img, cv2.COLOR_BGR2RGB), None
 #endregion
 
 #region Konfigurációs fájlok betöltése
   def loadGestures(self):
-    with open(self.__configpath, "r") as file:
+    with open(self.__configpath, "r", encoding='UTF-8') as file:
       data = dict(json.load(file))
     return data
 
@@ -224,6 +221,7 @@ class Recognizer:
       self.__hueoffset = data['HueOffset']
       self.__distance = data['Distance']
       self.__delay = data['Delay']
+      self.__framethrottling = data['FrameThrottling']
 #endregion
 
 #region Gesztusfelismerés
@@ -234,7 +232,7 @@ class Recognizer:
 
 
     self.__stop = False
-    cap = cv2.VideoCapture()  # Próbálj meg csatlakozni a megadott IP-címhez
+    cap = cv2.VideoCapture()
     cap.setExceptionMode(True)
 
     try:
@@ -251,12 +249,20 @@ class Recognizer:
     last_gestures = deque(maxlen=self.__framecount)
     last_gesture_time = datetime.now()
 
+    skip_frames = False
+    frame_index = 0
+    no_gesture_count = 0
 
 
     while not self.__stop and not self.__error: 
       #Beépített kamera
-      ret, img = cap.read()
       #img = cv2.flip(img, 1)
+      frame_index += 1
+      if self.__framethrottling and skip_frames and frame_index % 2 != 0:
+        cv2.waitKey(int(1000 / 30))
+        continue
+      
+      ret, img = cap.read()
       img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
       
       if self.__hueoffset != 0:
@@ -269,49 +275,54 @@ class Recognizer:
       mp_image = Image(image_format=ImageFormat.SRGB, data=img)
 
 
-      # Ha lát valamit a program, akkor adott confidence felett elkezdi halmozni listába
+
       result = self.recognizer.recognize(mp_image)
-      if len(result.gestures) >= 1:
-          for i, gesture in enumerate(result.gestures):
-              name = gesture[0].category_name
-              score = gesture[0].score
-              if name != 'NONE' and name != '':
-                  if score > (self.confidence - 0.2):
-                      landmarks = result.hand_landmarks[0]
-                      lm0 = landmarks[0]
-                      lm9 = landmarks[9]
-                    
-                      lm05 = landmarks[5]
-                      lm17 = landmarks[17]
+      gesture_detected = False
 
-                      distance_09 = ((lm0.x - lm9.x)**2 + (lm0.y - lm9.y)**2)**0.5
-                      distance_09 = 500 - int(distance_09 * 1000)
+      if len(result.hand_landmarks) >= 1:
+        distances = {}
+        for i, landmarks in enumerate(result.hand_landmarks):
+            lm0 = landmarks[0]
+            lm9 = landmarks[9]
+            lm05 = landmarks[5]
+            lm17 = landmarks[17]
+            distance_09 = ((lm0.x - lm9.x)**2 + (lm0.y - lm9.y)**2)**0.5
+            distance_09 = 500 - int(distance_09 * 1000)
 
-                      distance_517 = ((lm05.x - lm17.x)**2 + (lm05.y - lm17.y)**2)**0.5
-                      distance_517 = 460 - int(distance_517 * 1000)  #Az 5-17 távolság kisebb, mint a 0-9
+            distance_517 = ((lm05.x - lm17.x)**2 + (lm05.y - lm17.y)**2)**0.5
+            distance_517 = 460 - int(distance_517 * 1000)
 
-                      if distance_09 <= self.__distance or distance_517 <= self.__distance:
-                        last_gestures.append((name, score))
-                        print(f"Gesture: {name}, Score: {score:.2f}, Distance: {distance_09}, 5-17 Distance: {distance_517}")
+            distances[i] = (distance_09, distance_517)
 
-                  else:
-                      last_gestures.append(("NONE", 0.0))
-      else:
-        last_gestures.append(("NONE", 0.0))
+        closest_hand = min(distances, key=lambda x: sum(distances[x]))
 
-      # Ha a halmozás eredménye elég elemszámú, akkor majority voting
+        if len(result.gestures) >= 1:
+          gesture = result.gestures[closest_hand]
+          name = gesture[0].category_name
+          score = gesture[0].score
+          if name != 'NONE' and name != '':
+              if score > (self.confidence - 0.2):
+                  if distances[closest_hand][0] <= self.__distance or distances[closest_hand][1] <= self.__distance:
+                      last_gestures.append((name, score))
+                      gesture_detected = True
+                      print(f"Gesture: {name}, Score: {score:.2f}, Distance: {distance_09}, 5-17 Distance: {distance_517}")
+              else:
+                  last_gestures.append(("NONE", 0.0))
+          else:
+              last_gestures.append(("NONE", 0.0))
+        else:
+            last_gestures.append(("NONE", 0.0))
+
+      # Majority voting
       if len(last_gestures) >= self.__framecount:
           counts = Counter([g[0] for g in last_gestures])
           majority_gesture, majority_count = counts.most_common(1)[0]
 
           if (majority_count / self.__framecount) >= 0.8 and majority_gesture != 'NONE':
-              # Átlag confidence számítása a majority elemekre
               majority_confidences = [g[1] for g in last_gestures if g[0] == majority_gesture]
               avg_confidence = sum(majority_confidences) / len(majority_confidences)
 
-              if avg_confidence >= self.confidence \
-                  and (datetime.now() - last_gesture_time).total_seconds() > self.__delay:
-
+              if avg_confidence >= self.confidence and (datetime.now() - last_gesture_time).total_seconds() > self.__delay:
                   print(majority_gesture)
                   if majority_gesture in gesture_mappings.keys():
                       print(majority_gesture)
@@ -324,6 +335,17 @@ class Recognizer:
 
           last_gestures.clear()
 
+      if self.__framethrottling:
+        # Skip logika frissítése
+        if gesture_detected:
+            no_gesture_count = 0
+            skip_frames = False
+        else:
+            no_gesture_count += 1
+            if no_gesture_count >= 3:
+                skip_frames = True
+
+    
       if self.__camerafeed:
         annotated_image = self.draw_landmarks_on_image(mp_image.numpy_view(), result)
 

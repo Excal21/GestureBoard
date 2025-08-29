@@ -82,6 +82,10 @@ class Recorder():
 
 
     def getCameras(self):
+        if hasattr(self, '_cached_cameras'):
+            return self._cached_cameras
+
+        print('Kamerák keresése...')
         index = 0
         cameras = []
         while True:
@@ -91,4 +95,5 @@ class Recorder():
             cameras.append(index)
             cap.release()
             index += 1
+        self._cached_cameras = cameras
         return cameras

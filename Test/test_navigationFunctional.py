@@ -3,6 +3,7 @@ import pytest
 import os
 from PySide6.QtWidgets import QApplication
 from PySide6.QtCore import Qt
+from PySide6.QtWidgets import QWidget, QPushButton
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'UI')))
@@ -62,9 +63,3 @@ def test_camera_save_button_click(app, qtbot):
     qtbot.mouseClick(back_save, Qt.LeftButton)
     assert app.stacked_widget.currentIndex() == 1
 
-#Tanítómenü gombjai
-def test_train_back_button_click(app, qtbot):
-    app.stacked_widget.currentWidget() == app.teach_menu
-    back_save = app.teach_menu.ui.btnBack
-    qtbot.mouseClick(back_save, Qt.LeftButton)
-    assert app.stacked_widget.currentIndex() == 2

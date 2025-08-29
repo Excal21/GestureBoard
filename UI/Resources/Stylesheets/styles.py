@@ -22,6 +22,7 @@ button_hover_style = button_style + '''
 entry_button_style = button_style
 
 options_button_style = button_style + '''
+            border-radius: 7px;
             font-size: 14pt;
 '''
 
@@ -53,7 +54,7 @@ predefined_hover_label_style = '''
             background-color: lightgray;
             border-radius: 5px;
             text-align: left;
-            padding-left: 7px;
+            padding-left: 2px;
 '''
 
 gesture_entry_style = '''
@@ -120,13 +121,13 @@ train_scrollBar_style = scrollbar_style + '''
         #scrollArea {
             border: 1px solid rgb(70, 70, 70);
             background: white;
-            border-radius: 10px;
+            border-radius: 7px;
         }
         
         #scrollAreaWidgetContents {
             border: none;
             background: transparent;
-            border-radius: 10px;
+            border-radius: 7px;
         }
 '''
 
@@ -139,7 +140,7 @@ train_input_style = '''
             color: rgb(36, 41, 67);
             font-size: 14pt;
             border: 1px solid rgb(70, 70, 70);
-            border-radius: 10px;
+            border-radius: 5px;
             padding-left: 5px;
 '''
 
@@ -213,4 +214,22 @@ camera_combo_style = '''
 noborder='''
             border: none;
             background: transparent;
+'''
+
+checkbox_style = '''
+    QCheckBox::indicator {
+        width: 47px;
+        height: 27px;
+    }
+    QCheckBox::indicator:unchecked {
+        border: 1px solid rgb(70, 70, 70);
+        border-radius: 5px;
+        background: white;
+    }
+    QCheckBox::indicator:checked {
+        border: 1px solid rgb(70, 70, 70);
+        border-radius: 5px;
+        background: white;
+        image: url(Resources/Icons/check.png);
+    }
 '''

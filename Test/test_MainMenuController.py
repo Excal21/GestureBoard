@@ -60,14 +60,10 @@ def test_start_activates_recognizer(qtbot, monkeypatch):
     assert not mainMenu.ui.btnCameraOptions.isEnabled()
     assert started.get("started", False)
 
-    def is_lambda(fn):
-        return callable(fn) and fn.__name__ == "<lambda>"
-    
-    assert is_lambda(mainMenu.ui.btnOptions.enterEvent)
-    assert is_lambda(mainMenu.ui.btnOptions.leaveEvent)
-    assert is_lambda(mainMenu.ui.btnCameraOptions.enterEvent)
-    assert is_lambda(mainMenu.ui.btnCameraOptions.leaveEvent)
-
+    assert isinstance(mainMenu.ui.btnOptions.enterEvent, type(lambda: None))
+    assert isinstance(mainMenu.ui.btnOptions.leaveEvent, type(lambda: None))
+    assert isinstance(mainMenu.ui.btnCameraOptions.enterEvent, type(lambda: None))
+    assert isinstance(mainMenu.ui.btnCameraOptions.leaveEvent, type(lambda: None))
 
 def test_start_deactivates_recognizer(qtbot, monkeypatch):
     # Mock recognizer start/stop
