@@ -162,16 +162,6 @@ class TrainMenuController(BaseController):
 
 #region Tanítás kezelése
     def startTraining(self):
-        def remove_readonly(func, path, _):
-            os.chmod(path, stat.S_IWRITE)  # Eltávolítja az írásvédettséget
-            func(path)
-
-
-        # for key in os.listdir('Data/Samples'):
-        #     if key not in self.data.keys():
-        #         shutil.rmtree('Data/Samples/' + key, onerror=remove_readonly)
-        
-
         loading_page = self.stacked_widget.widget(0)
         info_widget = loading_page.findChild(QLabel, 'lblLoading')
 

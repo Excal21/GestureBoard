@@ -80,25 +80,15 @@ class Trainer(QThread):
         return True
 
     def train(self):
-        while not self.trained:
-            response = requests.get(self.address + '/status', headers={'X-API-KEY': API_KEY})
-            if response.json()['status'] == 'idle':
-                self.trained = True
-                self.progress.emit('Tanítás kész')
-                sleep(1)
-            elif response.json()['status'] == 'busy':
-                self.progress.emit('Tanítás folyamatban')
-                sleep(1)
-
-        if self.trained:
-            response = requests.get(self.address + '/download', headers={'X-API-KEY': API_KEY})
-            
-            if response.status_code == 200:
-                with open('Config/gesture_recognizer.task', 'wb') as f:
-                    f.write(response.content)
-                RecognizerHandler.getInstance().reload()
-                self.progress.emit('Modell elmentve')
-                self.trained = True
-            else:
-                self.progress.emit('Hiba történt a modell letöltése közben')
-                sleep(1)
+        self.progress.emit('Tanítás folyamatban')
+        response = requests.get(self.address + '/train', headers={'X-API-KEY': API_KEY})
+        if response.status_code == 200:
+            with open('Config/gesture_recognizer.task', 'wb') as f:
+                f.write(response.content)
+            RecognizerHandler.getInstance().reload()
+            self.progress.emit('Modell elmentve')
+            sleep(1)
+            self.trained = True
+        else:
+            self.progress.emit('Hiba történt a modell letöltése közben')
+            sleep(1)

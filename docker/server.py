@@ -118,13 +118,20 @@ def merge_chunks():
     if os.path.exists('gesture_recognizer.task'):
         os.remove('gesture_recognizer.task')
 
-    global t1
-    t1 = threading.Thread(target=ModelTrainer.train)
-    t1.start()
     training_state['status'] = 'busy'
 
     return jsonify({'message': 'Chunks merged and training started'}), 200
 
+
+@app.route('/train', methods=['GET'])
+def train():
+    try:
+        ModelTrainer.train()
+        training_state['status'] = 'idle'
+        return send_file('gesture_recognizer.task', as_attachment=True)
+    except Exception as e:
+        training_state['status'] = 'idle'
+        return jsonify({'error': str(e)}), 500
 
 @app.route('/status', methods=['GET'])
 def status():
@@ -133,11 +140,6 @@ def status():
     elif t1 is not None and not t1.is_alive() and training_state['status'] == 'busy':
         training_state['status'] = 'idle'
     return jsonify(training_state)
-
-
-@app.route('/download', methods=['GET'])
-def download():
-    return send_file('gesture_recognizer.task', as_attachment=True)
 
 
 if __name__ == '__main__':
