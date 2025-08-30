@@ -144,7 +144,7 @@ class TrainMenuController(BaseController):
 
                 
         self.trainer = Trainer()
-        self.trainer.ip = self.ui.txtinputServer.text().strip() if self.ui.txtinputServer.text() != '' else '127.0.0.1:5000'
+        self.trainer.address = self.ui.txtinputServer.text().strip() if self.ui.txtinputServer.text() != '' else 'http://127.0.0.1:5000'
         self.trainer.finished.connect(self.finishTraining)
         self.trainer.progress.connect(lambda text: info_widget.setText(text))
         self.trainer.start()
@@ -200,7 +200,7 @@ class TrainMenuController(BaseController):
 
         server_options_layout = QHBoxLayout() 
         self.ui.txtinputServer.setAlignment(Qt.AlignVCenter)
-        self.ui.txtinputServer.setPlaceholderText('127.0.0.1:5000')
+        self.ui.txtinputServer.setPlaceholderText('http://127.0.0.1:5000')
         self.ui.txtinputServer.setContextMenuPolicy(Qt.NoContextMenu)
         self.ui.lblDescription.setText(
             self.textToHTML('Add meg a tanítást végző kiszolgáló címét és portját, majd rögzítsd és tanítsd meg saját gesztusaidat!')

@@ -7,6 +7,7 @@ from PySide6.QtCore import QThread, Signal
 from Models.RecognizerHandler import RecognizerHandler
 
 CHUNK_SIZE = 30 * 1024 * 1024  # 30 MB
+API_KEY = '7fe4d89eeed500e650dcdd94cfe91cd202c6cca3bb1b9d36f2a366dd39af2965'
 
 class Trainer(QThread):
     progress = Signal(str)
@@ -15,25 +16,27 @@ class Trainer(QThread):
 
     def __init__(self):
         super().__init__()
-        self.ip = '127.0.0.1:5000'
+        self.address = '127.0.0.1:5000'
         self.filename = 'Images.zip'
         self.trained = False
     
     def run(self):
         try:
-            response = requests.get('https://' + self.ip + '/status', headers={'X-API-KEY': 'secret'})
+            response = requests.get(self.address + '/status', headers={'X-API-KEY': API_KEY})
             if response.status_code == 200:
                 if response.json()['status'] == 'idle':
                     if os.path.exists(self.filename):
                         os.remove(self.filename)
                     make_archive('Images', 'zip', 'Data/Samples')
                     
-                    self.upload_in_chunks(self.filename)
-
-                    self.progress.emit('Fájlok sikeresen feltöltve')
-                    sleep(1)
-                    os.remove(self.filename)
-                    self.train()
+                    if self.upload_in_chunks(self.filename):
+                        self.progress.emit('Fájlok sikeresen feltöltve')
+                        sleep(1)
+                        os.remove(self.filename)
+                        self.train()
+                    else:
+                        self.progress.emit('A kiszolgáló elutasította a fájlokat')
+                        sleep(1)
                 else:
                     self.progress.emit('A kiszolgáló elfoglalt')
                     sleep(1)
@@ -58,23 +61,26 @@ class Trainer(QThread):
                 chunk_data = f.read(CHUNK_SIZE)
                 files = {'file': (f"part_{i}", chunk_data)}
                 response = requests.post(
-                    'https://' + self.ip + '/upload_chunk',
-                    headers={'X-API-KEY': 'secret'},
+                    self.address + '/upload_chunk',
+                    headers={'X-API-KEY': API_KEY},
                     files=files
                 )
                 if response.status_code != 200:
                     self.progress.emit(f"Hiba a {i}. szelet feltöltésekor")
                     return
         
-        response = requests.post('https://' + self.ip + '/merge_chunks',
-                                 headers={'X-API-KEY': 'secret'},
+        response = requests.post(self.address + '/merge_chunks',
+                                 headers={'X-API-KEY': API_KEY},
                                  json={'filename': 'Images.zip'})
         if response.status_code != 200:
-            self.progress.emit("Hiba a szeletek összefűzésekor")
+            return False
+            print(response.json())
+
+        return True
 
     def train(self):
         while not self.trained:
-            response = requests.get('https://' + self.ip + '/status', headers={'X-API-KEY': 'secret'})
+            response = requests.get(self.address + '/status', headers={'X-API-KEY': API_KEY})
             if response.json()['status'] == 'idle':
                 self.trained = True
                 self.progress.emit('Tanítás kész')
@@ -84,8 +90,8 @@ class Trainer(QThread):
                 sleep(1)
 
         if self.trained:
-            response = requests.get('https://' + self.ip + '/download',
-                        headers={'X-API-KEY': 'secret'})
+            response = requests.get(self.address + '/download',
+                        headers={'X-API-KEY': API_KEY})
             
             if response.status_code == 200:
                 with open('Config/gesture_recognizer.task', 'wb') as f:
