@@ -49,7 +49,7 @@ def test_hover_and_leave_events_on_buttons():
         assert callable(btn.leaveEvent), f"{btn.objectName()} leaveEvent not callable"
 
 def test_setLayoutSettings_properties():
-    assert train_menu.ui.txtinputServer.placeholderText() == '127.0.0.1:5000'
+    assert train_menu.ui.txtinputServer.placeholderText() == 'http://127.0.0.1:5000'
     assert train_menu.ui.txtinputServer.contextMenuPolicy() == Qt.NoContextMenu
     assert train_menu.ui.lblDescription.text() != ''
 

@@ -209,19 +209,19 @@ def test_btnReset():
             "description": None,
             "highlight": -1
         },
-        "3": {
+        "2": {
             "gesture": "Felfelé mutatás",
             "action": None,
             "description": None,
             "highlight": -1
         },
-        "4": {
+        "3": {
             "gesture": "Két ujjal balra",
             "action": None,
             "description": None,
             "highlight": -1
         },
-        "5": {
+        "4": {
             "gesture": "Nyílt tenyér",
             "action": None,
             "description": None,
