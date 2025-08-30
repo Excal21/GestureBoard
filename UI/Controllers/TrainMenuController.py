@@ -11,6 +11,7 @@ from Views.ui_trainOptionsForm import Ui_Form
 from Models.Recorder import Recorder
 import json
 import shutil
+import stat
 from Models.Trainer import Trainer
 from Controllers.BaseController import BaseController
 from Resources.Fonts.FontLoader import FontLoader
@@ -24,7 +25,8 @@ class TrainMenuController(BaseController):
         self.ui = Ui_Form()
         self.ui.setupUi(self)
         self.initUI(overrides={
-            'scrollArea': train_scrollBar_style
+            'scrollArea': train_scrollBar_style,
+            'checkCloud': checkbox_style
         })
 
         self.setLayoutSettings()
@@ -37,6 +39,9 @@ class TrainMenuController(BaseController):
         self.data = None
         self.previous_page = 2
 
+        self.ui.txtinputServer.setText('https://gestureboard.com')
+        self.ui.txtinputServer.setEnabled(False)
+        self.ui.txtinputServer.setStyleSheet(train_input_disabled_style)
 
         #self.updateList()
 #endregion
@@ -44,16 +49,19 @@ class TrainMenuController(BaseController):
 #region Lista kezelése
 
     def onReturn(self, index):
-        if index == 3 and self.previous_page != 4:
+        if index == 3 and self.previous_page == 2:
             print(self.previous_page)
             with open('Config/UserSettings.json', 'r', encoding='UTF-8') as f:
                 self.data = dict(json.load(f))
             
             print('USerSettings JSON betöltve a TrainMenuController-be')
             self.updateList()
-
-        elif index == 3:
+        elif index == 3 and self.previous_page == 4:
             self.updateList()
+
+        self.previous_page = index
+        # elif index == 3:
+        #     self.updateList()
 
     def updateList(self):
 
@@ -92,47 +100,76 @@ class TrainMenuController(BaseController):
     def delete(self):
         if self.selected_gesture != None:
             self.data.pop(self.selected_gesture)
+            
+            if not os.path.exists('Data/Marked for delete'):
+                os.makedirs('Data/Marked for delete', exist_ok=True)
+
+            if os.path.exists('Data/Samples/' + self.selected_gesture):
+                shutil.move('Data/Samples/' + self.selected_gesture, 'Data/Marked for delete/' + self.selected_gesture)
 
         self.updateList()
         self.selected_gesture = None
 
-    def save(self):
+    def cleanUp(self):
         def remove_readonly(func, path, _):
-            import stat
-            os.chmod(path, stat.S_IWRITE)  # Eltávolítja az írásvédettséget
+            os.chmod(path, stat.S_IWRITE)
             func(path)
 
+        if os.path.exists('Data/Marked for delete'):
+            shutil.rmtree('Data/Marked for delete', onerror=remove_readonly)
 
+        #os.makedirs('Data/Marked for delete', exist_ok=True)
+
+    def backup(self):
+        def remove_readonly(func, path, _):
+            os.chmod(path, stat.S_IWRITE)
+            func(path)
+
+        if os.path.exists('Data/Marked for delete'):
+            for item in os.listdir('Data/Marked for delete'):
+                src = os.path.join('Data/Marked for delete', item)
+                dst = os.path.join('Data/Samples', item)
+                if os.path.isdir(src):
+                    if os.path.exists(dst):
+                        shutil.rmtree(dst, onerror=remove_readonly)
+                    shutil.move(src, 'Data/Samples')
+            shutil.rmtree('Data/Marked for delete', onerror=remove_readonly)
+
+        for key in os.listdir('Data/Samples'):
+            if key not in json.load(open('Config/UserSettings.json', 'r', encoding='UTF-8')).keys():
+                shutil.rmtree('Data/Samples/' + key, onerror=remove_readonly)
+
+    def save(self):
         print('Mentés előtti adat', self.data)
         with open('Config/UserSettings.json', 'w', encoding='UTF-8') as f:
             json.dump(self.data, f, ensure_ascii=False, indent=4)
         print('JSON dumped')
+        self.cleanUp()
 
-        for key in os.listdir('Data/Samples'):
-            if key not in self.data.keys():
-                shutil.rmtree('Data/Samples/' + key, onerror=remove_readonly)
+
 
     def startRecord(self):
         self.previous_page = 4
         self.stacked_widget.setCurrentIndex(4)
 
     def back(self):
+        self.backup()
         self.previous_page = 2
         self.stacked_widget.setCurrentIndex(2)
+
 
 #endregion
 
 #region Tanítás kezelése
     def startTraining(self):
         def remove_readonly(func, path, _):
-            import stat
             os.chmod(path, stat.S_IWRITE)  # Eltávolítja az írásvédettséget
             func(path)
 
 
-        for key in os.listdir('Data/Samples'):
-            if key not in self.data.keys():
-                shutil.rmtree('Data/Samples/' + key, onerror=remove_readonly)
+        # for key in os.listdir('Data/Samples'):
+        #     if key not in self.data.keys():
+        #         shutil.rmtree('Data/Samples/' + key, onerror=remove_readonly)
         
 
         loading_page = self.stacked_widget.widget(0)
@@ -151,8 +188,8 @@ class TrainMenuController(BaseController):
         
 
     def finishTraining(self):
-        print('sikeres tanítás')
         if self.trainer.trained:
+            print('sikeres tanítás')
             self.save()
             self.updateList()
             self.previous_page = 2
@@ -164,16 +201,24 @@ class TrainMenuController(BaseController):
 #endregion
 
 #region Eseménykezelők
+    def changeCheckBox(self):
+        if self.ui.checkCloud.isChecked():
+            self.ui.txtinputServer.setEnabled(False)
+            self.ui.txtinputServer.setStyleSheet(train_input_disabled_style)
+            self.ui.txtinputServer.setText('https://gestureboard.com')
+        else:
+            self.ui.txtinputServer.setEnabled(True)
+            self.ui.txtinputServer.setStyleSheet(train_input_style)
+            self.ui.txtinputServer.setText('')
+
     def setEventHandlers(self):
         self.stacked_widget.currentChanged.connect(self.onReturn)
+
+        self.ui.checkCloud.stateChanged.connect(self.changeCheckBox)
 
         self.ui.btnBack.clicked.connect(self.back)
         self.ui.btnBack.enterEvent = lambda event: self.ui.btnBack.setStyleSheet(options_button_hover_style)
         self.ui.btnBack.leaveEvent = lambda event: self.ui.btnBack.setStyleSheet(options_button_style)
-
-        
-
-
 
         #Gombeventek
         self.ui.btnRecord.enterEvent = lambda event: self.ui.btnRecord.setStyleSheet(options_button_hover_style)
@@ -193,7 +238,7 @@ class TrainMenuController(BaseController):
 #endregion
 
 
-#region Stílusállítók
+#region Layout beállítások
     def setLayoutSettings(self):
          #Labelek és inputmezők elrendezése
 
@@ -217,4 +262,9 @@ class TrainMenuController(BaseController):
         self.ui.scrollArea.verticalScrollBar().setContextMenuPolicy(Qt.NoContextMenu)
         self.scroll_layout.setAlignment(Qt.AlignTop)
         self.scroll_layout.setSpacing(0)
+
+
+        self.ui.checkCloud.setFixedHeight(40) #Ezek csak a placeholderek!! QSS állítja a valósat
+        self.ui.checkCloud.setFixedWidth(50)
+        self.ui.checkCloud.setChecked(True)
 #endregion

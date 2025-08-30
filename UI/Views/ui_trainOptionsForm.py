@@ -15,8 +15,9 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QFrame, QLabel, QLineEdit,
-    QPushButton, QScrollArea, QSizePolicy, QWidget)
+from PySide6.QtWidgets import (QApplication, QCheckBox, QFrame, QLabel,
+    QLineEdit, QPushButton, QScrollArea, QSizePolicy,
+    QWidget)
 
 class Ui_Form(object):
     def setupUi(self, Form):
@@ -42,22 +43,22 @@ class Ui_Form(object):
         self.frameButtons.setFrameShadow(QFrame.Shadow.Raised)
         self.lblServer = QLabel(self.frameButtons)
         self.lblServer.setObjectName(u"lblServer")
-        self.lblServer.setGeometry(QRect(40, 30, 161, 20))
+        self.lblServer.setGeometry(QRect(30, 30, 161, 20))
         self.txtinputServer = QLineEdit(self.frameButtons)
         self.txtinputServer.setObjectName(u"txtinputServer")
         self.txtinputServer.setGeometry(QRect(220, 30, 271, 21))
         self.btnRecord = QPushButton(self.frameButtons)
         self.btnRecord.setObjectName(u"btnRecord")
-        self.btnRecord.setGeometry(QRect(30, 130, 181, 41))
+        self.btnRecord.setGeometry(QRect(30, 140, 181, 41))
         self.btnTrain = QPushButton(self.frameButtons)
         self.btnTrain.setObjectName(u"btnTrain")
-        self.btnTrain.setGeometry(QRect(30, 270, 181, 41))
+        self.btnTrain.setGeometry(QRect(30, 280, 181, 41))
         self.btnDelete = QPushButton(self.frameButtons)
         self.btnDelete.setObjectName(u"btnDelete")
-        self.btnDelete.setGeometry(QRect(30, 200, 181, 41))
+        self.btnDelete.setGeometry(QRect(30, 210, 181, 41))
         self.scrollArea = QScrollArea(self.frameButtons)
         self.scrollArea.setObjectName(u"scrollArea")
-        self.scrollArea.setGeometry(QRect(223, 130, 271, 181))
+        self.scrollArea.setGeometry(QRect(223, 140, 271, 181))
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
@@ -65,7 +66,14 @@ class Ui_Form(object):
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
         self.lblGestures = QLabel(self.frameButtons)
         self.lblGestures.setObjectName(u"lblGestures")
-        self.lblGestures.setGeometry(QRect(230, 90, 251, 41))
+        self.lblGestures.setGeometry(QRect(230, 100, 251, 41))
+        self.lblCloud = QLabel(self.frameButtons)
+        self.lblCloud.setObjectName(u"lblCloud")
+        self.lblCloud.setGeometry(QRect(30, 90, 160, 20))
+        self.checkCloud = QCheckBox(self.frameButtons)
+        self.checkCloud.setObjectName(u"checkCloud")
+        self.checkCloud.setGeometry(QRect(220, 80, 61, 22))
+        self.checkCloud.setChecked(True)
         self.lblServer.raise_()
         self.txtinputServer.raise_()
         self.btnRecord.raise_()
@@ -73,6 +81,8 @@ class Ui_Form(object):
         self.btnDelete.raise_()
         self.lblGestures.raise_()
         self.scrollArea.raise_()
+        self.lblCloud.raise_()
+        self.checkCloud.raise_()
         self.btnBack = QPushButton(Form)
         self.btnBack.setObjectName(u"btnBack")
         self.btnBack.setGeometry(QRect(650, 340, 120, 40))
@@ -90,7 +100,9 @@ class Ui_Form(object):
         self.btnRecord.setText(QCoreApplication.translate("Form", u"Gesztus felv\u00e9tele", None))
         self.btnTrain.setText(QCoreApplication.translate("Form", u"Gesztusok tan\u00edt\u00e1sa", None))
         self.btnDelete.setText(QCoreApplication.translate("Form", u"Gesztus t\u00f6rl\u00e9se", None))
-        self.lblGestures.setText(QCoreApplication.translate("Form", u"Gesztusok", None))
+        self.lblGestures.setText("")
+        self.lblCloud.setText(QCoreApplication.translate("Form", u"Tan\u00edt\u00e1s felh\u0151ben", None))
+        self.checkCloud.setText("")
         self.btnBack.setText(QCoreApplication.translate("Form", u"Vissza", None))
     # retranslateUi
 

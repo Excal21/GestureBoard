@@ -103,10 +103,20 @@ def merge_chunks():
 
     if final_filename.lower().endswith('.zip'):
         try:
+            if os.path.exists('Samples'):
+                for item in os.listdir('Samples'):
+                    item_path = os.path.join('Samples', item)
+                    if os.path.isdir(item_path):
+                        shutil.rmtree(item_path)
+                    else:
+                        os.remove(item_path)
             safe_unzip(final_path, 'Samples')
         except Exception as e:
             print(e)
             return jsonify({'error': f'Invalid ZIP'}), 400
+
+    if os.path.exists('gesture_recognizer.task'):
+        os.remove('gesture_recognizer.task')
 
     global t1
     t1 = threading.Thread(target=ModelTrainer.train)

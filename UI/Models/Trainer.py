@@ -16,7 +16,7 @@ class Trainer(QThread):
 
     def __init__(self):
         super().__init__()
-        self.address = '127.0.0.1:5000'
+        self.address = 'http://127.0.0.1:5000'
         self.filename = 'Images.zip'
         self.trained = False
     
@@ -46,7 +46,8 @@ class Trainer(QThread):
                 sleep(1)
                 self.finished.emit()
                 return
-        except (requests.exceptions.ConnectionError , requests.exceptions.InvalidURL):
+        except (requests.exceptions.ConnectionError , requests.exceptions.InvalidURL) as e:
+            print(e)
             self.progress.emit('Kiszolgáló nem elérhető')
             sleep(1)
             self.finished.emit()
@@ -73,8 +74,8 @@ class Trainer(QThread):
                                  headers={'X-API-KEY': API_KEY},
                                  json={'filename': 'Images.zip'})
         if response.status_code != 200:
-            return False
             print(response.json())
+            return False
 
         return True
 
@@ -90,8 +91,7 @@ class Trainer(QThread):
                 sleep(1)
 
         if self.trained:
-            response = requests.get(self.address + '/download',
-                        headers={'X-API-KEY': API_KEY})
+            response = requests.get(self.address + '/download', headers={'X-API-KEY': API_KEY})
             
             if response.status_code == 200:
                 with open('Config/gesture_recognizer.task', 'wb') as f:
