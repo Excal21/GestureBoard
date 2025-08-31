@@ -23,7 +23,15 @@ A kliens futtatható a release verziókban található futtathatók segítségé
 </div>
 
 ## Saját gesztusok tanítása
-Ha szeretnéd lecserélni vagy bővíteni a 4 alapgesztust, akkor létre kell hoznod vagy meg kell adnod egy létező tanítószervert. Ez egy olyan kiszolgáló, ami fogadja a kezedről készült mintákat és a GestureBoard programnak megtanítja az új kéztartásaid. Erre a kiszolgálóra csak a tanítás idejére van szükség.
+Ha szeretnéd lecserélni vagy bővíteni a 4 alapgesztust, a tanítás idejére szükség van egy tanítószerverre. Készíthetsz saját szervert, megadhatsz egy létező kiszolgálót, vagy használhatod a GestureBoard által biztosított felhőalapú tanítószervert.
+
+A felhőalapú tanítás használatakor a tanítási folyamat akár 1-2 percet is igénybe vehet.
+
+> **Adatvédelem**  
+> A GestureBoard tanítási szakaszában a szoftver fényképeket készít a felhasználó kezéről. Ezekre a képekre kizárólag a tanítás ideje alatt van szükség, és azok semmilyen formában nem kerülnek továbbításra vagy megosztásra harmadik fél számára.
+>
+>A szoftver használata saját felelősségre történik. Kérlek, ügyelj arra, hogy a képeken ne szerepeljen semmilyen érzékeny adat, személyes információ, vagy olyan tartalom, amely adatvédelmi vagy biztonsági kockázatot jelenthet.
+
 
 ### Tanítószerver létrehozása
 A tanítószerver könnyedén elkészíthető és elindítható [Docker](https://www.docker.com/) segítségével. A Docker telepítése után a projekt <i>docker</i> mappájába navigálva add ki a következő parancsokat:
