@@ -66,6 +66,8 @@ class Trainer(QThread):
                     headers={'X-API-KEY': API_KEY},
                     files=files
                 )
+                self.progress.emit(f'Fájlok feltöltése {i + 1}/{total_chunks}')
+                
                 if response.status_code != 200:
                     self.progress.emit(f"Hiba a {i}. szelet feltöltésekor")
                     return

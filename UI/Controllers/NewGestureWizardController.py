@@ -66,7 +66,7 @@ class NewGestureWizardController(BaseController):
             self.lblImage.hide()
 
             self.ui.lblUserGuide.show()
-            self.ui.lblUserGuide.setText('Tartsd a kezed a kívánt gesztus pozíciójában, majd nyomj szőközt a másik kezeddel!')
+            self.ui.lblUserGuide.setText('Tartsd a kezed a kívánt gesztus pozíciójában, majd nyomj szőközt a másik kezeddel! A szóköz lenyomása után ne mozdítsd el a kezed!')
             self.recording_stage = 1
             print('Elindítva!')
 
@@ -74,7 +74,7 @@ class NewGestureWizardController(BaseController):
             print('Első rész')
             self.rec.record_batch(self.__gesture_id, 20)
             print('Első szakasz rögzítve!')
-            self.ui.lblUserGuide.setText('Most picit mozdítsd el ugyanebben a pozícióban a kezed, majd nyomj szőközt a másik kezeddel!')
+            self.ui.lblUserGuide.setText('Most picit mozdítsd el ugyanebben a pozícióban a kezed, majd nyomj szőközt a másik kezeddel! A szóköz lenyomása után ne mozdítsd el a kezed!')
             self.recording_stage = 2
 
         elif self.recording_stage == 2:
@@ -83,8 +83,6 @@ class NewGestureWizardController(BaseController):
             self.rec.release()
             print('Mentve!')
             self.recording_stage = 0
-            self.ui.lblUserGuide.setText('A gesztus sikeresen rögzítve!')
-            sleep(2)
             self.ui.lblUserGuide.setText('')
             self.ui.lblUserGuide.hide()
             
@@ -97,9 +95,7 @@ class NewGestureWizardController(BaseController):
 
 
             gesture_entry = {'gesture' : self.gesture_name, 'action' : None, 'description': None, 'highlight': -1}
-            print(self.stacked_widget.widget(3).data)
             self.stacked_widget.widget(3).data[str(self.__gesture_id)] = gesture_entry
-            print(self.stacked_widget.widget(3).data)
 
             self.ui.btnNameOK.clearFocus()
             self.ui.txtinputGestureName.setText('')
@@ -150,7 +146,7 @@ class NewGestureWizardController(BaseController):
 
 #endregion
 
-#region Stílusállítók
+#region Layout beállítások
     def setLayoutSettings(self):
         #Felbukkanó új gesztus varázsló elrendezése
         self.ui.frameNewGesture_layout = QVBoxLayout(self.ui.frameNewGesture)
@@ -166,7 +162,7 @@ class NewGestureWizardController(BaseController):
         self.lblImage.setAlignment(Qt.AlignCenter)
         self.ui.frameNewGesture_layout.addWidget(self.lblImage, alignment=Qt.AlignCenter)
         self.ui.frameNewGesture_layout.addWidget(self.ui.lblCvImg, alignment=Qt.AlignCenter)
-        self.lblImage.setPixmap(QPixmap(os.path.join(os.path.dirname(__file__), '..', 'Resources', 'Icons', 'hand.png')).scaled(100, 100, Qt.KeepAspectRatio))
+        self.lblImage.setPixmap(QPixmap('Resources/Icons/hand.png').scaled(100, 100, Qt.KeepAspectRatio))
         self.ui.lblCvImg.hide()
 
         #Geszuts neve input mező
