@@ -1,6 +1,6 @@
 import os
 import threading
-from flask import Flask, request, jsonify, send_file
+from flask import Flask, request, jsonify, send_file, abort
 import shutil
 import zipfile
 
@@ -11,17 +11,19 @@ training_state = {'status': 'idle'}
 t1 = None
 
 UPLOAD_DIR = "uploads"
-os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 API_KEY = '7fe4d89eeed500e650dcdd94cfe91cd202c6cca3bb1b9d36f2a366dd39af2965'
 
 
 def safe_unzip(zip_path, extract_to, max_size=400*1024*1024):
+    deleteImages()
+
     base_abs = os.path.abspath(extract_to)
     os.makedirs(base_abs, exist_ok=True)
 
     PNG_MAGIC = b"\x89PNG\r\n\x1a\n"
     total_size = 0
+
 
     with zipfile.ZipFile(zip_path, 'r') as z:
         for member in z.infolist():
@@ -65,11 +67,14 @@ def safe_unzip(zip_path, extract_to, max_size=400*1024*1024):
 @app.before_request
 def check_auth():
     if request.headers.get('X-API-KEY') != API_KEY:
-        return jsonify({'error': 'Unauthorized'}), 403
+        abort(404)
 
 
 @app.route('/upload_chunk', methods=['POST'])
 def upload_chunk():
+    os.makedirs(UPLOAD_DIR, exist_ok=True)
+
+
     file = request.files.get('file')
     if not file:
         return jsonify({'error': 'No file uploaded'}), 400
@@ -103,13 +108,7 @@ def merge_chunks():
 
     if final_filename.lower().endswith('.zip'):
         try:
-            if os.path.exists('Samples'):
-                for item in os.listdir('Samples'):
-                    item_path = os.path.join('Samples', item)
-                    if os.path.isdir(item_path):
-                        shutil.rmtree(item_path)
-                    else:
-                        os.remove(item_path)
+            
             safe_unzip(final_path, 'Samples')
         except Exception as e:
             print(e)
@@ -120,6 +119,9 @@ def merge_chunks():
 
     training_state['status'] = 'busy'
 
+    if os.path.exists(UPLOAD_DIR):
+        shutil.rmtree(UPLOAD_DIR)
+
     return jsonify({'message': 'Chunks merged and training started'}), 200
 
 
@@ -128,7 +130,11 @@ def train():
     try:
         ModelTrainer.train()
         training_state['status'] = 'idle'
+        
+        deleteImages()
+
         return send_file('gesture_recognizer.task', as_attachment=True)
+
     except Exception as e:
         training_state['status'] = 'idle'
         return jsonify({'error': str(e)}), 500
@@ -141,6 +147,18 @@ def status():
         training_state['status'] = 'idle'
     return jsonify(training_state)
 
+
+def deleteImages():
+    if os.path.exists('Samples'):
+        for item in os.listdir('Samples'):
+            item_path = os.path.join('Samples', item)
+            if os.path.isdir(item_path):
+                shutil.rmtree(item_path)
+            else:
+                os.remove(item_path)
+    
+    if os.path.exists('Images.zip'):
+        os.remove('Images.zip')
 
 if __name__ == '__main__':
     app.config['MAX_CONTENT_LENGTH'] = 200 * 1024 * 1024
