@@ -39,7 +39,7 @@ class TrainMenuController(BaseController):
         self.data = None
         self.previous_page = 2
 
-        self.ui.txtinputServer.setText('https://gestureboard.com')
+        self.ui.txtinputServer.setText('https://api.gestureboard.com')
         self.ui.txtinputServer.setEnabled(False)
         self.ui.txtinputServer.setStyleSheet(train_input_disabled_style)
 
@@ -195,7 +195,7 @@ class TrainMenuController(BaseController):
         if self.ui.checkCloud.isChecked():
             self.ui.txtinputServer.setEnabled(False)
             self.ui.txtinputServer.setStyleSheet(train_input_disabled_style)
-            self.ui.txtinputServer.setText('https://gestureboard.com')
+            self.ui.txtinputServer.setText('https://api.gestureboard.com')
         else:
             self.ui.txtinputServer.setEnabled(True)
             self.ui.txtinputServer.setStyleSheet(train_input_style)
