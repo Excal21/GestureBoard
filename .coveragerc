@@ -5,7 +5,9 @@ source =
 relative_files = True
 
 [report]
-omit = Test/*
+omit =
+    Test/*
+    docker/train.py
 include =
     App/*
     docker/*

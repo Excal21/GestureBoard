@@ -33,6 +33,7 @@ jobs:
           python -m venv .venv
           .venv\Scripts\python.exe -m pip install --upgrade pip
           .venv\Scripts\pip.exe install -r ./App/requirements.txt
+          .venv\Scripts\pip.exe install flask
           .venv\Scripts\pip.exe install pytest-qt
           .venv\Scripts\pip.exe install pyinstaller pytest-cov pytest-github-actions-annotate-failures
         if: steps.cache-venv.outputs.cache-hit != 'true'

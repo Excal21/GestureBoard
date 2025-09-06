@@ -4,7 +4,6 @@ from flask import Flask, request, jsonify, send_file, abort
 import shutil
 import zipfile
 
-from train import *
 
 app = Flask(__name__)
 training_state = {'status': 'idle'}
@@ -93,7 +92,7 @@ def upload_chunk():
 @app.route('/merge_chunks', methods=['POST'])
 def merge_chunks():
     data = request.get_json()
-    final_filename = data.get('filename', 'Images.zip')
+    final_filename = data.get('filename')
     final_path = os.path.join(UPLOAD_DIR, final_filename)
 
     with open(final_path, "wb") as outfile:
@@ -161,5 +160,7 @@ def deleteImages():
         os.remove('Images.zip')
 
 if __name__ == '__main__':
+    from train import *
+
     app.config['MAX_CONTENT_LENGTH'] = 200 * 1024 * 1024
     app.run(host='0.0.0.0', port=5000)
