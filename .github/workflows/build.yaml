@@ -26,7 +26,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: .venv
-          key: ${{ runner.os }}-venv-${{ hashFiles('./UI/requirements.txt') }}
+          key: ${{ runner.os }}-venv-${{ hashFiles('./App/requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-venv-
 #
@@ -34,14 +34,14 @@ jobs:
         run: |
           python -m venv .venv
           .venv\Scripts\python.exe -m pip install --upgrade pip
-          .venv\Scripts\pip.exe install -r ./UI/requirements.txt
+          .venv\Scripts\pip.exe install -r ./App/requirements.txt
           .venv\Scripts\pip.exe install pytest-qt
           .venv\Scripts\pip.exe install pyinstaller pytest-cov pytest-github-actions-annotate-failures
         if: steps.cache-venv.outputs.cache-hit != 'true'
 
       - name: Run tests with coverage
         id: tests
-        run: .venv\Scripts\pytest.exe --disable-warnings --junitxml=pytest.xml --cov=UI --cov-report=xml:coverage.xml
+        run: .venv\Scripts\pytest.exe --disable-warnings --junitxml=pytest.xml --cov=App --cov-report=xml:coverage.xml
 
       - name: Pytest coverage comment
         if: always()
@@ -67,7 +67,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: .venv
-          key: ${{ runner.os }}-venv-${{ hashFiles('./UI/requirements.txt') }}
+          key: ${{ runner.os }}-venv-${{ hashFiles('./App/requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-venv-
 
@@ -75,7 +75,7 @@ jobs:
         run: |
           python -m venv .venv
           .venv\Scripts\python.exe -m pip install --upgrade pip
-          .venv\Scripts\pip.exe install -r ./UI/requirements.txt
+          .venv\Scripts\pip.exe install -r ./App/requirements.txt
           .venv\Scripts\pip.exe install pyinstaller==6.14.2
         if: steps.cache-venv.outputs.cache-hit != 'true'
 
@@ -85,9 +85,9 @@ jobs:
       - name: Build with PyInstaller
         shell: cmd
         run: |
-          .venv\Scripts\pyinstaller ./UI/main.py ^
+          .venv\Scripts\pyinstaller ./App/main.py ^
             --windowed ^
-            --icon=./UI/Resources/Icons/hand.ico ^
+            --icon=./App/Resources/Icons/hand.ico ^
             --hidden-import=tensorflow ^
             --noconfirm ^
             --clean ^
@@ -98,9 +98,9 @@ jobs:
           mkdir ./build_dist/Config
           mkdir ./build_dist/Data
           mkdir ./build_dist/Resources
-          xcopy /E /I /Y .\UI\Config .\build_dist\Config
-          xcopy /E /I /Y .\UI\Data .\build_dist\Data
-          xcopy /E /I /Y .\UI\Resources .\build_dist\Resources
+          xcopy /E /I /Y .\App\Config .\build_dist\Config
+          xcopy /E /I /Y .\App\Data .\build_dist\Data
+          xcopy /E /I /Y .\App\Resources .\build_dist\Resources
 
       - name: Clean up folder structure
         shell: cmd

@@ -6,17 +6,17 @@ from PySide6.QtWidgets import QApplication, QStackedWidget, QLabel, QPushButton,
 from PySide6.QtCore import Qt
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'UI')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'App')))
 
-from UI.Controllers.TrainMenuController import TrainMenuController
-from UI.Resources.Stylesheets.styles import *
+from App.Controllers.TrainMenuController import TrainMenuController
+from App.Resources.Stylesheets.styles import *
 
 if QApplication.instance() is None:
     app = QApplication(sys.argv)
 
 stacked_widget = QStackedWidget()
 
-project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'UI'))
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'App'))
 os.chdir(project_root)
 
 train_menu = TrainMenuController(stacked_widget)

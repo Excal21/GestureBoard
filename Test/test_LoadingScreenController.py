@@ -4,7 +4,7 @@ from PySide6.QtWidgets import QApplication, QStackedWidget
 from PySide6.QtGui import QFont, QFontDatabase
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'UI')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'App')))
 
 
 if QApplication.instance() is None:
@@ -12,10 +12,10 @@ if QApplication.instance() is None:
 
 stacked_widget = QStackedWidget()
 
-from UI.Controllers.LoadingScreenController import LoadingScreenController
-from UI.Resources.Stylesheets import *
+from App.Controllers.LoadingScreenController import LoadingScreenController
+from App.Resources.Stylesheets import *
 
-project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'UI'))
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'App'))
 os.chdir(project_root)
 
 loading_screen = LoadingScreenController(stacked_widget)

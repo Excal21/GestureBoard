@@ -1,7 +1,7 @@
 #Samples
 docker/__pycache__/
 __pycache__
-gesture_recognizer.task
+
 
 # This file is used to ignore files which are generated
 # ----------------------------------------------------------------------------
@@ -91,3 +91,5 @@ CMakeLists.txt.user*
 .coverage
 */.coverage
 /.qtcreator
+
+/Diagramok

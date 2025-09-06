@@ -8,7 +8,7 @@ from PySide6.QtCore import Qt
 
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'UI')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'App')))
 
 
 if QApplication.instance() is None:
@@ -16,10 +16,10 @@ if QApplication.instance() is None:
 
 stacked_widget = QStackedWidget()
 
-from UI.Controllers.MainMenuController import MainMenuController
-from UI.Resources.Stylesheets.styles import *
+from App.Controllers.MainMenuController import MainMenuController
+from App.Resources.Stylesheets.styles import *
 
-project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'UI'))
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'App'))
 os.chdir(project_root)
 
 mainMenu = MainMenuController(stacked_widget)

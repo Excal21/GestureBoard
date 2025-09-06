@@ -1,7 +1,7 @@
 [run]
-source = UI
+source = App
 relative_files = True
 
 [report]
 omit = Test/*
-include = UI/*
+include = App/*

@@ -24,7 +24,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: .venv
-          key: ${{ runner.os }}-venv-${{ hashFiles('./UI/requirements.txt') }}
+          key: ${{ runner.os }}-venv-${{ hashFiles('./App/requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-venv-
 #
@@ -32,14 +32,14 @@ jobs:
         run: |
           python -m venv .venv
           .venv\Scripts\python.exe -m pip install --upgrade pip
-          .venv\Scripts\pip.exe install -r ./UI/requirements.txt
+          .venv\Scripts\pip.exe install -r ./App/requirements.txt
           .venv\Scripts\pip.exe install pytest-qt
           .venv\Scripts\pip.exe install pyinstaller pytest-cov pytest-github-actions-annotate-failures
         if: steps.cache-venv.outputs.cache-hit != 'true'
 
       - name: Run tests with coverage
         id: tests
-        run: .venv\Scripts\pytest.exe --disable-warnings --junitxml=pytest.xml --cov=UI --cov-report=xml:coverage.xml
+        run: .venv\Scripts\pytest.exe --disable-warnings --junitxml=pytest.xml --cov=App --cov-report=xml:coverage.xml
 
       - name: Pytest coverage comment
         if: always()

@@ -5,11 +5,11 @@ from PySide6.QtWidgets import QApplication, QWidget, QPushButton
 from PySide6.QtCore import Qt, QPoint
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'UI')))
-from UI.main import MainWindow
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'App')))
+from App.main import MainWindow
 from unittest.mock import patch
 
-project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'UI'))
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'App'))
 os.chdir(project_root)
 
 @pytest.fixture

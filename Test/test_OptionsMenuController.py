@@ -6,18 +6,18 @@ from PySide6.QtCore import Qt, QPoint, QEvent, QSize
 import copy
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'UI')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'App')))
 
 if QApplication.instance() is None:
     app = QApplication(sys.argv)
 
 stacked_widget = QStackedWidget()
 
-from UI.Controllers.OptionsMenuController import OptionsMenuController
-from UI.Resources.Stylesheets.styles import *
+from App.Controllers.OptionsMenuController import OptionsMenuController
+from App.Resources.Stylesheets.styles import *
 import json
 
-project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'UI'))
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'App'))
 os.chdir(project_root)
 
 options_menu = OptionsMenuController(stacked_widget)

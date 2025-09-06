@@ -2,7 +2,7 @@ import os
 from mediapipe.tasks import python
 import pytest
 
-project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'UI'))
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'App'))
 os.chdir(project_root)
 
 @pytest.mark.filterwarnings('ignore::DeprecationWarning')
