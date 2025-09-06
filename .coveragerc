@@ -1,7 +1,11 @@
 [run]
-source = App
+source =
+    App
+    docker
 relative_files = True
 
 [report]
 omit = Test/*
-include = App/*
+include =
+    App/*
+    docker/*
