@@ -119,7 +119,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Gesztusok tanítása</string>
+     <string>Modell tanítása</string>
     </property>
    </widget>
    <widget class="QPushButton" name="btnDelete">
@@ -132,7 +132,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Gesztus törlése</string>
+     <string>Kiválasztott törlése</string>
     </property>
    </widget>
    <widget class="QScrollArea" name="scrollArea">

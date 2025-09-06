@@ -53,11 +53,21 @@ class TrainMenuController(BaseController):
             print(self.previous_page)
             with open('Config/UserSettings.json', 'r', encoding='UTF-8') as f:
                 self.data = dict(json.load(f))
-            
+                self.ui.btnTrain.setEnabled(False)
+                self.ui.btnTrain.setStyleSheet(options_button_style + disabled_style)
+                self.ui.btnTrain.enterEvent = lambda event: None
+                self.ui.btnTrain.leaveEvent = lambda event: None
+       
             print('USerSettings JSON betöltve a TrainMenuController-be')
             self.updateList()
         elif index == 3 and self.previous_page == 4:
             self.updateList()
+            
+            self.ui.btnTrain.setEnabled(True)
+            self.ui.btnTrain.setStyleSheet(options_button_style)
+            self.ui.btnTrain.enterEvent = lambda event: self.ui.btnTrain.setStyleSheet(options_button_hover_style)
+            self.ui.btnTrain.leaveEvent = lambda event: self.ui.btnTrain.setStyleSheet(options_button_style)    
+            
 
         self.previous_page = index
         # elif index == 3:
@@ -108,6 +118,13 @@ class TrainMenuController(BaseController):
                 shutil.move('Data/Samples/' + self.selected_gesture, 'Data/Marked for delete/' + self.selected_gesture)
 
         self.updateList()
+
+        self.ui.btnTrain.setEnabled(True)
+        self.ui.btnTrain.setStyleSheet(options_button_style)
+        self.ui.btnTrain.enterEvent = lambda event: self.ui.btnTrain.setStyleSheet(options_button_hover_style)
+        self.ui.btnTrain.leaveEvent = lambda event: self.ui.btnTrain.setStyleSheet(options_button_style)    
+            
+
         self.selected_gesture = None
 
     def cleanUp(self):
@@ -165,7 +182,8 @@ class TrainMenuController(BaseController):
         loading_page = self.stacked_widget.widget(0)
         info_widget = loading_page.findChild(QLabel, 'lblLoading')
 
-        info_widget.setText('Várakozás a kiszolgálóra...')
+        info_widget.setText('Várakozás a kiszolgálóra...' + ('\n~1 perc' if self.ui.checkCloud.isChecked() else ''))
+        info_widget.setAlignment(Qt.AlignCenter)
         self.stacked_widget.setCurrentIndex(0)
 
 
@@ -219,9 +237,6 @@ class TrainMenuController(BaseController):
         self.ui.btnDelete.leaveEvent = lambda event: self.ui.btnDelete.setStyleSheet(options_button_style)
         self.ui.btnDelete.clicked.connect(self.delete)
 
-
-        self.ui.btnTrain.enterEvent = lambda event: self.ui.btnTrain.setStyleSheet(options_button_hover_style)
-        self.ui.btnTrain.leaveEvent = lambda event: self.ui.btnTrain.setStyleSheet(options_button_style)        
         self.ui.btnTrain.clicked.connect(lambda event: self.startTraining())
 
 
@@ -238,7 +253,7 @@ class TrainMenuController(BaseController):
         self.ui.txtinputServer.setPlaceholderText('http://127.0.0.1:5000')
         self.ui.txtinputServer.setContextMenuPolicy(Qt.NoContextMenu)
         self.ui.lblDescription.setText(
-            self.textToHTML('Add meg a tanítást végző kiszolgáló címét és portját, majd rögzítsd és tanítsd meg saját gesztusaidat!')
+            self.textToHTML('Rögzíts új gesztusokat vagy törölj a meglévőkből, majd tanítsd újra a modellt!')
         )
 
         self.ui.lblServer.setFixedHeight(30)

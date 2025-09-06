@@ -1,9 +1,9 @@
 {
     "Camera": 0,
     "HueOffset": 0,
-    "Distance": 100,
-    "Confidence": 0.0,
-    "FrameCount": 1,
-    "Delay": 0.0,
+    "Distance": 365,
+    "Confidence": 0.6,
+    "FrameCount": 5,
+    "Delay": 1.0,
     "FrameThrottling": true
 }
