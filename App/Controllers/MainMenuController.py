@@ -65,8 +65,8 @@ class MainMenuController(BaseController):
             self.ui.btnStart.setText('Gesztusvezérlés kikapcsolása')
             self.ui.btnOptions.setEnabled(False)
             self.ui.btnCameraOptions.setEnabled(False)
-            self.ui.btnOptions.setStyleSheet(button_hover_style)
-            self.ui.btnCameraOptions.setStyleSheet(button_hover_style)
+            self.ui.btnOptions.setStyleSheet(button_style + disabled_style)
+            self.ui.btnCameraOptions.setStyleSheet(button_style + disabled_style)
             self.ui.btnOptions.enterEvent = lambda event: None
             self.ui.btnOptions.leaveEvent = lambda event: None
     

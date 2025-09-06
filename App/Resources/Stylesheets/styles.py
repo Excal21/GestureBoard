@@ -144,10 +144,12 @@ train_input_style = '''
             padding-left: 5px;
 '''
 
-train_input_disabled_style = train_input_style + '''
+disabled_style = '''
             background: lightgray;
             color: rgb(100, 100, 100);
 '''
+
+train_input_disabled_style = train_input_style + disabled_style
 
 slider_style = '''
         QSlider::groove:horizontal {
