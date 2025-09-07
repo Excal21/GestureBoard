@@ -42,7 +42,7 @@ jobs:
 
       - name: Run tests with coverage
         id: tests
-        run: .venv\Scripts\pytest.exe --disable-warnings --junitxml=pytest.xml --cov=App --cov-report=xml:coverage.xml
+        run: .venv\Scripts\pytest.exe --disable-warnings --junitxml=pytest.xml --cov=App --cov=docker --cov-report=xml:coverage.xml
 
       - name: Pytest coverage comment
         if: always()
