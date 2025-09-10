@@ -232,18 +232,25 @@ class Recognizer:
 
 
     self.__stop = False
-    cap = cv2.VideoCapture()
+    cap = cv2.VideoCapture(self.__camera)
     cap.setExceptionMode(True)
 
-    try:
-      if type(self.__camera) == int:
-        cap.open(self.__camera, cv2.CAP_DSHOW)
-        cap.set(cv2.CAP_PROP_FPS, 30)
-      else:
-        cap.open(self.__camera,  apiPreference=cv2.CAP_FFMPEG,
-        params=[cv2.CAP_PROP_OPEN_TIMEOUT_MSEC, 500])
-    except:
+    if not cap.isOpened():
+      print("Nem sikerült megnyitni a kamerát")
       self.__error = True
+      return
+
+    cap.set(cv2.CAP_PROP_FPS, 30)
+
+    # try:
+    #   if type(self.__camera) == int:
+    #     cap.open(self.__camera, cv2.CAP_DSHOW)
+    #     cap.set(cv2.CAP_PROP_FPS, 30)
+    #   else:
+    #     cap.open(self.__camera,  apiPreference=cv2.CAP_FFMPEG,
+    #     params=[cv2.CAP_PROP_OPEN_TIMEOUT_MSEC, 500])
+    # except:
+    #   self.__error = True
     
 
     last_gestures = deque(maxlen=self.__framecount)
