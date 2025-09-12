@@ -41,5 +41,5 @@ class RecognizerHandler(QThread):
         self.__recognizer.camerafeed = True
 
     def stop(self):
-        self.__recognizer.Stop()
+        self.__recognizer.stop = True
         print('Recognizer stopped')

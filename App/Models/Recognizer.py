@@ -44,73 +44,17 @@ class Recognizer:
           )
       self.recognizer = python.vision.GestureRecognizer.create_from_options(self.options)
 
-      self.__camera = 0
-      self.__confidence = 0.5
-      self.__stop = False
-      self.__commands = {}
-      self.__camerafeed = True
-      self.__framecount = 5
-      self.__hueoffset = 0
-      self.__distance = 500
-      self.__delay = 1
-      self.__error = False
-      self.__configpath = config_path
-
-#region Getterek Setterek
-  @property
-  def framecount(self):
-    return self.__framecount
-  @framecount.setter
-  def framecount(self, value):
-    self.__framecount = value
-
-
-  @property
-  def camera(self):
-    return self.__camera
-  
-  @camera.setter
-  def camera(self, value):
-    if type(value) is str:
-      self.__camera = 'http://' + value + ':8080/video'
-    else:
-      self.__camera = value
-
-  @property
-  def labels(self):
-    return self.__labels
-
-  @property
-  def labels_with_alias(self):
-    return self.__labels_with_alias
-
-  @property
-  def commands(self):
-    return self.__commands
-  @commands.setter
-  def commands(self, value):
-    self.__commands = value
-
-  @property
-  def confidence(self):
-    return self.__confidence
-  @confidence.setter
-  def confidence(self, value):
-    self.__confidence = value/100
-
-  @property
-  def camerafeed(self):
-    return self.__camerafeed
-  @camerafeed.setter
-  def camerafeed(self, value):
-    self.__camerafeed = value
-
-  @property
-  def error(self):
-    return self.__error
-  @error.setter
-  def error(self, value):
-    self.__error = value
+      self.camera = 0
+      self.confidence = 0.5
+      self.stop = False
+      self.commands = {}
+      self.camerafeed = True
+      self.framecount = 5
+      self.hueoffset = 0
+      self.distance = 500
+      self.delay = 1
+      self.error = False
+      self.configpath = config_path
 
 #endregion
 
@@ -208,20 +152,20 @@ class Recognizer:
 
 #region Konfigurációs fájlok betöltése
   def loadGestures(self):
-    with open(self.__configpath, "r", encoding='UTF-8') as file:
+    with open(self.configpath, "r", encoding='UTF-8') as file:
       data = dict(json.load(file))
     return data
 
   def loadCameraSettings(self):
     with open('Config/CameraSettings.json', encoding='UTF-8') as f:
       data = dict(json.load(f))
-      self.__camera = data['Camera']
-      self.__framecount = data['FrameCount']
-      self.__confidence = data['Confidence']
-      self.__hueoffset = data['HueOffset']
-      self.__distance = data['Distance']
-      self.__delay = data['Delay']
-      self.__framethrottling = data['FrameThrottling']
+      self.camera = data['Camera']
+      self.framecount = data['FrameCount']
+      self.confidence = data['Confidence']
+      self.hueoffset = data['HueOffset']
+      self.distance = data['Distance']
+      self.delay = data['Delay']
+      self.framethrottling = data['FrameThrottling']
 #endregion
 
 #region Gesztusfelismerés
@@ -229,31 +173,19 @@ class Recognizer:
     print('Recognizer started')
     self.loadCameraSettings()
     gesture_mappings = self.loadGestures()
-
-
-    self.__stop = False
-    cap = cv2.VideoCapture(self.__camera)
+    self.stop = False
+    cap = cv2.VideoCapture(self.camera, cv2.CAP_DSHOW)
     cap.setExceptionMode(True)
 
     if not cap.isOpened():
       print("Nem sikerült megnyitni a kamerát")
-      self.__error = True
+      self.error = True
       return
 
     cap.set(cv2.CAP_PROP_FPS, 30)
 
-    # try:
-    #   if type(self.__camera) == int:
-    #     cap.open(self.__camera, cv2.CAP_DSHOW)
-    #     cap.set(cv2.CAP_PROP_FPS, 30)
-    #   else:
-    #     cap.open(self.__camera,  apiPreference=cv2.CAP_FFMPEG,
-    #     params=[cv2.CAP_PROP_OPEN_TIMEOUT_MSEC, 500])
-    # except:
-    #   self.__error = True
-    
 
-    last_gestures = deque(maxlen=self.__framecount)
+    last_gestures = deque(maxlen=self.framecount)
     last_gesture_time = datetime.now()
 
     skip_frames = False
@@ -261,24 +193,22 @@ class Recognizer:
     no_gesture_count = 0
 
 
-    while not self.__stop and not self.__error: 
-      #Beépített kamera
-      #img = cv2.flip(img, 1)
+    while not self.stop and not self.error: 
       frame_index += 1
-      if self.__framethrottling and skip_frames and frame_index % 2 != 0:
+      if self.framethrottling and skip_frames and frame_index % 2 != 0:
         cv2.waitKey(int(1000 / 30))
         continue
       
       ret, img = cap.read()
       img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
       
-      if self.__hueoffset != 0:
+      if self.hueoffset != 0:
         img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
-        img[:, :, 0] += self.__hueoffset
+        img[:, :, 0] += self.hueoffset
         img = cv2.cvtColor(img, cv2.COLOR_HSV2BGR)
       
       if cv2.waitKey(1) == 27: 
-          self.__stop = True
+          self.stop = True
       mp_image = Image(image_format=ImageFormat.SRGB, data=img)
 
 
@@ -309,7 +239,7 @@ class Recognizer:
           score = gesture[0].score
           if name != 'NONE' and name != '':
               if score > (self.confidence - 0.2):
-                  if distances[closest_hand][0] <= self.__distance or distances[closest_hand][1] <= self.__distance:
+                  if distances[closest_hand][0] <= self.distance or distances[closest_hand][1] <= self.distance:
                       last_gestures.append((name, score))
                       gesture_detected = True
                       print(f"Gesture: {name}, Score: {score:.2f}, Distance: {distance_09}, 5-17 Distance: {distance_517}")
@@ -321,15 +251,15 @@ class Recognizer:
             last_gestures.append(("NONE", 0.0))
 
       # Majority voting
-      if len(last_gestures) >= self.__framecount:
+      if len(last_gestures) >= self.framecount:
           counts = Counter([g[0] for g in last_gestures])
           majority_gesture, majority_count = counts.most_common(1)[0]
 
-          if (majority_count / self.__framecount) >= 0.8 and majority_gesture != 'NONE':
+          if (majority_count / self.framecount) >= 0.8 and majority_gesture != 'NONE':
               majority_confidences = [g[1] for g in last_gestures if g[0] == majority_gesture]
               avg_confidence = sum(majority_confidences) / len(majority_confidences)
 
-              if avg_confidence >= self.confidence and (datetime.now() - last_gesture_time).total_seconds() > self.__delay:
+              if avg_confidence >= self.confidence and (datetime.now() - last_gesture_time).total_seconds() > self.delay:
                   print(majority_gesture)
                   if majority_gesture in gesture_mappings.keys():
                       print(majority_gesture)
@@ -342,7 +272,7 @@ class Recognizer:
 
           last_gestures.clear()
 
-      if self.__framethrottling:
+      if self.framethrottling:
         # Skip logika frissítése
         if gesture_detected:
             no_gesture_count = 0
@@ -353,7 +283,7 @@ class Recognizer:
                 skip_frames = True
 
     
-      if self.__camerafeed:
+      if self.camerafeed:
         annotated_image = self.draw_landmarks_on_image(mp_image.numpy_view(), result)
 
         annotated_image = cv2.cvtColor(annotated_image, cv2.COLOR_BGR2RGB)
@@ -361,8 +291,6 @@ class Recognizer:
 
     cv2.destroyAllWindows()
 
-  def Stop(self):
-    self.__stop = True
 #endregion
 
 #region Közvetlen futtatás debughoz
