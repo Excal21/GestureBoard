@@ -88,7 +88,7 @@ class TrainMenuController(BaseController):
                     entry = QPushButton(value['gesture'])
                     entry.setStyleSheet(predefined_label_style + noborder)
                     entry.setFont(FontLoader.getFont())
-                    entry.setFixedHeight(33)
+                    entry.setFixedHeight(32)
                     
                     entry.clicked.connect(lambda event, key=key, entry = entry : self.select(key, entry))
                     

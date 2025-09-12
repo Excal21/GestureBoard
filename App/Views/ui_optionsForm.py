@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'optionsForm.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.8.2
+## Created by: Qt User Interface Compiler version 6.9.1
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -43,18 +43,18 @@ class Ui_OptionsForm(object):
         self.frameButtons.setFrameShadow(QFrame.Shadow.Raised)
         self.scrollArea = QScrollArea(self.frameButtons)
         self.scrollArea.setObjectName(u"scrollArea")
-        self.scrollArea.setGeometry(QRect(20, 20, 481, 311))
+        self.scrollArea.setGeometry(QRect(20, 10, 481, 311))
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
         self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 479, 309))
         self.scrollCombo = QScrollArea(self.scrollAreaWidgetContents)
         self.scrollCombo.setObjectName(u"scrollCombo")
-        self.scrollCombo.setGeometry(QRect(20, 10, 245, 321))
+        self.scrollCombo.setGeometry(QRect(20, 10, 245, 311))
         self.scrollCombo.setWidgetResizable(True)
         self.scrollComboWidgetContents = QWidget()
         self.scrollComboWidgetContents.setObjectName(u"scrollComboWidgetContents")
-        self.scrollComboWidgetContents.setGeometry(QRect(0, 0, 243, 319))
+        self.scrollComboWidgetContents.setGeometry(QRect(0, 0, 243, 309))
         self.scrollCombo.setWidget(self.scrollComboWidgetContents)
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
         self.btnSave = QPushButton(self.frameButtons)
@@ -63,7 +63,7 @@ class Ui_OptionsForm(object):
         self.btnSave.setGeometry(QRect(370, 340, 120, 40))
         self.btnReset = QPushButton(self.frameButtons)
         self.btnReset.setObjectName(u"btnReset")
-        self.btnReset.setGeometry(QRect(240, 340, 120, 40))
+        self.btnReset.setGeometry(QRect(229, 340, 131, 40))
         self.btnManager = QPushButton(self.frameButtons)
         self.btnManager.setObjectName(u"btnManager")
         self.btnManager.setGeometry(QRect(30, 340, 191, 40))

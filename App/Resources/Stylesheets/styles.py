@@ -45,6 +45,7 @@ predefined_label_style = '''
             color: black;
             font-size: 14pt;
             text-align: left;
+            border: none;
 '''
 
 predefined_hover_label_style = '''
@@ -88,6 +89,8 @@ scrollbar_style ='''
             background: rgb(212, 212, 212);
             width: 10px;
             border-radius: 5px;
+            margin-top: 10px;
+            margin-bottom: 10px;
         }
 
         QScrollBar::handle:vertical {
@@ -117,7 +120,40 @@ scrollbar_style ='''
         }
 '''
 
-train_scrollBar_style = scrollbar_style + '''
+train_scrollBar_style = '''
+        QScrollBar:vertical {
+            border: none;
+            background: rgb(212, 212, 212);
+            width: 10px;
+            border-radius: 5px;
+        }
+
+        QScrollBar::handle:vertical {
+            background: rgb(36, 41, 67);
+            height: 20px;
+            border-radius: 5px;
+            border: none;
+            background-clip: border-box;
+        }
+
+        QScrollBar::handle:vertical:hover {
+            background: rgb(0, 172, 201)
+        }
+
+        /* Nyilak eltüntetése */
+        QScrollBar::sub-line:vertical,
+        QScrollBar::add-line:vertical {
+            background: none;
+            height: 0px;
+            border: none;
+        }
+
+        /* Görgetősáv végeinek lekerekítése */
+        QScrollBar::sub-page:vertical,
+        QScrollBar::add-page:vertical {
+            border-radius: 5px;
+        }
+
         #scrollArea {
             border: 1px solid rgb(70, 70, 70);
             background: white;

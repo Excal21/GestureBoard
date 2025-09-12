@@ -48,7 +48,7 @@ class OptionsMenuController(BaseController):
 
             gesture_entry = QWidget()
             gesture_entry_layout = QHBoxLayout(gesture_entry)
-            gesture_entry_layout.setSpacing(0) #Távolság a gomb és a hosszabb címke közt
+            gesture_entry_layout.setSpacing(0)
             gesture_entry.setFixedHeight(70)
 
             label = QLabel(entry['gesture'])
@@ -59,7 +59,7 @@ class OptionsMenuController(BaseController):
             btnKey = QPushButton()
             btnConsole = QPushButton()                
 
-            #Gombok ikonjainak beállítása
+
             btnCombo.setIcon(QIcon('Resources/Icons/widget.png'))
             btnCombo.setIconSize(QSize(40, 40))
 
@@ -152,6 +152,7 @@ class OptionsMenuController(BaseController):
         for predefined_action in predefined_actions_data.items():
             combo_entry = QPushButton(predefined_action[0])
             combo_entry.setFixedHeight(30)
+            combo_entry.setFixedWidth(220)
             combo_entry.setStyleSheet(predefined_label_style)
             combo_entry.setFont(FontLoader.getFont())
             
@@ -412,7 +413,7 @@ class OptionsMenuController(BaseController):
 
         #Előre definiált beállítások menüje
         self.ui.scrollCombo.hide()
-
+        self.ui.scrollCombo.verticalScrollBar().setContentsMargins(0, 20, 0, 0)
         self.ui.scrollCombo.verticalScrollBar().setContextMenuPolicy(Qt.NoContextMenu)
         self.ui.scrollCombo.horizontalScrollBar().setContextMenuPolicy(Qt.NoContextMenu)
         self.predefined_clicked = None
