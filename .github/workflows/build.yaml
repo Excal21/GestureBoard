@@ -95,6 +95,7 @@ jobs:
           .venv\Scripts\pyinstaller ./App/main.py ^
             --windowed ^
             --icon=./App/Resources/Icons/hand.ico ^
+            --paths=./App/Resources/Stylesheets ^
             --hidden-import=tensorflow ^
             --noconfirm ^
             --clean ^

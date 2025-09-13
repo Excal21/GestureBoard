@@ -7,7 +7,6 @@ from label_QSS import *
 from scrollBar_QSS import *
 
 
-
 sidebar_style = '''
             background-color: rgb(36 , 41 , 67)
 '''
