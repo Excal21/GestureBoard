@@ -25,7 +25,7 @@ def test_loadConfig():
 
 def test_loadCameraSettings():
     recognizer.loadCameraSettings()
-    assert recognizer.camera != None
+    assert recognizer.camera is not None
     assert recognizer.camera in [-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
     assert recognizer.confidence >= 0 and recognizer.confidence <= 1
     assert recognizer.hueoffset >= 0 and recognizer.hueoffset <= 255
@@ -35,7 +35,7 @@ def test_loadCameraSettings():
 
 def test_reloadModel():
     recognizer.reloadModel()
-    assert recognizer.recognizer != None
+    assert recognizer.recognizer is not None
 
 def test_annotateImage():
     img = cv2.imread('Data/Samples/2/2_1')

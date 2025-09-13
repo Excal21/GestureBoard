@@ -88,4 +88,4 @@ def test_backup():
 def test_cleanup():
     os.makedirs('Data/Marked for delete', exist_ok=True)
     train_menu.cleanUp()
-    assert os.path.exists('Data/Marked for delete') == False
+    assert not os.path.exists('Data/Marked for delete')

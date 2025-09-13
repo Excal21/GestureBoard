@@ -2,14 +2,7 @@ import requests
 import sys
 import os
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'App')))
-
-from App.Models.Trainer import *
-
-project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'App'))
-os.chdir(project_root)
-
+API_KEY = '7fe4d89eeed500e650dcdd94cfe91cd202c6cca3bb1b9d36f2a366dd39af2965'
 
 def test_status():
     response = requests.get("https://api.gestureboard.com/status", headers={'X-API-Key': API_KEY}, timeout=60)
