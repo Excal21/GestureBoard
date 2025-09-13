@@ -8,6 +8,7 @@ from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLa
 from PySide6.QtCore import Qt, QSize
 from PySide6.QtGui import QFontDatabase, QFont, QIcon, QKeyEvent, QKeySequence
 from PySide6.QtWidgets import QApplication, QStackedWidget
+
 from Resources.Stylesheets.styles import *
 from Views.ui_optionsForm import Ui_OptionsForm
 from Controllers.BaseController import BaseController
@@ -48,8 +49,9 @@ class OptionsMenuController(BaseController):
 
             gesture_entry = QWidget()
             gesture_entry_layout = QHBoxLayout(gesture_entry)
-            gesture_entry_layout.setSpacing(0) #Távolság a gomb és a hosszabb címke közt
+            gesture_entry_layout.setSpacing(0)
             gesture_entry.setFixedHeight(70)
+            gesture_entry.setContentsMargins(0, 0, 0, 0)
 
             label = QLabel(entry['gesture'])
             label.setStyleSheet(entry_label_style)
@@ -59,7 +61,7 @@ class OptionsMenuController(BaseController):
             btnKey = QPushButton()
             btnConsole = QPushButton()                
 
-            #Gombok ikonjainak beállítása
+
             btnCombo.setIcon(QIcon('Resources/Icons/widget.png'))
             btnCombo.setIconSize(QSize(40, 40))
 
@@ -113,6 +115,7 @@ class OptionsMenuController(BaseController):
 
             self.scroll_layout.addWidget(gesture_entry)
         
+        self.scroll_layout.setSpacing(3)
         self.scroll_layout.addStretch()
 
     def resetEntry(self, key):
@@ -152,6 +155,7 @@ class OptionsMenuController(BaseController):
         for predefined_action in predefined_actions_data.items():
             combo_entry = QPushButton(predefined_action[0])
             combo_entry.setFixedHeight(30)
+            combo_entry.setFixedWidth(220)
             combo_entry.setStyleSheet(predefined_label_style)
             combo_entry.setFont(FontLoader.getFont())
             
@@ -285,7 +289,7 @@ class OptionsMenuController(BaseController):
     # def keyReleaseEvent(self, event):   <== lol ezt minek raktam ide
     #     if self.keycapture_active:
     #         self.ui.lblUserGuide.setText('Billentyűkombináció')
-
+#endregion
 
 #region Parancs megadása
     def showCommandInput(self, key):
@@ -412,7 +416,7 @@ class OptionsMenuController(BaseController):
 
         #Előre definiált beállítások menüje
         self.ui.scrollCombo.hide()
-
+        self.ui.scrollCombo.verticalScrollBar().setContentsMargins(0, 20, 0, 0)
         self.ui.scrollCombo.verticalScrollBar().setContextMenuPolicy(Qt.NoContextMenu)
         self.ui.scrollCombo.horizontalScrollBar().setContextMenuPolicy(Qt.NoContextMenu)
         self.predefined_clicked = None

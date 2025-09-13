@@ -4,7 +4,7 @@ import cv2
 import json
 
 
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout
+from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QAbstractScrollArea
 from PySide6.QtCore import Qt, QTimer, QSize
 from PySide6.QtGui import QFontDatabase, QFont, QImage, QPixmap, QRegion, QPainterPath, QIcon, QPainter, QColor
 
@@ -142,7 +142,7 @@ class CameraOptionsController(BaseController):
         self.scroll_area.setWidgetResizable(True)
         self.scroll_layout = QVBoxLayout(self.ui.scrollAreaWidgetContents)
         self.scroll_area.setWidget(self.ui.scrollAreaWidgetContents)
-
+        self.scroll_layout.setContentsMargins(0, 0, 20, 0)
 
         self.ui.spinConfidence.setAlignment(Qt.AlignCenter)
         self.ui.spinFrameCnt.setAlignment(Qt.AlignCenter)
@@ -151,7 +151,8 @@ class CameraOptionsController(BaseController):
         self.ui.spinConfidence.setContentsMargins(0, 0, 0, 0)
         self.ui.spinFrameCnt.setContentsMargins(0, 0, 0, 0)
         self.ui.spinDelay.setContentsMargins(0, 0, 0, 0)
-
+        
+        self.scroll_layout.addSpacing(20)
         
         pairs = [
                 (self.ui.lblCamera, self.ui.comboCamera),
@@ -168,10 +169,12 @@ class CameraOptionsController(BaseController):
         for widget1, widget2 in pairs:
             line = QHBoxLayout()
             if widget1: line.addWidget(widget1)
-            line.addStretch()  # opcionális, ha igazítani szeretnéd
+            line.addStretch()
             if widget2: line.addWidget(widget2)
             self.scroll_layout.addLayout(line)
     
+        self.scroll_layout.addStretch()
+
         self.ui.spinConfidence.setFixedWidth(50)
         self.ui.spinFrameCnt.setFixedWidth(50)
         self.ui.spinDelay.setFixedWidth(50)
@@ -181,16 +184,16 @@ class CameraOptionsController(BaseController):
         self.ui.sliderDistance.setFixedWidth(200)
         self.ui.sliderSensitivity.setFixedWidth(200)
 
-        self.ui.lblCamera.setFixedHeight(40)
-        self.ui.comboCamera.setFixedHeight(40)
-        self.ui.lblHue.setFixedHeight(40)
-        self.ui.lblDistance.setFixedHeight(40)
-        self.ui.lblConfidence.setFixedHeight(40)
-        self.ui.lblFrameCnt.setFixedHeight(40)
-        self.ui.lblDelay.setFixedHeight(40)
-        self.ui.lblSensitivity.setFixedHeight(40)
-        self.ui.lblRadius.setFixedHeight(40)
-        self.ui.btnStartCam.setFixedHeight(40)
+        self.ui.lblCamera.setFixedHeight(42)
+        self.ui.comboCamera.setFixedHeight(42)
+        self.ui.lblHue.setFixedHeight(42)
+        self.ui.lblDistance.setFixedHeight(42)
+        self.ui.lblConfidence.setFixedHeight(42)
+        self.ui.lblFrameCnt.setFixedHeight(42)
+        self.ui.lblDelay.setFixedHeight(42)
+        self.ui.lblSensitivity.setFixedHeight(42)
+        self.ui.lblRadius.setFixedHeight(42)
+        self.ui.btnStartCam.setFixedHeight(42)
         
         self.ui.checkFrameThrottling.setFixedHeight(40) #Ezek csak a placeholderek!! QSS állítja a valósat
         self.ui.checkFrameThrottling.setFixedWidth(50)

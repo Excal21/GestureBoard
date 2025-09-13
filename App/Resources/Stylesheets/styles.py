@@ -1,60 +1,15 @@
-sidebar_title_style = '''
-            color: white;
-            font-size: 26pt;
-'''
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
+from button_QSS import *
+from label_QSS import *
+from scrollBar_QSS import *
+
+
 
 sidebar_style = '''
             background-color: rgb(36 , 41 , 67)
-'''
-
-button_style = '''
-            background-color: white;
-            color:  black;
-            border: 1px solid rgb(70, 70, 70);
-            border-radius: 10px;
-            font-size: 20pt;
-'''
-
-button_hover_style = button_style + '''
-            background-color: lightgray;
-'''
-
-entry_button_style = button_style
-
-options_button_style = button_style + '''
-            border-radius: 7px;
-            font-size: 14pt;
-'''
-
-options_button_hover_style = options_button_style + '''
-            background-color: lightgray;
-
-'''
-options_button_active_style = options_button_style + '''
-            background-color: rgb(0, 172, 201);
-'''
-
-
-entry_label_style = '''
-            color: rgb(36, 41, 67);
-            font-size: 20pt;
-            margin: 0px;
-'''
-
-predefined_label_style = '''
-            color: black;
-            font-size: 14pt;
-            text-align: left;
-'''
-
-predefined_hover_label_style = '''
-            color: black;
-            font-size: 14pt;
-            border: 1px solid rgb(70, 70, 70);
-            background-color: lightgray;
-            border-radius: 5px;
-            text-align: left;
-            padding-left: 2px;
 '''
 
 gesture_entry_style = '''
@@ -64,76 +19,6 @@ gesture_entry_style = '''
 description_style = '''
             color: white;
             font-size: 14pt;
-'''
-
-guide_style = '''
-            color: rgb(36, 41, 67);
-            font-size: 12pt;
-'''
-
-long_desciption_style = '''
-            color: white;
-            font-size: 12pt;
-'''
-
-info_label_style = '''
-            color: rgb(36, 41, 67);
-            font-size: 24pt;
-            '''
-
-
-scrollbar_style ='''
-        QScrollBar:vertical {
-            border: none;
-            background: rgb(212, 212, 212);
-            width: 10px;
-            border-radius: 5px;
-        }
-
-        QScrollBar::handle:vertical {
-            background: rgb(36, 41, 67);
-            height: 20px;
-            border-radius: 5px;
-            border: none;
-            background-clip: border-box;
-        }
-
-        QScrollBar::handle:vertical:hover {
-            background: rgb(0, 172, 201)
-        }
-
-        /* Nyilak eltüntetése */
-        QScrollBar::sub-line:vertical,
-        QScrollBar::add-line:vertical {
-            background: none;
-            height: 0px;
-            border: none;
-        }
-
-        /* Görgetősáv végeinek lekerekítése */
-        QScrollBar::sub-page:vertical,
-        QScrollBar::add-page:vertical {
-            border-radius: 5px;
-        }
-'''
-
-train_scrollBar_style = scrollbar_style + '''
-        #scrollArea {
-            border: 1px solid rgb(70, 70, 70);
-            background: white;
-            border-radius: 7px;
-        }
-        
-        #scrollAreaWidgetContents {
-            border: none;
-            background: transparent;
-            border-radius: 7px;
-        }
-'''
-
-train_label_style = '''
-            color: rgb(36, 41, 67);
-            font-size: 16pt;
 '''
 
 train_input_style = '''
@@ -184,10 +69,6 @@ slider_style = '''
         }
 '''
 
-camera_label_style = '''
-            background-color: white;
-            border-radius: 10px;
-'''
 
 camera_combo_style = '''
         QComboBox {
