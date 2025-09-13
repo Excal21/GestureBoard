@@ -195,7 +195,6 @@ def test_btnSave():
     options_menu.loadConfig()
     assert options_menu.data != {}, "Mentés után üres maradt a konfigfájl"
 
-    # Visszaállítjuk az eredeti konfigurációt
     options_menu.data = original_data
     options_menu.saveMappings()
 

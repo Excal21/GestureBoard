@@ -42,7 +42,6 @@ def test_eventHandlers():
 
 
 def test_start_activates_recognizer(qtbot, monkeypatch):
-    # Mock recognizer start/stop
     started = {}
     monkeypatch.setattr(mainMenu.recognizer, "start", lambda: started.setdefault("started", True))
     monkeypatch.setattr(mainMenu.recognizer, "stop", lambda: started.setdefault("stopped", True))
@@ -65,13 +64,10 @@ def test_start_activates_recognizer(qtbot, monkeypatch):
     assert isinstance(mainMenu.ui.btnCameraOptions.enterEvent, type(lambda: None))
     assert isinstance(mainMenu.ui.btnCameraOptions.leaveEvent, type(lambda: None))
 
-def test_start_deactivates_recognizer(qtbot, monkeypatch):
-    # Mock recognizer start/stop
     started = {}
     monkeypatch.setattr(mainMenu.recognizer, "start", lambda: started.setdefault("started", True))
     monkeypatch.setattr(mainMenu.recognizer, "stop", lambda: started.setdefault("stopped", True))
 
-    # Set recognizer as active
     mainMenu.recognizer_active = True
     mainMenu.ui.btnStart.setText('Gesztusvezérlés kikapcsolása')
     mainMenu.ui.btnOptions.setEnabled(False)
@@ -84,7 +80,6 @@ def test_start_deactivates_recognizer(qtbot, monkeypatch):
     assert mainMenu.ui.btnOptions.isEnabled()
     assert mainMenu.ui.btnCameraOptions.isEnabled()
     assert started.get("stopped", False)
-    # enterEvent and leaveEvent should set stylesheet
     mainMenu.ui.btnOptions.enterEvent(None)
     assert mainMenu.ui.btnOptions.styleSheet() == button_hover_style
     mainMenu.ui.btnOptions.leaveEvent(None)

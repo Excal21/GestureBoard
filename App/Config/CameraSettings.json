@@ -5,5 +5,5 @@
     "Confidence": 0.6,
     "FrameCount": 5,
     "Delay": 1.0,
-    "FrameThrottling": true
+    "FrameThrottling": false
 }
