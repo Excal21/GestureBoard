@@ -1,5 +1,8 @@
 import os
 import sys
+import json
+import shutil
+import stat
 
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QApplication
@@ -9,9 +12,6 @@ from time import sleep
 from Resources.Stylesheets.styles import *
 from Views.ui_trainOptionsForm import Ui_Form
 from Models.Recorder import Recorder
-import json
-import shutil
-import stat
 from Models.Trainer import Trainer
 from Controllers.BaseController import BaseController
 from Resources.Fonts.FontLoader import FontLoader
