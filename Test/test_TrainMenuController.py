@@ -76,3 +76,16 @@ def test_delete_removes_selected_gesture():
     btn.click()
     train_menu.delete()
     assert "1" not in train_menu.data
+
+def test_backup():
+    train_menu.backup()
+    train_menu.previous_page = 2
+    train_menu.onReturn(index=3)
+    train_menu.updateList()
+    
+    assert len(train_menu.data) == 4
+
+def test_cleanup():
+    os.makedirs('Data/Marked for delete', exist_ok=True)
+    train_menu.cleanUp()
+    assert not os.path.exists('Data/Marked for delete')

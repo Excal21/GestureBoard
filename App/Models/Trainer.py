@@ -22,7 +22,7 @@ class Trainer(QThread):
     
     def run(self):
         try:
-            response = requests.get(self.address + '/status', headers={'X-API-KEY': API_KEY})
+            response = requests.get(self.address + '/status', headers={'X-API-KEY': API_KEY}, timeout=60)
             if response.status_code == 200:
                 if response.json()['status'] == 'idle':
                     if os.path.exists(self.filename):

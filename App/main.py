@@ -56,7 +56,8 @@ class MainWindow(QMainWindow):
         self.ml.start()
 
     def closeEvent(self, event):
-        self.rl.stop()
+        if self.rl is not None:
+            self.rl.stop()
         event.accept()
 
 if __name__ == '__main__':
