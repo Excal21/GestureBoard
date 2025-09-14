@@ -13,6 +13,8 @@ from Resources.Stylesheets.styles import *
 from Views.ui_cameraOptionsForm import Ui_Form
 from Models.RecognizerHandler import RecognizerHandler
 from Models.Recorder import Recorder
+from Models.MouseProcessor import OverlayCircle
+
 from time import sleep
 from Controllers.BaseController import BaseController
 from Resources.Fonts.FontLoader import FontLoader
@@ -27,7 +29,8 @@ class CameraOptionsController(BaseController):
         self.ui.setupUi(self)
         self.initUI(
             {
-                'checkFrameThrottling': checkbox_style
+                'checkFrameThrottling': checkbox_style,
+                'checkInvertButtons': checkbox_style
             }
         )
         
@@ -40,6 +43,8 @@ class CameraOptionsController(BaseController):
 
         self.timer = None
 
+        self.overlay = OverlayCircle(circle_only=True)
+
         self.ui.sliderHue.setRange(0, 255)
         self.ui.sliderDistance.setRange(100, 500)
         self.ui.spinConfidence.setRange(0, 100)
@@ -47,7 +52,8 @@ class CameraOptionsController(BaseController):
         self.ui.spinDelay.setRange(0, 5)
         self.ui.spinDelay.setSingleStep(0.1)
         self.ui.spinDelay.setDecimals(1)
-
+        self.ui.sliderSensitivity.setRange(5, 30)
+        self.ui.sliderDrift.setRange(100, 350)
 
         self.ui.lblCvImg.setAlignment(Qt.AlignCenter)
         self.ui.lblCvImg.setPixmap(QPixmap('Resources/Icons/camera.png').scaled(100, 70, Qt.KeepAspectRatio, Qt.SmoothTransformation))
@@ -58,10 +64,10 @@ class CameraOptionsController(BaseController):
 
 
         #TOUCHLESSPAD
-        self.ui.lblRadius.setVisible(False)
-        self.ui.spinRadius.setVisible(False)
-        self.ui.lblSensitivity.setVisible(False)
-        self.ui.sliderSensitivity.setVisible(False)
+        # self.ui.lblRadius.setVisible(False)
+        # self.ui.spinRadius.setVisible(False)
+        # self.ui.lblSensitivity.setVisible(False)
+        # self.ui.sliderSensitivity.setVisible(False)
         
 #region Kamerakép
     def startCamera(self):
@@ -78,13 +84,13 @@ class CameraOptionsController(BaseController):
             self.timer.start(10)
             self.is_camera_on = True
             self.ui.btnStartCam.setStyleSheet(options_button_active_style + 'background-color: rgb(201, 97, 97)')
-            self.ui.btnStartCam.setText('Kamera leállítása')
+            self.ui.btnStartCam.setText('Leállítás')
         else:
             self.timer.stop()
             self.rec.cap.release()
             self.ui.lblCvImg.setPixmap(QPixmap('Resources/Icons/camera.png').scaled(100, 70, Qt.KeepAspectRatio, Qt.SmoothTransformation))
             self.is_camera_on = False
-            self.ui.btnStartCam.setText('Kamera tesztelése')
+            self.ui.btnStartCam.setText('Kamerateszt')
             self.ui.btnStartCam.setStyleSheet(options_button_style)
 
     def updateFrame(self):
@@ -147,7 +153,6 @@ class CameraOptionsController(BaseController):
         self.ui.spinConfidence.setAlignment(Qt.AlignCenter)
         self.ui.spinFrameCnt.setAlignment(Qt.AlignCenter)
         self.ui.spinDelay.setAlignment(Qt.AlignCenter)
-        self.ui.spinRadius.setAlignment(Qt.AlignCenter)
         self.ui.spinConfidence.setContentsMargins(0, 0, 0, 0)
         self.ui.spinFrameCnt.setContentsMargins(0, 0, 0, 0)
         self.ui.spinDelay.setContentsMargins(0, 0, 0, 0)
@@ -162,8 +167,10 @@ class CameraOptionsController(BaseController):
                 (self.ui.lblFrameCnt, self.ui.spinFrameCnt),
                 (self.ui.lblDelay, self.ui.spinDelay),
                 (self.ui.lblFrameThrottling, self.ui.checkFrameThrottling),
+                (self.ui.lblMouseSettings, None),
                 (self.ui.lblSensitivity, self.ui.sliderSensitivity),
-                (self.ui.lblRadius, self.ui.spinRadius),
+                (self.ui.lblRadius, self.ui.sliderDrift),
+                (self.ui.lblInvertButtons, self.ui.checkInvertButtons)
             ]
 
         for widget1, widget2 in pairs:
@@ -178,11 +185,11 @@ class CameraOptionsController(BaseController):
         self.ui.spinConfidence.setFixedWidth(50)
         self.ui.spinFrameCnt.setFixedWidth(50)
         self.ui.spinDelay.setFixedWidth(50)
-        self.ui.spinRadius.setFixedWidth(50)
 
         self.ui.sliderHue.setFixedWidth(200)
         self.ui.sliderDistance.setFixedWidth(200)
         self.ui.sliderSensitivity.setFixedWidth(200)
+        self.ui.sliderDrift.setFixedWidth(200)
 
         self.ui.lblCamera.setFixedHeight(42)
         self.ui.comboCamera.setFixedHeight(42)
@@ -191,6 +198,9 @@ class CameraOptionsController(BaseController):
         self.ui.lblConfidence.setFixedHeight(42)
         self.ui.lblFrameCnt.setFixedHeight(42)
         self.ui.lblDelay.setFixedHeight(42)
+
+        self.ui.lblMouseSettings.setContentsMargins(0, 30, 0, 0)
+        self.ui.lblMouseSettings.setFixedHeight(72)
         self.ui.lblSensitivity.setFixedHeight(42)
         self.ui.lblRadius.setFixedHeight(42)
         self.ui.btnStartCam.setFixedHeight(42)
@@ -199,6 +209,9 @@ class CameraOptionsController(BaseController):
         self.ui.checkFrameThrottling.setFixedWidth(50)
         self.ui.checkFrameThrottling.setChecked(True)
 
+        self.ui.checkInvertButtons.setFixedHeight(40)
+        self.ui.checkInvertButtons.setFixedWidth(50)
+        self.ui.checkInvertButtons.setChecked(False)
 #endregion
 
 #region Eseménykezelők
@@ -254,6 +267,10 @@ class CameraOptionsController(BaseController):
         self.ui.lblFrameThrottling.enterEvent = lambda event: self.ui.lblDescription.setText(
             self.textToHTML('Dinamikus képkocka-korlátozás. Csökkenti a CPU használatot, de nagyban növelheti a reakcióidőt.'))
         self.ui.lblFrameThrottling.leaveEvent = lambda event: self.ui.lblDescription.setText('')
+
+        self.ui.sliderDrift.enterEvent = lambda event: self.overlay.show()
+        self.ui.sliderDrift.leaveEvent = lambda event: self.overlay.hide()
+        self.ui.sliderDrift.valueChanged.connect(lambda value: self.overlay.setRadius(value))
 #endregion
 
 #region Beállítások kezelése
@@ -288,6 +305,9 @@ class CameraOptionsController(BaseController):
             self.ui.spinFrameCnt.setValue(self.data['FrameCount'])
             self.ui.spinDelay.setValue(self.data['Delay'])
             self.ui.checkFrameThrottling.setChecked(self.data['FrameThrottling'])
+            self.ui.sliderSensitivity.setValue(self.data['Sensitivity'])
+            self.ui.sliderDrift.setValue(self.data['Drift'])
+            self.ui.checkInvertButtons.setChecked(self.data['InvertButtons'])
 
 
     
@@ -299,6 +319,9 @@ class CameraOptionsController(BaseController):
         self.data['FrameCount'] = self.ui.spinFrameCnt.value()
         self.data['Delay'] = self.ui.spinDelay.value()
         self.data['FrameThrottling'] = self.ui.checkFrameThrottling.isChecked()
+        self.data['Sensitivity'] = self.ui.sliderSensitivity.value()
+        self.data['Drift'] = self.ui.sliderDrift.value()
+        self.data['InvertButtons'] = self.ui.checkInvertButtons.isChecked()
 
         with open('Config/CameraSettings.json', 'w') as file:
             json.dump(self.data, file, indent=4)

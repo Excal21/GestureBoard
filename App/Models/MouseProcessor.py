@@ -12,9 +12,10 @@ from datetime import datetime, timedelta
 
 #region Overlay
 class OverlayCircle(QWidget):
-    def __init__(self, radius):
+    def __init__(self, radius = 100, circle_only = False):
         super().__init__()
         self.radius = radius
+        self.circle_only = circle_only
         self.index_finger_pos = QPoint(0, 0)
 
         self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint | Qt.Tool)
@@ -43,6 +44,10 @@ class OverlayCircle(QWidget):
         self.index_finger_pos = QPoint(fx, fy)
         self.update()
 
+    def setRadius(self, radius):
+        self.radius = radius
+        self.update()
+
     def paintEvent(self, event):
         if not self.isVisible():
             return
@@ -57,12 +62,13 @@ class OverlayCircle(QWidget):
         center_y = self.screen_height // 2
         painter.drawEllipse(center_x - self.radius, center_y - self.radius, self.radius * 2, self.radius * 2)
 
-        pen = QPen(QColor(100, 180, 255, 120), 15)
-        painter.setPen(pen)
-        painter.setBrush(Qt.NoBrush)
-        painter.drawEllipse(self.index_finger_pos.x() - 30,
-                    self.index_finger_pos.y() - 30,
-                    60, 60)
+        if not self.circle_only:
+            pen = QPen(QColor(100, 180, 255, 120), 15)
+            painter.setPen(pen)
+            painter.setBrush(Qt.NoBrush)
+            painter.drawEllipse(self.index_finger_pos.x() - 30,
+                        self.index_finger_pos.y() - 30,
+                        60, 60)
 
 #endregion
 
