@@ -42,4 +42,7 @@ class RecognizerHandler(QThread):
 
     def stop(self):
         self.__recognizer.stop = True
+        self.__recognizer.mouse_processor.hideOverlay()
+        self.__recognizer.mouse_active = False
+        self.__recognizer.framethrottling = self.__recognizer.framethrottling_prevstate
         print('Recognizer stopped')

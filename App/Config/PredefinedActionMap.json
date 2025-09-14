@@ -1,4 +1,5 @@
 {
+    "Egérmód ki/be": "self.toggleMouseMode()",
     "Böngésző elindítása": "os.system('start http://www.google.com')",
     "Képernyőkép készítése": "pyautogui.press('printscreen')",
     "Számológép indítása": "os.system('start calc')",
