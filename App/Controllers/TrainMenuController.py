@@ -183,7 +183,7 @@ class TrainMenuController(BaseController):
         info_widget = loading_page.findChild(QLabel, 'lblLoading')
 
         if self.ui.checkCloud.isChecked():
-            info_widget.setText('Várakozás a kiszolgálóra...<br><span style="font-size:10pt;">~1 perc</span>')
+            info_widget.setText('Várakozás a kiszolgálóra...<br><span style="font-size:20pt;">~1 perc</span>')
         else:
             info_widget.setText('Várakozás a kiszolgálóra...')
         info_widget.setAlignment(Qt.AlignCenter)

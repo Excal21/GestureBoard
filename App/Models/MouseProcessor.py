@@ -12,7 +12,7 @@ from datetime import datetime, timedelta
 
 #region Overlay
 class OverlayCircle(QWidget):
-    def __init__(self, radius = 100, circle_only = False):
+    def __init__(self, radius = 50, circle_only = False):
         super().__init__()
         self.radius = radius
         self.circle_only = circle_only
@@ -77,6 +77,7 @@ class MouseProcessor:
     def __init__(self, radius=250, sensitivity=15):
         self.radius = radius
         self.sensitivity = sensitivity
+        self.invert = False
         self.mouse = Controller()
         self.last_click_time = datetime.min
     
@@ -89,6 +90,7 @@ class MouseProcessor:
         self.screen_width = size.width()
         self.screen_height = size.height()
 
+        self.init_state = True
 
         self.prev_screen_x, self.prev_screen_y = None, None
         self.overlay_circle = OverlayCircle(self.radius)
@@ -98,20 +100,9 @@ class MouseProcessor:
 
     def showOverlay(self):
         self.overlay_circle.show()
+        self.initangles = None
 
-    def process(self, hand_landmarks):
-        lm08 = hand_landmarks[8]
-
-        lm00 = hand_landmarks[0]
-        lm09 = hand_landmarks[9] #Középső ujj töve
-
-        lm012 = hand_landmarks[12] #Középső ujj vége
-        lm010 = hand_landmarks[10] #Középső ujj alsó része
-
-    #region Jobb katt
-        v1 = (lm09.x - lm00.x, lm09.y - lm00.y, lm09.z - lm00.z)
-        v2 = (lm012.x - lm010.x, lm012.y - lm010.y, lm012.z - lm010.z)
-
+    def calcAngle(self, v1, v2):
         product = v1[0]*v2[0] + v1[1]*v2[1] + v1[2]*v2[2]
 
         len1 = math.sqrt(v1[0]**2 + v1[1]**2 + v1[2]**2)
@@ -121,15 +112,57 @@ class MouseProcessor:
         cos_theta = max(min(cos_theta, 1.0), -1.0)  # float hülyeségek miatt
 
         angle = math.degrees(math.acos(cos_theta))
+        return angle
+
+    def process(self, hand_landmarks):
+        lm08 = hand_landmarks[8]
+
+        lm00 = hand_landmarks[0]
+
+        lm01 = hand_landmarks[1] #Hüvelykujj alja
+        lm04 = hand_landmarks[4] #Hüvelykujj közepe
+
+        lm05 = hand_landmarks[5]
+        lm17 = hand_landmarks[17]
+
+        lm09 = hand_landmarks[9] #Középső ujj töve
+
+        lm012 = hand_landmarks[12] #Középső ujj vége
+        lm010 = hand_landmarks[10] #Középső ujj alsó része
+
+        v1 = (lm09.x - lm00.x, lm09.y - lm00.y, lm09.z - lm00.z)
+        v2 = (lm012.x - lm010.x, lm012.y - lm010.y, lm012.z - lm010.z)
         
+        v3 = (lm04.x - lm01.x, lm04.y - lm01.y, lm04.z - lm01.z)
+        v4 = (lm05.x - lm17.x, lm05.y - lm17.y, lm05.z - lm17.z)
+
+        angle1 = self.calcAngle(v1, v2)
+        angle2 = self.calcAngle(v3, v4)
+
+        if self.init_state:
+            if angle1 < 20 and angle2 < 50:
+                self.init_state = False
+            else:
+                print('Szögek: ', angle1, angle2)
+                return
+
+
         now = datetime.now()
-        if abs(angle) > 45:
+        #Mutatóujj
+        if angle1 > 45:
             if now - self.last_click_time > timedelta(seconds=0.4):
-                self.mouse.press(Button.left)
-                self.mouse.release(Button.left)
+                self.mouse.press(Button.right if self.invert else Button.left)
+                self.mouse.release(Button.right if self.invert else Button.left)
                 self.last_click_time = now
             return
-    #endregion
+      
+        #Hüvelykujj
+        if angle2 > 70:
+            if now - self.last_click_time > timedelta(seconds=0.4):
+                self.mouse.press(Button.left if self.invert else Button.right)
+                self.mouse.release(Button.left if self.invert else Button.right)
+                self.last_click_time = now
+            return
 
     #region EAM simítás
         alpha = 0.2

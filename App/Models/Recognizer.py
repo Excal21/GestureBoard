@@ -15,6 +15,7 @@ from mediapipe.tasks import python
 from datetime import datetime
 from collections import Counter, deque
 from Models.MouseProcessor import MouseProcessor
+from PySide6.QtCore import QThread
 
 class Recognizer:
     def __init__(self, task_file_path: str, config_path: str):
@@ -153,6 +154,10 @@ class Recognizer:
             self.distance = data['Distance']
             self.delay = data['Delay']
             self.framethrottling = data['FrameThrottling']
+            self.mouse_processor.sensitivity = data['Sensitivity']
+            self.mouse_processor.overlay_circle.setRadius(data['Drift'])
+            self.mouse_processor.radius = data['Drift']
+            self.mouse_processor.invert = data['InvertButtons']
 #endregion
 
 #region Felismerő
@@ -181,11 +186,12 @@ class Recognizer:
         frame_index = 0
         no_gesture_count = 0
 
+        mouse_gesture = next((key for key, value in gesture_mappings.items() if value.get('action') == 'self.toggleMouseMode()'), None)
 
         #region Fő ciklus
         while not self.stop and not self.error:
             frame_index += 1
-            if self.framethrottling and skip_frames and frame_index % 2 != 0:
+            if self.framethrottling and not self.mouse_active and skip_frames and frame_index % 2 != 0:
                 cv2.waitKey(int(1000 / 30))
                 continue
 
@@ -221,9 +227,13 @@ class Recognizer:
 
                 closest_hand = min(distances, key=lambda x: sum(distances[x]))
 
-                if self.mouse_active and distances[closest_hand][0] <= self.distance:
+                if (
+                    self.mouse_active
+                    and len(last_gestures) > 0
+                    and last_gestures[-1][0] != mouse_gesture
+                    and distances[closest_hand][0] <= self.distance
+                ):
                     self.mouse_processor.process(result.hand_landmarks[closest_hand])
-
 
                 if len(result.gestures) >= 1:
                     gesture = result.gestures[closest_hand]
@@ -235,7 +245,7 @@ class Recognizer:
                                     distances[closest_hand][1] <= self.distance):
                                 last_gestures.append((name, score))
                                 gesture_detected = True
-                                print(f"Gesture: {name}, Score: {score:.2f}, Distance: {distance_09}, 5-17 Distance: {distance_517}")
+                                #print(f"Gesture: {name}, Score: {score:.2f}, Distance: {distance_09}, 5-17 Distance: {distance_517}")
                         else:
                             last_gestures.append(("NONE", 0.0))
                     else:
@@ -271,7 +281,7 @@ class Recognizer:
                         last_gesture_time = datetime.now()
 
                 last_gestures.clear()
-            #endregion
+            #endregion           
 
             #region FrameThrottling
             if self.framethrottling:
@@ -303,6 +313,7 @@ class Recognizer:
             self.mouse_active = True
             self.framethrottling_prevstate = self.framethrottling
             self.framethrottling = False
+            self.mouse_processor.init_state = True
             self.mouse_processor.showOverlay()
     #endregion
 
