@@ -276,14 +276,14 @@ class CameraOptionsController(BaseController):
 #region Beállítások kezelése
     def loadCameraCombo(self):
         self.ui.comboCamera.clear()
-        cameras = self.rec.getCameras()
+        cameras = RecognizerHandler.getInstance().getCameras()
         if cameras == []:
             self.ui.comboCamera.addItem('Nem található')
             self.ui.comboCamera.setEnabled(False)
             self.ui.btnStartCam.setEnabled(False)
             return
         else:
-            for cameraIDX in self.rec.getCameras():
+            for cameraIDX in cameras:
                 if cameraIDX == 0:
                     self.ui.comboCamera.addItem('Beépített kamera')
                 else:

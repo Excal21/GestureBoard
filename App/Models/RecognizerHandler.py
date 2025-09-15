@@ -1,6 +1,7 @@
 from PySide6.QtCore import Qt, QThread, Signal
 import sys
 import os
+import cv2
 
 #sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
@@ -23,6 +24,7 @@ class RecognizerHandler(QThread):
         if not self.__recognizer:
             from Models.Recognizer import Recognizer
             self.__recognizer = Recognizer('Config/gesture_recognizer.task', 'Config/UserSettings.json')
+            self.getCameras()
             print('Recognizer loaded')
         self.finished.emit()
 
@@ -46,3 +48,20 @@ class RecognizerHandler(QThread):
         self.__recognizer.mouse_active = False
         self.__recognizer.framethrottling = self.__recognizer.framethrottling_prevstate
         print('Recognizer stopped')
+
+    def getCameras(self):
+        if hasattr(self, '_cached_cameras'):
+            return self._cached_cameras
+
+        print('Kamerák keresése...')
+        index = 0
+        cameras = []
+        while True:
+            cap = cv2.VideoCapture(index, cv2.CAP_DSHOW)
+            if not cap.isOpened():
+                break
+            cameras.append(index)
+            cap.release()
+            index += 1
+        self._cached_cameras = cameras
+        return cameras
