@@ -13,7 +13,7 @@ import Controllers.NewGestureWizardController
 
 import Controllers.CameraOptionsController
 from Models.RecognizerHandler import *
-from Models.MediaPipeHandler import MediapipeLoader
+from Models.MediaPipeHandler import ImportHandler
 from Models.Recorder import Recorder
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'Controllers')))
@@ -46,7 +46,7 @@ class MainWindow(QMainWindow):
         self.stacked_widget.addWidget(self.new_gesture_wizard)
         self.stacked_widget.addWidget(self.camera_options)
 
-        self.ml = MediapipeLoader()
+        self.ml = ImportHandler()
         self.rl = RecognizerHandler.getInstance()
 
         self.ml.finished.connect(self.rl.load)

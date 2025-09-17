@@ -290,7 +290,7 @@ class CameraOptionsController(BaseController):
                     self.ui.comboCamera.addItem(f'{cameraIDX + 1}. kamera')
 
     def onReturn(self, index):
-        if index == 0:
+        if index == 1:
             self.loadCameraCombo()
         elif index == 5:
             self.loadSettings()

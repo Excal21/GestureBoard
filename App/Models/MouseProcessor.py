@@ -4,7 +4,6 @@ import math
 import sys
 import ctypes
 from pynput.mouse import Controller, Button
-from mediapipe import solutions
 from PySide6.QtWidgets import QApplication, QWidget
 from PySide6.QtGui import QPainter, QColor, QPen
 from PySide6.QtCore import Qt, QPoint

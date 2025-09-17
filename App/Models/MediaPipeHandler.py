@@ -1,6 +1,6 @@
 from PySide6.QtCore import Qt, QThread, Signal
 
-class MediapipeLoader(QThread):
+class ImportHandler(QThread):
     def run(self):
         print('Mediapipe betöltése...')
         import os
@@ -12,5 +12,7 @@ class MediapipeLoader(QThread):
         from datetime import datetime
         import shutil
         import pyautogui
+        import pynput
+        import PySide6
 
         print('Mediapipe betöltve!')
