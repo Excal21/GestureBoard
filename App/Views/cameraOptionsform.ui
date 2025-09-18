@@ -89,7 +89,7 @@
    <widget class="QPushButton" name="btnBack">
     <property name="geometry">
      <rect>
-      <x>360</x>
+      <x>370</x>
       <y>340</y>
       <width>120</width>
       <height>40</height>
@@ -102,7 +102,7 @@
    <widget class="QPushButton" name="btnSave">
     <property name="geometry">
      <rect>
-      <x>230</x>
+      <x>240</x>
       <y>340</y>
       <width>120</width>
       <height>40</height>
@@ -118,7 +118,7 @@
       <x>30</x>
       <y>10</y>
       <width>471</width>
-      <height>311</height>
+      <height>321</height>
      </rect>
     </property>
     <property name="widgetResizable">
@@ -130,7 +130,7 @@
        <x>0</x>
        <y>0</y>
        <width>469</width>
-       <height>309</height>
+       <height>319</height>
       </rect>
      </property>
      <widget class="QLabel" name="lblConfidence">
