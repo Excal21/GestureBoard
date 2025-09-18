@@ -1,14 +1,10 @@
 import os
-import sys
 import json
 import shutil
 import stat
 
 from PySide6.QtCore import Qt
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QApplication
-from PySide6.QtGui import QFontDatabase, QFont, QMovie, QPixmap, QShortcut, QIcon
-from PySide6.QtCore import QThread, Signal, QSize
-from time import sleep
+from PySide6.QtWidgets import QVBoxLayout, QLabel, QPushButton, QHBoxLayout
 from Resources.Stylesheets.styles import *
 from Views.ui_trainOptionsForm import Ui_Form
 from Models.Recorder import Recorder

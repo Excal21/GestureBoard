@@ -2,12 +2,8 @@
 # Bővebb információ Google MediaPiperól az alábbi linken érhető el:
 # https://ai.google.dev/edge/mediapipe
 
-import os
-import sys
 import cv2
 import numpy as np
-import shutil
-import pyautogui
 import json
 from mediapipe import solutions, Image, ImageFormat
 from mediapipe.framework.formats import landmark_pb2
@@ -15,7 +11,6 @@ from mediapipe.tasks import python
 from datetime import datetime
 from collections import Counter, deque
 from Models.MouseProcessor import MouseProcessor
-from PySide6.QtCore import QThread
 
 class Recognizer:
     def __init__(self, task_file_path: str, config_path: str):

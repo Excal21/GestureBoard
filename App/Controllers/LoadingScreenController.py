@@ -1,11 +1,7 @@
-import os
-import sys
-
 from PySide6.QtCore import Qt
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton
-from PySide6.QtGui import QFontDatabase, QFont, QMovie
-from PySide6.QtCore import QThread, Signal, QSize
-from time import sleep
+from PySide6.QtWidgets import QVBoxLayout
+from PySide6.QtGui import QMovie
+from PySide6.QtCore import QSize
 from Resources.Stylesheets.styles import *
 from Views.ui_loadingForm import Ui_Form
 from Controllers.BaseController import BaseController

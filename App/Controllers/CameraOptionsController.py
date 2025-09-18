@@ -1,12 +1,10 @@
-import os
-import sys
 import cv2
 import json
 
 
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QAbstractScrollArea
-from PySide6.QtCore import Qt, QTimer, QSize
-from PySide6.QtGui import QFontDatabase, QFont, QImage, QPixmap, QRegion, QPainterPath, QIcon, QPainter, QColor
+from PySide6.QtWidgets import QVBoxLayout, QHBoxLayout
+from PySide6.QtCore import Qt, QTimer
+from PySide6.QtGui import QImage, QPixmap, QRegion, QPainterPath, QPainter, QColor
 
 
 from Resources.Stylesheets.styles import *
@@ -157,7 +155,7 @@ class CameraOptionsController(BaseController):
         self.ui.spinFrameCnt.setContentsMargins(0, 0, 0, 0)
         self.ui.spinDelay.setContentsMargins(0, 0, 0, 0)
         
-        self.scroll_layout.addSpacing(20)
+        self.scroll_layout.addSpacing(25)
         
         pairs = [
                 (self.ui.lblCamera, self.ui.comboCamera),

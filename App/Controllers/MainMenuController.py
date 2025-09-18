@@ -1,9 +1,5 @@
-import os
-import sys
-
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton
+from PySide6.QtWidgets import QVBoxLayout
 from PySide6.QtCore import Qt
-from PySide6.QtGui import QFontDatabase, QFont
 from Resources.Stylesheets.styles import *
 from Views.ui_mainMenuForm import Ui_MainWindow
 from Models.RecognizerHandler import *

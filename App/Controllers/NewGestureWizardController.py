@@ -1,17 +1,12 @@
-import os
-import sys
-
+import cv2
 from PySide6.QtCore import Qt
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QApplication
-from PySide6.QtGui import QFontDatabase, QFont, QMovie, QPixmap, QShortcut, QIcon, QImage, QRegion, QPainterPath
-from PySide6.QtCore import QThread, Signal, QSize, QTimer
+from PySide6.QtWidgets import QVBoxLayout, QLabel, QHBoxLayout
+from PySide6.QtGui import QPixmap, QShortcut, QIcon, QImage, QRegion, QPainterPath
+from PySide6.QtCore import QSize, QTimer
 from time import sleep
 from Resources.Stylesheets.styles import *
 from Views.ui_newGestureWizardForm import Ui_Form
 from Models.Recorder import Recorder
-import json
-import shutil
-import cv2
 from Models.RecognizerHandler import RecognizerHandler
 from Controllers.BaseController import BaseController
 

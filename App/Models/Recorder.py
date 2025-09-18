@@ -2,7 +2,6 @@ from time import sleep
 import cv2
 import os
 import json
-import sys
 
 class Recorder():
     def __init__(self):
