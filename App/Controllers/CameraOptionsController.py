@@ -144,6 +144,7 @@ class CameraOptionsController(BaseController):
     def setLayoutSettings(self):
         self.scroll_area = self.ui.scrollArea
         self.scroll_area.setWidgetResizable(True)
+        self.ui.scrollArea.verticalScrollBar().setContextMenuPolicy(Qt.NoContextMenu)
         self.scroll_layout = QVBoxLayout(self.ui.scrollAreaWidgetContents)
         self.scroll_area.setWidget(self.ui.scrollAreaWidgetContents)
         self.scroll_layout.setContentsMargins(0, 0, 20, 0)
@@ -215,9 +216,19 @@ class CameraOptionsController(BaseController):
 #region Eseménykezelők
     def updateCameraIndex(self, index):
         self.data['Camera'] = index
+
+    def sliderDriftEnter(self, event):
+        self.ui.lblDescription.setText(
+        self.textToHTML('A szürke körön belül finom mozgást végezhetsz az egérrel, '
+                        'míg a körön kívül sodródni fog a kurzor.'))
+        self.overlay.show()
+
+    def sliderDriftLeave(self, event):
+        self.ui.lblDescription.setText('')
+        self.overlay.hide()
     
     def setEventHandlers(self):
-        self.stacked_widget.currentChanged.connect(self.onReturn)  # Beállítások betöltése, ha a kamera beállítások menü aktív
+        self.stacked_widget.currentChanged.connect(self.onReturn)
 
         self.ui.comboCamera.currentIndexChanged.connect(self.updateCameraIndex)
     
@@ -237,37 +248,44 @@ class CameraOptionsController(BaseController):
 
 
 
-        self.ui.lblCamera.enterEvent = lambda event: self.ui.lblDescription.setText(
+        self.ui.comboCamera.enterEvent = lambda event: self.ui.lblDescription.setText(
             self.textToHTML('Válaszd ki a kamerát, amivel a gesztusokat tudja érzékelni a program!'))
-        self.ui.lblCamera.leaveEvent = lambda event: self.ui.lblDescription.setText('')
+        self.ui.comboCamera.leaveEvent = lambda event: self.ui.lblDescription.setText('')
 
-        self.ui.lblHue.enterEvent = lambda event: self.ui.lblDescription.setText(
+        self.ui.sliderHue.enterEvent = lambda event: self.ui.lblDescription.setText(
             self.textToHTML('A színek eltolásával beállíthatod, hogy kesztyűben is felismerje a kezedet a program. Kapcsold be a kamerát és állítsd be óvatosan a csúszkával!'))
-        self.ui.lblHue.leaveEvent = lambda event: self.ui.lblDescription.setText('')
+        self.ui.sliderHue.leaveEvent = lambda event: self.ui.lblDescription.setText('')
 
-        self.ui.lblDistance.enterEvent = lambda event: self.ui.lblDescription.setText(
+        self.ui.sliderDistance.enterEvent = lambda event: self.ui.lblDescription.setText(
             self.textToHTML('A csúszka segítségével állítsd be a kezed távolságát a kamerától! Túl nagy távolság esetén előfordulhat, hogy más ember kezét érzékeli a GestureBoard.'))
-        self.ui.lblDistance.leaveEvent = lambda event: self.ui.lblDescription.setText('')
+        self.ui.sliderDistance.leaveEvent = lambda event: self.ui.lblDescription.setText('')
 
-        self.ui.lblConfidence.enterEvent = lambda event: self.ui.lblDescription.setText(
+        self.ui.spinConfidence.enterEvent = lambda event: self.ui.lblDescription.setText(
             self.textToHTML('Növelésével csökkenthető a véletlen felismerések száma, de csökken a felismerés érzékenysége.'))
-        self.ui.lblConfidence.leaveEvent = lambda event: self.ui.lblDescription.setText('')
+        self.ui.spinConfidence.leaveEvent = lambda event: self.ui.lblDescription.setText('')
 
-        self.ui.lblFrameCnt.enterEvent = lambda event: self.ui.lblDescription.setText(
+        self.ui.spinFrameCnt.enterEvent = lambda event: self.ui.lblDescription.setText(
             self.textToHTML('A program ennyi képkockán keresztül figyeli a gesztust a művelet végrehajtása előtt. Növelésével pontosabb, de lassabb lesz a felismerés.'))
-        self.ui.lblFrameCnt.leaveEvent = lambda event: self.ui.lblDescription.setText('')
+        self.ui.spinFrameCnt.leaveEvent = lambda event: self.ui.lblDescription.setText('')
 
-        self.ui.lblDelay.enterEvent = lambda event: self.ui.lblDescription.setText(
+        self.ui.spinDelay.enterEvent = lambda event: self.ui.lblDescription.setText(
             self.textToHTML('Két gesztus közt eltelt idő másodpercben. Csökkentésével gyorsabban tudod kiadni a parancsokat.'))
+        self.ui.spinDelay.leaveEvent = lambda event: self.ui.lblDescription.setText('')
 
-        self.ui.lblDelay.leaveEvent = lambda event: self.ui.lblDescription.setText('')
-
-        self.ui.lblFrameThrottling.enterEvent = lambda event: self.ui.lblDescription.setText(
+        self.ui.checkFrameThrottling.enterEvent = lambda event: self.ui.lblDescription.setText(
             self.textToHTML('Dinamikus képkocka-korlátozás. Csökkenti a CPU használatot, de nagyban növelheti a reakcióidőt.'))
-        self.ui.lblFrameThrottling.leaveEvent = lambda event: self.ui.lblDescription.setText('')
+        self.ui.checkFrameThrottling.leaveEvent = lambda event: self.ui.lblDescription.setText('')
 
-        self.ui.sliderDrift.enterEvent = lambda event: self.overlay.show()
-        self.ui.sliderDrift.leaveEvent = lambda event: self.overlay.hide()
+        self.ui.sliderSensitivity.enterEvent = lambda event: self.ui.lblDescription.setText(
+            self.textToHTML('Az egérmutató érzékenysége a sodródásmentes zónán kívül. Minél nagyobb az érték, annál gyorsabban mozog az egérmutató.'))
+        self.ui.sliderSensitivity.leaveEvent = lambda event: self.ui.lblDescription.setText('')
+
+        self.ui.checkInvertButtons.enterEvent = lambda event: self.ui.lblDescription.setText(
+            self.textToHTML('Felcseréli a jobb és bal egérgombokat egérmódban.'))
+        self.ui.checkInvertButtons.leaveEvent = lambda event: self.ui.lblDescription.setText('')
+
+        self.ui.sliderDrift.enterEvent = lambda event: self.sliderDriftEnter(event)
+        self.ui.sliderDrift.leaveEvent = lambda event: self.sliderDriftLeave(event)
         self.ui.sliderDrift.valueChanged.connect(lambda value: self.overlay.setRadius(value))
 #endregion
 

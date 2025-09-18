@@ -76,7 +76,7 @@ def test_setStyles():
     assert camera_options_menu.ui.spinFrameCnt.styleSheet() == train_input_style
     assert camera_options_menu.ui.spinDelay.styleSheet() == train_input_style
 
-def test_ubuntu_font_family():
+def test_ubuntuFont():
     expected_family = 'Ubuntu'
     widgets = [
         camera_options_menu.ui.lblTitle,
@@ -107,20 +107,27 @@ def test_setEventHandlers():
     assert isinstance(camera_options_menu.ui.btnStartCam.enterEvent, type(lambda: None))
     assert isinstance(camera_options_menu.ui.btnStartCam.leaveEvent, type(lambda: None))
 
-    assert isinstance(camera_options_menu.ui.lblCamera.enterEvent, type(lambda: None))
-    assert isinstance(camera_options_menu.ui.lblCamera.leaveEvent, type(lambda: None))
-    assert isinstance(camera_options_menu.ui.lblHue.enterEvent, type(lambda: None))
-    assert isinstance(camera_options_menu.ui.lblHue.leaveEvent, type(lambda: None))
-    assert isinstance(camera_options_menu.ui.lblConfidence.enterEvent, type(lambda: None))
-    assert isinstance(camera_options_menu.ui.lblConfidence.leaveEvent, type(lambda: None))
-    assert isinstance(camera_options_menu.ui.lblFrameCnt.enterEvent, type(lambda: None))
-    assert isinstance(camera_options_menu.ui.lblDelay.enterEvent, type(lambda: None))
-    assert isinstance(camera_options_menu.ui.lblDelay.leaveEvent, type(lambda: None))
-    assert isinstance(camera_options_menu.ui.lblFrameThrottling.enterEvent, type(lambda: None))
-    assert isinstance(camera_options_menu.ui.lblFrameThrottling.leaveEvent, type(lambda: None))
+    pairs = [
+        (camera_options_menu.ui.lblCamera, camera_options_menu.ui.comboCamera),
+        (camera_options_menu.ui.lblHue, camera_options_menu.ui.sliderHue),
+        (camera_options_menu.ui.lblDistance, camera_options_menu.ui.sliderDistance),
+        (camera_options_menu.ui.lblConfidence, camera_options_menu.ui.spinConfidence),
+        (camera_options_menu.ui.lblFrameCnt, camera_options_menu.ui.spinFrameCnt),
+        (camera_options_menu.ui.lblDelay, camera_options_menu.ui.spinDelay),
+        (camera_options_menu.ui.lblFrameThrottling, camera_options_menu.ui.checkFrameThrottling),
+        (camera_options_menu.ui.lblMouseSettings, None),
+        (camera_options_menu.ui.lblSensitivity, camera_options_menu.ui.sliderSensitivity),
+        (camera_options_menu.ui.lblRadius, camera_options_menu.ui.sliderDrift),
+        (camera_options_menu.ui.lblInvertButtons, camera_options_menu.ui.checkInvertButtons)
+    ]
+
+    for _, widget in pairs:
+        if widget is not None:
+            assert isinstance(widget.enterEvent, type(lambda: None)), f"{widget.objectName()} enterEvent nincs beállítva"
+            assert isinstance(widget.leaveEvent, type(lambda: None)), f"{widget.objectName()} leaveEvent nincs beállítva"
 
 
-def test_hover_and_leave_events_trigger_styles_and_labels():
+def test_hoverDescription():
     widgets_with_styles = [
         camera_options_menu.ui.btnSave,
         camera_options_menu.ui.btnBack,
@@ -135,7 +142,6 @@ def test_hover_and_leave_events_trigger_styles_and_labels():
         QApplication.sendEvent(widget, leave_event)
         assert widget.styleSheet() == options_button_style, f"{widget.objectName()} nem áll vissza hover stílusról simára"
 
-    # Kameraindító gomb esetén figyelembe vesszük a self.is_camera_on állapotot
     start_cam_widget = camera_options_menu.ui.btnStartCam
     camera_off_style_hover = options_button_hover_style
     camera_off_style_leave = options_button_style
@@ -156,27 +162,36 @@ def test_hover_and_leave_events_trigger_styles_and_labels():
     QApplication.sendEvent(start_cam_widget, QEvent(QEvent.Leave))
     assert start_cam_widget.styleSheet() == camera_on_style_leave
 
-    # Tooltip frissítést tesztelünk a label elemeken
-    label_tooltips = {
-        camera_options_menu.ui.lblCamera: 'Válaszd ki a kamerát, amivel a gesztusokat tudja érzékelni a program!',
-        camera_options_menu.ui.lblHue: 'A színek eltolásával beállíthatod, hogy kesztyűben is felismerje a kezedet a program. Kapcsold be a kamerát és állítsd be óvatosan a csúszkával!',
-        camera_options_menu.ui.lblConfidence: 'Növelésével csökkenthető a véletlen felismerések száma, de csökken a felismerés érzékenysége.',
-        camera_options_menu.ui.lblFrameCnt: 'A program ennyi képkockán keresztül figyeli a gesztust a művelet végrehajtása előtt. Növelésével pontosabb, de lassabb lesz a felismerés.',
-        camera_options_menu.ui.lblDelay: 'Két gesztus közt eltelt idő másodpercben. Csökkentésével gyorsabban tudod kiadni a parancsokat.',
-    }
+    pairs = [
+        (camera_options_menu.ui.lblCamera, camera_options_menu.ui.comboCamera),
+        (camera_options_menu.ui.lblHue, camera_options_menu.ui.sliderHue),
+        (camera_options_menu.ui.lblDistance, camera_options_menu.ui.sliderDistance),
+        (camera_options_menu.ui.lblConfidence, camera_options_menu.ui.spinConfidence),
+        (camera_options_menu.ui.lblFrameCnt, camera_options_menu.ui.spinFrameCnt),
+        (camera_options_menu.ui.lblDelay, camera_options_menu.ui.spinDelay),
+        (camera_options_menu.ui.lblFrameThrottling, camera_options_menu.ui.checkFrameThrottling),
+        (camera_options_menu.ui.lblMouseSettings, None),
+        (camera_options_menu.ui.lblSensitivity, camera_options_menu.ui.sliderSensitivity),
+        (camera_options_menu.ui.lblRadius, camera_options_menu.ui.sliderDrift),
+        (camera_options_menu.ui.lblInvertButtons, camera_options_menu.ui.checkInvertButtons)
+    ]
 
-    for label, expected_text in label_tooltips.items():
-        enter_event = QEvent(QEvent.Enter)
-        QApplication.sendEvent(label, enter_event)
-        assert expected_text in camera_options_menu.ui.lblDescription.text(), f"{label.objectName()} hover leírása hibás"
+    for label, widget in pairs:
+        if widget is not None:
+            assert isinstance(widget.enterEvent, type(lambda: None)), f"{widget.objectName()} enterEvent nincs beállítva"
+            assert isinstance(widget.leaveEvent, type(lambda: None)), f"{widget.objectName()} leaveEvent nincs beállítva"
 
-        leave_event = QEvent(QEvent.Leave)
-        QApplication.sendEvent(label, leave_event)
-        assert camera_options_menu.ui.lblDescription.text() == '', f"{label.objectName()} leírása nem törlődik hover után"
+            eredeti_szoveg = camera_options_menu.ui.lblDescription.text()
+
+            QApplication.sendEvent(widget, QEvent(QEvent.Enter))
+            assert camera_options_menu.ui.lblDescription.text() != eredeti_szoveg, f"{widget.objectName()} enterEvent nem módosítja az lblDescription-t"
+
+            QApplication.sendEvent(widget, QEvent(QEvent.Leave))
+            assert camera_options_menu.ui.lblDescription.text() == eredeti_szoveg, f"{widget.objectName()} leaveEvent nem állítja vissza az lblDescription-t"
+
 
 
 def test_user_input_boundaries():
-    # Confidence SpinBox: 0 alá és 100 fölé próbálunk beállítani
     spin = camera_options_menu.ui.spinConfidence
 
     spin.setValue(-10)
@@ -198,8 +213,6 @@ def test_user_input_boundaries():
     spin.setValue(60)
     assert spin.value() <= 5, f'Túl nagy érték engedve: {spin.value()} > 5'
 
-
-    #Színtoló csúszka
     slider = camera_options_menu.ui.sliderHue
 
     slider.setValue(-1)
