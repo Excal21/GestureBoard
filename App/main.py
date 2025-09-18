@@ -49,7 +49,7 @@ class MainWindow(QMainWindow):
         self.ml = ImportHandler()
         self.rl = RecognizerHandler.getInstance()
 
-        self.ml.finished.connect(self.rl.load)
+        self.ml.finished.connect(self.rl.start)
         self.rl.finished.connect(lambda: self.stacked_widget.setCurrentIndex(1))
 
     def start_background(self):

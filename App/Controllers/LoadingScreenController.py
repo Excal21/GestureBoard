@@ -20,14 +20,20 @@ class LoadingScreenController(BaseController):
         layout.addWidget(self.ui.lblLoading, alignment=Qt.AlignCenter)
         layout.setContentsMargins(0, 55, 0, 0)
         layout.setSpacing(0)
-        
+        layout.setAlignment(Qt.AlignCenter)
+        self.ui.lblLoadingSpinner.setAlignment(Qt.AlignCenter)
+        self.ui.lblLoading.setContentsMargins(0, 0, 0, 0)
+
         self.movie = QMovie("Resources/Icons/loading.gif")
+        self.movie.setCacheMode(QMovie.CacheAll)
+        self.movie.setSpeed(180)
+
         self.ui.lblLoadingSpinner.setMovie(self.movie)
-        self.movie.setScaledSize(QSize(70,70))
+        self.movie.setScaledSize(QSize(42 , 42))
 
         self.ui.lblLoadingSpinner.setFixedHeight(100)
         self.ui.lblLoadingSpinner.setFixedWidth(100)
         layout.addWidget(self.ui.lblLoadingSpinner, alignment=Qt.AlignCenter)
-        self.movie.start()  # Animáció elindítása
+        self.movie.start()
         
         layout.addStretch()

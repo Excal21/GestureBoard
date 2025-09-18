@@ -46,7 +46,6 @@ class MainMenuController(BaseController):
         layout.addWidget(self.ui.btnCameraOptions, alignment=Qt.AlignCenter)
         layout.addStretch()
 
-        #TOUCHLESSPAD
         self.ui.btnCameraOptions.setText('Kamera-beállítások')
 
 
@@ -68,7 +67,7 @@ class MainMenuController(BaseController):
     
             self.ui.btnCameraOptions.enterEvent = lambda event: None
             self.ui.btnCameraOptions.leaveEvent = lambda event: None
-            self.recognizer.start()
+            self.recognizer.startRecognizer()
         else:
             self.recognizer_active = False
             self.recognizer.stop()

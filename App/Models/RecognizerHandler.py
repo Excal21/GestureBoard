@@ -16,7 +16,7 @@ class RecognizerHandler(QThread):
         super().__init__()
         self.__recognizer = None
 
-    def load(self):
+    def run(self):
         if not self.__recognizer:
             from Models.Recognizer import Recognizer
             self.__recognizer = Recognizer('Config/gesture_recognizer.task', 'Config/UserSettings.json')
@@ -31,7 +31,7 @@ class RecognizerHandler(QThread):
     def annotate(self, frame, gestures = False, distance=500):
         return self.__recognizer.annotateImage(frame, gestures, distance)
 
-    def start(self):
+    def startRecognizer(self):
         self.__recognizer.camerafeed = False
         self.__recognizer.Run()
 
