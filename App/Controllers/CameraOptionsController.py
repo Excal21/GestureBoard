@@ -1,18 +1,18 @@
-import os
-import sys
 import cv2
 import json
 
 
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QAbstractScrollArea
-from PySide6.QtCore import Qt, QTimer, QSize
-from PySide6.QtGui import QFontDatabase, QFont, QImage, QPixmap, QRegion, QPainterPath, QIcon, QPainter, QColor
+from PySide6.QtWidgets import QVBoxLayout, QHBoxLayout
+from PySide6.QtCore import Qt, QTimer
+from PySide6.QtGui import QImage, QPixmap, QRegion, QPainterPath, QPainter, QColor
 
 
 from Resources.Stylesheets.styles import *
 from Views.ui_cameraOptionsForm import Ui_Form
 from Models.RecognizerHandler import RecognizerHandler
 from Models.Recorder import Recorder
+from Models.OverlayHandler import OverlayHandler
+
 from time import sleep
 from Controllers.BaseController import BaseController
 from Resources.Fonts.FontLoader import FontLoader
@@ -27,7 +27,8 @@ class CameraOptionsController(BaseController):
         self.ui.setupUi(self)
         self.initUI(
             {
-                'checkFrameThrottling': checkbox_style
+                'checkFrameThrottling': checkbox_style,
+                'checkInvertButtons': checkbox_style
             }
         )
         
@@ -40,6 +41,8 @@ class CameraOptionsController(BaseController):
 
         self.timer = None
 
+        self.overlay = OverlayHandler.getInstance()
+
         self.ui.sliderHue.setRange(0, 255)
         self.ui.sliderDistance.setRange(100, 500)
         self.ui.spinConfidence.setRange(0, 100)
@@ -47,7 +50,8 @@ class CameraOptionsController(BaseController):
         self.ui.spinDelay.setRange(0, 5)
         self.ui.spinDelay.setSingleStep(0.1)
         self.ui.spinDelay.setDecimals(1)
-
+        self.ui.sliderSensitivity.setRange(5, 30)
+        self.ui.sliderDrift.setRange(100, 350)
 
         self.ui.lblCvImg.setAlignment(Qt.AlignCenter)
         self.ui.lblCvImg.setPixmap(QPixmap('Resources/Icons/camera.png').scaled(100, 70, Qt.KeepAspectRatio, Qt.SmoothTransformation))
@@ -58,10 +62,10 @@ class CameraOptionsController(BaseController):
 
 
         #TOUCHLESSPAD
-        self.ui.lblRadius.setVisible(False)
-        self.ui.spinRadius.setVisible(False)
-        self.ui.lblSensitivity.setVisible(False)
-        self.ui.sliderSensitivity.setVisible(False)
+        # self.ui.lblRadius.setVisible(False)
+        # self.ui.spinRadius.setVisible(False)
+        # self.ui.lblSensitivity.setVisible(False)
+        # self.ui.sliderSensitivity.setVisible(False)
         
 #region Kamerakép
     def startCamera(self):
@@ -78,13 +82,13 @@ class CameraOptionsController(BaseController):
             self.timer.start(10)
             self.is_camera_on = True
             self.ui.btnStartCam.setStyleSheet(options_button_active_style + 'background-color: rgb(201, 97, 97)')
-            self.ui.btnStartCam.setText('Kamera leállítása')
+            self.ui.btnStartCam.setText('Leállítás')
         else:
             self.timer.stop()
             self.rec.cap.release()
             self.ui.lblCvImg.setPixmap(QPixmap('Resources/Icons/camera.png').scaled(100, 70, Qt.KeepAspectRatio, Qt.SmoothTransformation))
             self.is_camera_on = False
-            self.ui.btnStartCam.setText('Kamera tesztelése')
+            self.ui.btnStartCam.setText('Kamerateszt')
             self.ui.btnStartCam.setStyleSheet(options_button_style)
 
     def updateFrame(self):
@@ -140,6 +144,7 @@ class CameraOptionsController(BaseController):
     def setLayoutSettings(self):
         self.scroll_area = self.ui.scrollArea
         self.scroll_area.setWidgetResizable(True)
+        self.ui.scrollArea.verticalScrollBar().setContextMenuPolicy(Qt.NoContextMenu)
         self.scroll_layout = QVBoxLayout(self.ui.scrollAreaWidgetContents)
         self.scroll_area.setWidget(self.ui.scrollAreaWidgetContents)
         self.scroll_layout.setContentsMargins(0, 0, 20, 0)
@@ -147,12 +152,11 @@ class CameraOptionsController(BaseController):
         self.ui.spinConfidence.setAlignment(Qt.AlignCenter)
         self.ui.spinFrameCnt.setAlignment(Qt.AlignCenter)
         self.ui.spinDelay.setAlignment(Qt.AlignCenter)
-        self.ui.spinRadius.setAlignment(Qt.AlignCenter)
         self.ui.spinConfidence.setContentsMargins(0, 0, 0, 0)
         self.ui.spinFrameCnt.setContentsMargins(0, 0, 0, 0)
         self.ui.spinDelay.setContentsMargins(0, 0, 0, 0)
         
-        self.scroll_layout.addSpacing(20)
+        self.scroll_layout.addSpacing(25)
         
         pairs = [
                 (self.ui.lblCamera, self.ui.comboCamera),
@@ -162,8 +166,10 @@ class CameraOptionsController(BaseController):
                 (self.ui.lblFrameCnt, self.ui.spinFrameCnt),
                 (self.ui.lblDelay, self.ui.spinDelay),
                 (self.ui.lblFrameThrottling, self.ui.checkFrameThrottling),
+                (self.ui.lblMouseSettings, None),
                 (self.ui.lblSensitivity, self.ui.sliderSensitivity),
-                (self.ui.lblRadius, self.ui.spinRadius),
+                (self.ui.lblRadius, self.ui.sliderDrift),
+                (self.ui.lblInvertButtons, self.ui.checkInvertButtons)
             ]
 
         for widget1, widget2 in pairs:
@@ -178,11 +184,11 @@ class CameraOptionsController(BaseController):
         self.ui.spinConfidence.setFixedWidth(50)
         self.ui.spinFrameCnt.setFixedWidth(50)
         self.ui.spinDelay.setFixedWidth(50)
-        self.ui.spinRadius.setFixedWidth(50)
 
         self.ui.sliderHue.setFixedWidth(200)
         self.ui.sliderDistance.setFixedWidth(200)
         self.ui.sliderSensitivity.setFixedWidth(200)
+        self.ui.sliderDrift.setFixedWidth(200)
 
         self.ui.lblCamera.setFixedHeight(42)
         self.ui.comboCamera.setFixedHeight(42)
@@ -191,6 +197,9 @@ class CameraOptionsController(BaseController):
         self.ui.lblConfidence.setFixedHeight(42)
         self.ui.lblFrameCnt.setFixedHeight(42)
         self.ui.lblDelay.setFixedHeight(42)
+
+        self.ui.lblMouseSettings.setContentsMargins(0, 30, 0, 0)
+        self.ui.lblMouseSettings.setFixedHeight(72)
         self.ui.lblSensitivity.setFixedHeight(42)
         self.ui.lblRadius.setFixedHeight(42)
         self.ui.btnStartCam.setFixedHeight(42)
@@ -199,14 +208,27 @@ class CameraOptionsController(BaseController):
         self.ui.checkFrameThrottling.setFixedWidth(50)
         self.ui.checkFrameThrottling.setChecked(True)
 
+        self.ui.checkInvertButtons.setFixedHeight(40)
+        self.ui.checkInvertButtons.setFixedWidth(50)
+        self.ui.checkInvertButtons.setChecked(False)
 #endregion
 
 #region Eseménykezelők
     def updateCameraIndex(self, index):
         self.data['Camera'] = index
+
+    def sliderDriftEnter(self, event):
+        self.ui.lblDescription.setText(
+        self.textToHTML('A szürke körön belül finom mozgást végezhetsz az egérrel, '
+                        'míg a körön kívül sodródni fog a kurzor.'))
+        self.overlay.show()
+
+    def sliderDriftLeave(self, event):
+        self.ui.lblDescription.setText('')
+        self.overlay.hide()
     
     def setEventHandlers(self):
-        self.stacked_widget.currentChanged.connect(self.onReturn)  # Beállítások betöltése, ha a kamera beállítások menü aktív
+        self.stacked_widget.currentChanged.connect(self.onReturn)
 
         self.ui.comboCamera.currentIndexChanged.connect(self.updateCameraIndex)
     
@@ -226,56 +248,68 @@ class CameraOptionsController(BaseController):
 
 
 
-        self.ui.lblCamera.enterEvent = lambda event: self.ui.lblDescription.setText(
+        self.ui.comboCamera.enterEvent = lambda event: self.ui.lblDescription.setText(
             self.textToHTML('Válaszd ki a kamerát, amivel a gesztusokat tudja érzékelni a program!'))
-        self.ui.lblCamera.leaveEvent = lambda event: self.ui.lblDescription.setText('')
+        self.ui.comboCamera.leaveEvent = lambda event: self.ui.lblDescription.setText('')
 
-        self.ui.lblHue.enterEvent = lambda event: self.ui.lblDescription.setText(
+        self.ui.sliderHue.enterEvent = lambda event: self.ui.lblDescription.setText(
             self.textToHTML('A színek eltolásával beállíthatod, hogy kesztyűben is felismerje a kezedet a program. Kapcsold be a kamerát és állítsd be óvatosan a csúszkával!'))
-        self.ui.lblHue.leaveEvent = lambda event: self.ui.lblDescription.setText('')
+        self.ui.sliderHue.leaveEvent = lambda event: self.ui.lblDescription.setText('')
 
-        self.ui.lblDistance.enterEvent = lambda event: self.ui.lblDescription.setText(
+        self.ui.sliderDistance.enterEvent = lambda event: self.ui.lblDescription.setText(
             self.textToHTML('A csúszka segítségével állítsd be a kezed távolságát a kamerától! Túl nagy távolság esetén előfordulhat, hogy más ember kezét érzékeli a GestureBoard.'))
-        self.ui.lblDistance.leaveEvent = lambda event: self.ui.lblDescription.setText('')
+        self.ui.sliderDistance.leaveEvent = lambda event: self.ui.lblDescription.setText('')
 
-        self.ui.lblConfidence.enterEvent = lambda event: self.ui.lblDescription.setText(
+        self.ui.spinConfidence.enterEvent = lambda event: self.ui.lblDescription.setText(
             self.textToHTML('Növelésével csökkenthető a véletlen felismerések száma, de csökken a felismerés érzékenysége.'))
-        self.ui.lblConfidence.leaveEvent = lambda event: self.ui.lblDescription.setText('')
+        self.ui.spinConfidence.leaveEvent = lambda event: self.ui.lblDescription.setText('')
 
-        self.ui.lblFrameCnt.enterEvent = lambda event: self.ui.lblDescription.setText(
+        self.ui.spinFrameCnt.enterEvent = lambda event: self.ui.lblDescription.setText(
             self.textToHTML('A program ennyi képkockán keresztül figyeli a gesztust a művelet végrehajtása előtt. Növelésével pontosabb, de lassabb lesz a felismerés.'))
-        self.ui.lblFrameCnt.leaveEvent = lambda event: self.ui.lblDescription.setText('')
+        self.ui.spinFrameCnt.leaveEvent = lambda event: self.ui.lblDescription.setText('')
 
-        self.ui.lblDelay.enterEvent = lambda event: self.ui.lblDescription.setText(
+        self.ui.spinDelay.enterEvent = lambda event: self.ui.lblDescription.setText(
             self.textToHTML('Két gesztus közt eltelt idő másodpercben. Csökkentésével gyorsabban tudod kiadni a parancsokat.'))
+        self.ui.spinDelay.leaveEvent = lambda event: self.ui.lblDescription.setText('')
 
-        self.ui.lblDelay.leaveEvent = lambda event: self.ui.lblDescription.setText('')
-
-        self.ui.lblFrameThrottling.enterEvent = lambda event: self.ui.lblDescription.setText(
+        self.ui.checkFrameThrottling.enterEvent = lambda event: self.ui.lblDescription.setText(
             self.textToHTML('Dinamikus képkocka-korlátozás. Csökkenti a CPU használatot, de nagyban növelheti a reakcióidőt.'))
-        self.ui.lblFrameThrottling.leaveEvent = lambda event: self.ui.lblDescription.setText('')
+        self.ui.checkFrameThrottling.leaveEvent = lambda event: self.ui.lblDescription.setText('')
+
+        self.ui.sliderSensitivity.enterEvent = lambda event: self.ui.lblDescription.setText(
+            self.textToHTML('Az egérmutató érzékenysége a sodródásmentes zónán kívül. Minél nagyobb az érték, annál gyorsabban mozog az egérmutató.'))
+        self.ui.sliderSensitivity.leaveEvent = lambda event: self.ui.lblDescription.setText('')
+
+        self.ui.checkInvertButtons.enterEvent = lambda event: self.ui.lblDescription.setText(
+            self.textToHTML('Felcseréli a jobb és bal egérgombokat egérmódban.'))
+        self.ui.checkInvertButtons.leaveEvent = lambda event: self.ui.lblDescription.setText('')
+
+        self.ui.sliderDrift.enterEvent = lambda event: self.sliderDriftEnter(event)
+        self.ui.sliderDrift.leaveEvent = lambda event: self.sliderDriftLeave(event)
+        self.ui.sliderDrift.valueChanged.connect(lambda value: self.overlay.setRadius(value))
 #endregion
 
 #region Beállítások kezelése
     def loadCameraCombo(self):
         self.ui.comboCamera.clear()
-        cameras = self.rec.getCameras()
+        cameras = RecognizerHandler.getInstance().getCameras()
         if cameras == []:
             self.ui.comboCamera.addItem('Nem található')
             self.ui.comboCamera.setEnabled(False)
             self.ui.btnStartCam.setEnabled(False)
             return
         else:
-            for cameraIDX in self.rec.getCameras():
+            for cameraIDX in cameras:
                 if cameraIDX == 0:
                     self.ui.comboCamera.addItem('Beépített kamera')
                 else:
                     self.ui.comboCamera.addItem(f'{cameraIDX + 1}. kamera')
 
     def onReturn(self, index):
-        if index == 0:
+        if index == 1:
             self.loadCameraCombo()
         elif index == 5:
+            self.overlay.setCircleOnly(True)
             self.loadSettings()
 
     def loadSettings(self):
@@ -288,6 +322,9 @@ class CameraOptionsController(BaseController):
             self.ui.spinFrameCnt.setValue(self.data['FrameCount'])
             self.ui.spinDelay.setValue(self.data['Delay'])
             self.ui.checkFrameThrottling.setChecked(self.data['FrameThrottling'])
+            self.ui.sliderSensitivity.setValue(self.data['Sensitivity'])
+            self.ui.sliderDrift.setValue(self.data['Drift'])
+            self.ui.checkInvertButtons.setChecked(self.data['InvertButtons'])
 
 
     
@@ -299,6 +336,9 @@ class CameraOptionsController(BaseController):
         self.data['FrameCount'] = self.ui.spinFrameCnt.value()
         self.data['Delay'] = self.ui.spinDelay.value()
         self.data['FrameThrottling'] = self.ui.checkFrameThrottling.isChecked()
+        self.data['Sensitivity'] = self.ui.sliderSensitivity.value()
+        self.data['Drift'] = self.ui.sliderDrift.value()
+        self.data['InvertButtons'] = self.ui.checkInvertButtons.isChecked()
 
         with open('Config/CameraSettings.json', 'w') as file:
             json.dump(self.data, file, indent=4)

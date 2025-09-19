@@ -1,9 +1,5 @@
-import os
-import sys
-
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton
+from PySide6.QtWidgets import QVBoxLayout
 from PySide6.QtCore import Qt
-from PySide6.QtGui import QFontDatabase, QFont
 from Resources.Stylesheets.styles import *
 from Views.ui_mainMenuForm import Ui_MainWindow
 from Models.RecognizerHandler import *
@@ -50,7 +46,6 @@ class MainMenuController(BaseController):
         layout.addWidget(self.ui.btnCameraOptions, alignment=Qt.AlignCenter)
         layout.addStretch()
 
-        #TOUCHLESSPAD
         self.ui.btnCameraOptions.setText('Kamera-beállítások')
 
 
@@ -72,7 +67,7 @@ class MainMenuController(BaseController):
     
             self.ui.btnCameraOptions.enterEvent = lambda event: None
             self.ui.btnCameraOptions.leaveEvent = lambda event: None
-            self.recognizer.start()
+            self.recognizer.startRecognizer()
         else:
             self.recognizer_active = False
             self.recognizer.stop()

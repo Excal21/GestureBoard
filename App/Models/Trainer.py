@@ -1,5 +1,4 @@
 import os
-import sys
 from shutil import make_archive
 from time import sleep
 import requests

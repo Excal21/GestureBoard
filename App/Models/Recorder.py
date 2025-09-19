@@ -2,7 +2,6 @@ from time import sleep
 import cv2
 import os
 import json
-import sys
 
 class Recorder():
     def __init__(self):
@@ -81,19 +80,4 @@ class Recorder():
         self.hue_offset = data['HueOffset']
 
 
-    def getCameras(self):
-        if hasattr(self, '_cached_cameras'):
-            return self._cached_cameras
-
-        print('Kamerák keresése...')
-        index = 0
-        cameras = []
-        while True:
-            cap = cv2.VideoCapture(index, cv2.CAP_DSHOW)
-            if not cap.isOpened():
-                break
-            cameras.append(index)
-            cap.release()
-            index += 1
-        self._cached_cameras = cameras
-        return cameras
+   

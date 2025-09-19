@@ -44,7 +44,7 @@ def test_predefinedAction(app: MainWindow, qtbot):
     
     qtbot.wait(500)        
     qtbot.mouseClick(btn_predef, Qt.LeftButton)
-    sub_btn = options_menu.ui.scrollComboWidgetContents.layout().itemAt(0).widget()
+    sub_btn = options_menu.ui.scrollComboWidgetContents.layout().itemAt(1).widget() #Böngi
     qtbot.mouseClick(sub_btn, Qt.LeftButton)
     qtbot.wait(500)
     assert options_menu.data['1']['description'] == 'Böngésző elindítása\n\n\nTörléshez kattints\njobb gombbal!'

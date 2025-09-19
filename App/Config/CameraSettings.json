@@ -5,5 +5,8 @@
     "Confidence": 0.6,
     "FrameCount": 5,
     "Delay": 1.0,
-    "FrameThrottling": false
+    "FrameThrottling": true,
+    "Sensitivity": 10,
+    "Drift": 175,
+    "InvertButtons": false
 }

@@ -13,8 +13,9 @@ import Controllers.NewGestureWizardController
 
 import Controllers.CameraOptionsController
 from Models.RecognizerHandler import *
-from Models.MediaPipeHandler import MediapipeLoader
+from Models.MediaPipeHandler import ImportHandler
 from Models.Recorder import Recorder
+from Models.OverlayHandler import OverlayHandler
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'Controllers')))
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'Models')))
@@ -46,10 +47,12 @@ class MainWindow(QMainWindow):
         self.stacked_widget.addWidget(self.new_gesture_wizard)
         self.stacked_widget.addWidget(self.camera_options)
 
-        self.ml = MediapipeLoader()
+        self.overlay = OverlayHandler.getInstance()
+
+        self.ml = ImportHandler()
         self.rl = RecognizerHandler.getInstance()
 
-        self.ml.finished.connect(self.rl.load)
+        self.ml.finished.connect(self.rl.start)
         self.rl.finished.connect(lambda: self.stacked_widget.setCurrentIndex(1))
 
     def start_background(self):

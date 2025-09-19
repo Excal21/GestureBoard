@@ -79,10 +79,10 @@
    <widget class="QScrollArea" name="scrollArea">
     <property name="geometry">
      <rect>
-      <x>20</x>
+      <x>30</x>
       <y>10</y>
-      <width>481</width>
-      <height>311</height>
+      <width>471</width>
+      <height>321</height>
      </rect>
     </property>
     <property name="widgetResizable">
@@ -93,8 +93,8 @@
       <rect>
        <x>0</x>
        <y>0</y>
-       <width>479</width>
-       <height>309</height>
+       <width>469</width>
+       <height>319</height>
       </rect>
      </property>
      <widget class="QScrollArea" name="scrollCombo">
@@ -102,8 +102,8 @@
        <rect>
         <x>20</x>
         <y>10</y>
-        <width>245</width>
-        <height>311</height>
+        <width>241</width>
+        <height>321</height>
        </rect>
       </property>
       <property name="widgetResizable">
@@ -114,8 +114,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>243</width>
-         <height>309</height>
+         <width>239</width>
+         <height>319</height>
         </rect>
        </property>
       </widget>
@@ -141,7 +141,7 @@
    <widget class="QPushButton" name="btnReset">
     <property name="geometry">
      <rect>
-      <x>229</x>
+      <x>220</x>
       <y>340</y>
       <width>131</width>
       <height>40</height>
@@ -168,9 +168,9 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>30</y>
-      <width>221</width>
-      <height>301</height>
+      <y>20</y>
+      <width>261</width>
+      <height>321</height>
      </rect>
     </property>
     <property name="frameShape">
@@ -182,8 +182,8 @@
     <widget class="QLabel" name="lblUserGuide">
      <property name="geometry">
       <rect>
-       <x>8</x>
-       <y>20</y>
+       <x>20</x>
+       <y>0</y>
        <width>221</width>
        <height>81</height>
       </rect>
@@ -197,7 +197,7 @@
       <rect>
        <x>20</x>
        <y>60</y>
-       <width>161</width>
+       <width>201</width>
        <height>28</height>
       </rect>
      </property>
@@ -205,7 +205,7 @@
     <widget class="QPushButton" name="btnCommandOk">
      <property name="geometry">
       <rect>
-       <x>190</x>
+       <x>230</x>
        <y>60</y>
        <width>31</width>
        <height>29</height>

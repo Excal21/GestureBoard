@@ -43,7 +43,7 @@ def test_eventHandlers():
 
 def test_start_activates_recognizer(qtbot, monkeypatch):
     started = {}
-    monkeypatch.setattr(mainMenu.recognizer, "start", lambda: started.setdefault("started", True))
+    monkeypatch.setattr(mainMenu.recognizer, "startRecognizer", lambda: started.setdefault("started", True))
     monkeypatch.setattr(mainMenu.recognizer, "stop", lambda: started.setdefault("stopped", True))
 
     mainMenu.recognizer_active = False

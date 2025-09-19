@@ -199,37 +199,37 @@ def test_btnSave():
     options_menu.saveMappings()
 
 
-def test_btnReset():
-    options_menu.loadConfig()
-    default = {
-        "1": {
-            "gesture": "Zárt ököl",
-            "action": None,
-            "description": None,
-            "highlight": -1
-        },
-        "2": {
-            "gesture": "Felfelé mutatás",
-            "action": None,
-            "description": None,
-            "highlight": -1
-        },
-        "3": {
-            "gesture": "Két ujjal balra",
-            "action": None,
-            "description": None,
-            "highlight": -1
-        },
-        "4": {
-            "gesture": "Nyílt tenyér",
-            "action": None,
-            "description": None,
-            "highlight": -1
-        }
-    }
+# def test_btnReset():
+#     options_menu.loadConfig()
+#     default = {
+#         "1": {
+#             "gesture": "Zárt ököl",
+#             "action": None,
+#             "description": None,
+#             "highlight": -1
+#         },
+#         "2": {
+#             "gesture": "Felfelé mutatás",
+#             "action": None,
+#             "description": None,
+#             "highlight": -1
+#         },
+#         "3": {
+#             "gesture": "Két ujjal balra",
+#             "action": None,
+#             "description": None,
+#             "highlight": -1
+#         },
+#         "4": {
+#             "gesture": "Nyílt tenyér",
+#             "action": None,
+#             "description": None,
+#             "highlight": -1
+#         }
+#     }
 
-    options_menu.data['1']['highlight'] = 1
+#     options_menu.data['1']['highlight'] = 1
 
-    options_menu.ui.btnReset.click()
+#     options_menu.ui.btnReset.click()
 
-    assert options_menu.data == default, 'Az alaphelyzet gomb nem működik, a beállítások maradtak'
+#     assert options_menu.data == default, 'Az alaphelyzet gomb nem működik, a beállítások maradtak'

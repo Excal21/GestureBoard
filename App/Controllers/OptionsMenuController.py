@@ -1,13 +1,11 @@
-import os
-import sys
 import json
 from time import sleep
 
 
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QMenu
+from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout
 from PySide6.QtCore import Qt, QSize
-from PySide6.QtGui import QFontDatabase, QFont, QIcon, QKeyEvent, QKeySequence
-from PySide6.QtWidgets import QApplication, QStackedWidget
+from PySide6.QtGui import QIcon, QKeyEvent
+from PySide6.QtWidgets import QApplication
 
 from Resources.Stylesheets.styles import *
 from Views.ui_optionsForm import Ui_OptionsForm
@@ -34,7 +32,8 @@ class OptionsMenuController(BaseController):
         self.key_command = ''
 
         self.data = None
-
+        self.ui.btnReset.setEnabled(False)
+        self.ui.btnReset.setVisible(False)
         #self.loadConfig()
 
 
@@ -49,9 +48,8 @@ class OptionsMenuController(BaseController):
 
             gesture_entry = QWidget()
             gesture_entry_layout = QHBoxLayout(gesture_entry)
-            gesture_entry_layout.setSpacing(0)
-            gesture_entry.setFixedHeight(70)
-            gesture_entry.setContentsMargins(0, 0, 0, 0)
+            gesture_entry_layout.setContentsMargins(0, 0, 0, 0)
+            gesture_entry.setFixedHeight(75)
 
             label = QLabel(entry['gesture'])
             label.setStyleSheet(entry_label_style)
@@ -64,12 +62,16 @@ class OptionsMenuController(BaseController):
 
             btnCombo.setIcon(QIcon('Resources/Icons/widget.png'))
             btnCombo.setIconSize(QSize(40, 40))
+            btnCombo.setFixedWidth(45)
 
             btnKey.setIcon(QIcon('Resources/Icons/keyboard.png'))
             btnKey.setIconSize(QSize(60, 60))
+            btnKey.setFixedWidth(70)
 
             btnConsole.setIcon(QIcon('Resources/Icons/console.png'))
             btnConsole.setIconSize(QSize(50, 45))
+            btnConsole.setFixedWidth(45)
+
             #Windows világos téma miatt
             btnCombo.setStyleSheet(noborder)
             btnKey.setStyleSheet(noborder)
@@ -91,7 +93,14 @@ class OptionsMenuController(BaseController):
             #Gombok helyének beállítása
             btnContainer = QWidget()
             btnContainer_layout = QHBoxLayout(btnContainer)
-            btnContainer_layout.setSpacing(10)
+            btnContainer.setFixedWidth(200)
+            if len(self.data) > 4:
+                btnContainer.setFixedWidth(230)
+            else:
+                btnContainer.setFixedWidth(200)
+
+            btnContainer_layout.setContentsMargins(0, 0, 0, 0)
+
             btnContainer_layout.addWidget(btnCombo)
             btnContainer_layout.addWidget(btnKey)
             btnContainer_layout.addWidget(btnConsole)
@@ -115,7 +124,6 @@ class OptionsMenuController(BaseController):
 
             self.scroll_layout.addWidget(gesture_entry)
         
-        self.scroll_layout.setSpacing(3)
         self.scroll_layout.addStretch()
 
     def resetEntry(self, key):
@@ -165,7 +173,7 @@ class OptionsMenuController(BaseController):
 
             combo_layout.addWidget(combo_entry)
 
-        combo_layout.setContentsMargins(0, 30, 0, 30)
+        combo_layout.setContentsMargins(0, 10, 0, 0)
         combo_layout.addStretch()
 
 
@@ -407,6 +415,7 @@ class OptionsMenuController(BaseController):
         self.scroll_area = self.ui.scrollArea
         self.scroll_area.setWidgetResizable(True)
         self.scroll_layout = QVBoxLayout(self.ui.scrollAreaWidgetContents)
+        self.scroll_layout.setContentsMargins(0, 0, 0, 0)
         self.scroll_area.setWidget(self.ui.scrollAreaWidgetContents)
 
         self.ui.scrollArea.verticalScrollBar().setContextMenuPolicy(Qt.NoContextMenu)

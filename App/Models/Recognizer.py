@@ -14,7 +14,7 @@ from mediapipe.framework.formats import landmark_pb2
 from mediapipe.tasks import python
 from datetime import datetime
 from collections import Counter, deque
-
+from Models.MouseProcessor import MouseProcessor
 
 class Recognizer:
     def __init__(self, task_file_path: str, config_path: str):
@@ -38,6 +38,12 @@ class Recognizer:
             num_hands=4
         )
         self.recognizer = python.vision.GestureRecognizer.create_from_options(self.options)
+
+        self.mouse_active = False
+        self.framethrottling_prevstate = None
+
+        self.mouse_processor = MouseProcessor()
+
 
         self.camera = 0
         self.confidence = 0.5
@@ -147,6 +153,10 @@ class Recognizer:
             self.distance = data['Distance']
             self.delay = data['Delay']
             self.framethrottling = data['FrameThrottling']
+            self.mouse_processor.sensitivity = data['Sensitivity']
+            self.mouse_processor.overlay_circle.setRadius(data['Drift'])
+            self.mouse_processor.radius = data['Drift']
+            self.mouse_processor.invert = data['InvertButtons']
 #endregion
 
 #region Felismerő
@@ -175,10 +185,12 @@ class Recognizer:
         frame_index = 0
         no_gesture_count = 0
 
+        mouse_gesture = next((key for key, value in gesture_mappings.items() if value.get('action') == 'self.toggleMouseMode()'), None)
+
         #region Fő ciklus
         while not self.stop and not self.error:
             frame_index += 1
-            if self.framethrottling and skip_frames and frame_index % 2 != 0:
+            if self.framethrottling and not self.mouse_active and skip_frames and frame_index % 2 != 0:
                 cv2.waitKey(int(1000 / 30))
                 continue
 
@@ -214,6 +226,14 @@ class Recognizer:
 
                 closest_hand = min(distances, key=lambda x: sum(distances[x]))
 
+                if (
+                    self.mouse_active
+                    and len(last_gestures) > 0
+                    and last_gestures[-1][0] != mouse_gesture
+                    and distances[closest_hand][0] <= self.distance
+                ):
+                    self.mouse_processor.process(result.hand_landmarks[closest_hand])
+
                 if len(result.gestures) >= 1:
                     gesture = result.gestures[closest_hand]
                     name = gesture[0].category_name
@@ -224,7 +244,7 @@ class Recognizer:
                                     distances[closest_hand][1] <= self.distance):
                                 last_gestures.append((name, score))
                                 gesture_detected = True
-                                print(f"Gesture: {name}, Score: {score:.2f}, Distance: {distance_09}, 5-17 Distance: {distance_517}")
+                                #print(f"Gesture: {name}, Score: {score:.2f}, Distance: {distance_09}, 5-17 Distance: {distance_517}")
                         else:
                             last_gestures.append(("NONE", 0.0))
                     else:
@@ -242,19 +262,25 @@ class Recognizer:
                     majority_confidences = [g[1] for g in last_gestures if g[0] == majority_gesture]
                     avg_confidence = sum(majority_confidences) / len(majority_confidences)
 
+            #endregion
+
+            #region Parancsvégrehajtás
                     if avg_confidence >= self.confidence and (datetime.now() - last_gesture_time).total_seconds() > self.delay:
                         print(majority_gesture)
                         if majority_gesture in gesture_mappings.keys():
                             print(majority_gesture)
                             try:
-                                exec(gesture_mappings[majority_gesture]['action'])
-                            except Exception:
-                                print("Hiba történt a parancs végrehajtásakor")
+                                if self.mouse_active and gesture_mappings[majority_gesture]['action'] == 'self.toggleMouseMode()':
+                                    self.toggleMouseMode()
+                                elif not self.mouse_active:
+                                    exec(gesture_mappings[majority_gesture]['action'])
+                            except Exception as e:
+                                print("Hiba történt a parancs végrehajtásakor: ", e)
                             print(f"last_gesture: {majority_gesture}, avg confidence: {avg_confidence:.2f}")
                         last_gesture_time = datetime.now()
 
                 last_gestures.clear()
-            #endregion
+            #endregion           
 
             #region FrameThrottling
             if self.framethrottling:
@@ -274,7 +300,23 @@ class Recognizer:
 
         #endregion
 
+
         cv2.destroyAllWindows()
+    #region Egér mód
+    def toggleMouseMode(self):
+        if self.mouse_active:
+            self.mouse_active = False
+            self.framethrottling = self.framethrottling_prevstate
+            self.mouse_processor.hideOverlay()
+        else:
+            self.mouse_active = True
+            self.framethrottling_prevstate = self.framethrottling
+            self.framethrottling = False
+            self.mouse_processor.init_state = True
+            self.mouse_processor.overlay_circle.setCircleOnly(False)
+            self.mouse_processor.showOverlay()
+    #endregion
+
 #endregion
 
 if __name__ == '__main__':
