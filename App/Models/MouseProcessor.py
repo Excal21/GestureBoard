@@ -1,73 +1,11 @@
 import math
 import sys
-import ctypes
 from pynput.mouse import Controller, Button
-from PySide6.QtWidgets import QApplication, QWidget
-from PySide6.QtGui import QPainter, QColor, QPen
-from PySide6.QtCore import Qt, QPoint
+
 from datetime import datetime, timedelta
+from PySide6.QtWidgets import QApplication, QWidget
+from Models.OverlayHandler import OverlayHandler
 
-#region Overlay
-class OverlayCircle(QWidget):
-    def __init__(self, radius = 50, circle_only = False):
-        super().__init__()
-        self.radius = radius
-        self.circle_only = circle_only
-        self.index_finger_pos = QPoint(0, 0)
-
-        self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint | Qt.Tool)
-        self.setAttribute(Qt.WA_TranslucentBackground)
-        self.setAttribute(Qt.WA_TransparentForMouseEvents)
-
-        screen = QApplication.primaryScreen()
-        size = screen.size()
-        self.screen_width = size.width()
-        self.screen_height = size.height()
-        self.setGeometry(0, 0, self.screen_width, self.screen_height)
-        self.setClickThrough()
-
-    def setClickThrough(widget):
-        #Azért kell, hogy az átlátszó körön keresztül menjen a kattintás
-        #Leírás: https://learn.microsoft.com/en-us/windows/win32/winmsg/window-features
-        hwnd = widget.winId()
-        style = ctypes.windll.user32.GetWindowLongW(hwnd, -20)  # GWL_EXSTYLE = -20
-        style |= 0x20  # WS_EX_TRANSPARENT
-        style |= 0x80000  # WS_EX_LAYERED
-        ctypes.windll.user32.SetWindowLongW(hwnd, -20, style)
-
-    def updatePosition(self, index_finger):
-        fx = int(index_finger.x * self.screen_width)
-        fy = int(index_finger.y * self.screen_height)
-        self.index_finger_pos = QPoint(fx, fy)
-        self.update()
-
-    def setRadius(self, radius):
-        self.radius = radius
-        self.update()
-
-    def paintEvent(self, event):
-        if not self.isVisible():
-            return
-
-        painter = QPainter(self)
-        painter.setRenderHint(QPainter.Antialiasing)
-
-        pen = QPen(QColor(80, 80, 80, 80), 40)
-        painter.setPen(pen)
-        painter.setBrush(Qt.NoBrush)
-        center_x = self.screen_width // 2
-        center_y = self.screen_height // 2
-        painter.drawEllipse(center_x - self.radius, center_y - self.radius, self.radius * 2, self.radius * 2)
-
-        if not self.circle_only:
-            pen = QPen(QColor(100, 180, 255, 120), 15)
-            painter.setPen(pen)
-            painter.setBrush(Qt.NoBrush)
-            painter.drawEllipse(self.index_finger_pos.x() - 30,
-                        self.index_finger_pos.y() - 30,
-                        60, 60)
-
-#endregion
 
 #region Egérvezérlő
 class MouseProcessor:
@@ -90,7 +28,7 @@ class MouseProcessor:
         self.init_state = True
 
         self.prev_screen_x, self.prev_screen_y = None, None
-        self.overlay_circle = OverlayCircle(self.radius)
+        self.overlay_circle = OverlayHandler.getInstance()
 
     def hideOverlay(self):
         self.overlay_circle.hide()
@@ -117,7 +55,7 @@ class MouseProcessor:
         lm00 = hand_landmarks[0]
 
         lm01 = hand_landmarks[1] #Hüvelykujj alja
-        lm04 = hand_landmarks[4] #Hüvelykujj közepe
+        lm04 = hand_landmarks[4] #Hüvelykujj vége
 
         lm05 = hand_landmarks[5]
         lm17 = hand_landmarks[17]

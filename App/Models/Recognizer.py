@@ -2,8 +2,12 @@
 # Bővebb információ Google MediaPiperól az alábbi linken érhető el:
 # https://ai.google.dev/edge/mediapipe
 
+import os
+import sys
 import cv2
 import numpy as np
+import shutil
+import pyautogui
 import json
 from mediapipe import solutions, Image, ImageFormat
 from mediapipe.framework.formats import landmark_pb2
@@ -309,6 +313,7 @@ class Recognizer:
             self.framethrottling_prevstate = self.framethrottling
             self.framethrottling = False
             self.mouse_processor.init_state = True
+            self.mouse_processor.overlay_circle.setCircleOnly(False)
             self.mouse_processor.showOverlay()
     #endregion
 

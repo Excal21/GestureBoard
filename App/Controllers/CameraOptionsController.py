@@ -11,7 +11,7 @@ from Resources.Stylesheets.styles import *
 from Views.ui_cameraOptionsForm import Ui_Form
 from Models.RecognizerHandler import RecognizerHandler
 from Models.Recorder import Recorder
-from Models.MouseProcessor import OverlayCircle
+from Models.OverlayHandler import OverlayHandler
 
 from time import sleep
 from Controllers.BaseController import BaseController
@@ -41,7 +41,7 @@ class CameraOptionsController(BaseController):
 
         self.timer = None
 
-        self.overlay = OverlayCircle(circle_only=True)
+        self.overlay = OverlayHandler.getInstance()
 
         self.ui.sliderHue.setRange(0, 255)
         self.ui.sliderDistance.setRange(100, 500)
@@ -309,6 +309,7 @@ class CameraOptionsController(BaseController):
         if index == 1:
             self.loadCameraCombo()
         elif index == 5:
+            self.overlay.setCircleOnly(True)
             self.loadSettings()
 
     def loadSettings(self):
