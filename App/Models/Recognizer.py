@@ -120,7 +120,7 @@ class Recognizer:
             distance_517 = ((lm05.x - lm17.x) ** 2 + (lm05.y - lm17.y) ** 2) ** 0.5
             distance_517 = 460 - int(distance_517 * 1000)  # Az 5-17 távolság kisebb, mint a 0-9
 
-            print(f'Távolság: {distance_09}, 5-17 távolság: {distance_517}')
+            #print(f'Távolság: {distance_09}, 5-17 távolság: {distance_517}')
 
             if distance_09 <= distance or distance_517 <= distance:
                 annotated_image = self.draw_landmarks_on_image(mp_image.numpy_view(), result)

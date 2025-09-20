@@ -55,6 +55,7 @@ class TrainMenuController(BaseController):
                 self.ui.btnTrain.leaveEvent = lambda event: None
        
             print('USerSettings JSON betöltve a TrainMenuController-be')
+            self.backup()
             self.updateList()
         elif index == 3 and self.previous_page == 4:
             self.updateList()

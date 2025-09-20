@@ -10,9 +10,11 @@ class Recorder():
         self.width = 500
         self.height = 500
         self.img_counter = 0
+        self.saved_images = 0
         self.data = None
         self.camera = 0
-
+        
+        self.frame_counter = 0
         self.__gesture_id = None
         self.__gesture_name = None
         self.cap = None
@@ -26,35 +28,24 @@ class Recorder():
         self.cap = cv2.VideoCapture(self.camera, cv2.CAP_DSHOW)
         print('loaded')
 
+    def save(self, frame, gesture_id):
 
-    def record_batch(self, gesture_name, imgcnt):
-        self.img_counter
+        if self.saved_images < 50:
+            self.frame_counter += 1
+            if self.frame_counter % 2 == 0:
+                print('mentés')
+                gesture_dir = os.path.join('Data/Samples', str(gesture_id))
+                if not os.path.exists(gesture_dir):
+                    os.makedirs(gesture_dir)
 
-        gesture_dir = os.path.join('Data/Samples', str(gesture_name))
-        if not os.path.exists(gesture_dir):
-            os.makedirs(gesture_dir)
-
-        for i in range(imgcnt):
-            frame = self.getFrame()
-            if frame is not None:
-                h, w, _ = frame.shape
-
-                center_x, center_y = w // 2, h // 2
-                crop_width, crop_height = 500, 300
-                x1, x2 = center_x - crop_width // 2, center_x + crop_width // 2
-                y1, y2 = center_y - crop_height // 2, center_y + crop_height // 2
-
-                cropped_frame = frame[y1:y2, x1:x2].copy()  # C-contiguous hiba elkerülése miatt
-
-                ret, buf = cv2.imencode('.png', cropped_frame)
+                img_name = os.path.join(gesture_dir, f'{gesture_id}_{self.img_counter}')
+                self.img_counter += 1
+                ret, buf = cv2.imencode('.png', frame)
                 if ret:
-                    img_name = os.path.join(gesture_dir, f'{gesture_name}_{self.img_counter}')  # Nincs kiterjesztés
                     with open(img_name, 'wb') as f:
                         f.write(buf.tobytes())
-                    self.img_counter += 1
-
-
-                sleep(0.02)
+                    print(f'Kép mentve: {img_name}')
+                    self.saved_images += 1
 
     def getFrame(self, manual_hue_offset = -1):
         frame = self.cap.read()[1]
