@@ -56,7 +56,7 @@ class NewGestureWizardController(BaseController):
             self.widget = widget
 
         def run(self):
-            self.rec.load(self.widget.data)
+            self.rec.load()
             self.rec.cap.set(cv2.CAP_PROP_BUFFERSIZE, 1)
             self.rec.cap.set(cv2.CAP_PROP_FPS, 60)
 

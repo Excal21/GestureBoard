@@ -16,6 +16,7 @@ from datetime import datetime
 from collections import Counter, deque
 from Models.MouseProcessor import MouseProcessor
 
+
 class Recognizer:
     def __init__(self, task_file_path: str, config_path: str):
         self.MARGIN = 10
@@ -176,7 +177,7 @@ class Recognizer:
             self.error = True
             return
 
-        cap.set(cv2.CAP_PROP_FPS, 30)
+        cap.set(cv2.CAP_PROP_FPS, 60)
 
         last_gestures = deque(maxlen=self.framecount)
         last_gesture_time = datetime.now()

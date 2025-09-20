@@ -15,21 +15,18 @@ class Recorder():
         self.camera = 0
         
         self.frame_counter = 0
-        self.__gesture_id = None
-        self.__gesture_name = None
         self.cap = None
 
     def loadCameraOnly(self, camera_idx):
         self.cap = cv2.VideoCapture(camera_idx, cv2.CAP_DSHOW)
 
-    def load(self, data):
+    def load(self):
         self.loadJSONSettings()
 
         self.cap = cv2.VideoCapture(self.camera, cv2.CAP_DSHOW)
         print('loaded')
 
     def save(self, frame, gesture_id):
-
         if self.saved_images < 50:
             self.frame_counter += 1
             if self.frame_counter % 2 == 0:

@@ -13,9 +13,15 @@ class OverlayHandler(QWidget):
         self.index_finger_pos = QPoint(0, 0)
         self.circle_only = False
 
-        self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint | Qt.Tool)
+        self.setWindowFlags(
+                            Qt.FramelessWindowHint |
+                            Qt.WindowStaysOnTopHint |
+                            Qt.Tool |
+                            Qt.WindowTransparentForInput
+                        )
         self.setAttribute(Qt.WA_TranslucentBackground)
         self.setAttribute(Qt.WA_TransparentForMouseEvents)
+        self.setFocusPolicy(Qt.NoFocus)
 
         screen = QApplication.primaryScreen()
         size = screen.size()
