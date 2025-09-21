@@ -3,7 +3,7 @@ import json
 import shutil
 import stat
 
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, QCoreApplication
 from PySide6.QtWidgets import QVBoxLayout, QLabel, QPushButton, QHBoxLayout
 from Resources.Stylesheets.styles import *
 from Views.ui_trainOptionsForm import Ui_Form
@@ -82,7 +82,7 @@ class TrainMenuController(BaseController):
                     child.widget().deleteLater()
             if len(self.data) > 0:
                 for key, value in self.data.items():
-                    entry = QPushButton(value['gesture'])
+                    entry = QPushButton(QCoreApplication.translate('Pretrained gesture', value['gesture']))
                     entry.setStyleSheet(predefined_label_style + noborder)
                     entry.setFont(FontLoader.getFont())
                     entry.setFixedHeight(32)
