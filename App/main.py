@@ -1,6 +1,6 @@
 import os
 import sys
-import time
+import json
 
 from PySide6.QtWidgets import QApplication, QMainWindow, QStackedWidget
 from PySide6.QtCore import Qt, QThread, Signal, QTranslator
@@ -16,11 +16,6 @@ from Models.RecognizerHandler import *
 from Models.MediaPipeHandler import ImportHandler
 from Models.Recorder import Recorder
 from Models.OverlayHandler import OverlayHandler
-import json
-
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'Controllers')))
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'Models')))
-
 
 
 class MainWindow(QMainWindow):

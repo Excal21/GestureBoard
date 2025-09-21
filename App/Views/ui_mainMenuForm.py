@@ -70,7 +70,7 @@ class Ui_MainWindow(object):
         self.lblTitle.setText(QCoreApplication.translate("MainWindow", u"GestureBoard", None))
         self.btnCameraOptions.setText(QCoreApplication.translate("MainWindow", u"Kamera- \u00e9s eg\u00e9rbe\u00e1ll\u00edt\u00e1sok", None))
         self.btnOptions.setText(QCoreApplication.translate("MainWindow", u"Be\u00e1ll\u00edt\u00e1sok", None))
-        self.btnStart.setText(QCoreApplication.translate("MainWindow", u"Gesztusvez\u00e9rl\u00e9s elind\u00edt\u00e1sa", None))
+        self.btnStart.setText(QCoreApplication.translate("MainWindow", u"Gesztusvez\u00e9rl\u00e9s ind\u00edt\u00e1sa", None))
         self.btnLanguage.setText(QCoreApplication.translate("MainWindow", u"EN", None))
     # retranslateUi
 

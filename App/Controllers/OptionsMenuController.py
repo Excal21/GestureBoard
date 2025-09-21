@@ -160,7 +160,7 @@ class OptionsMenuController(BaseController):
             predefined_actions_data = dict(json.load(file))
 
         for predefined_action in predefined_actions_data.items():
-            combo_entry = QPushButton(predefined_action[0])
+            combo_entry = QPushButton(QApplication.translate('Predefined action', predefined_action[0]))
             combo_entry.setFixedHeight(30)
             combo_entry.setFixedWidth(220)
             combo_entry.setStyleSheet(predefined_label_style)
@@ -179,7 +179,7 @@ class OptionsMenuController(BaseController):
     def saveSubSelection(self, predefined_action):
         self.data[self.clicked]['action'] = predefined_action[1]
         self.data[self.clicked]['highlight'] = 0
-        self.data[self.clicked]['description'] = predefined_action[0] + QCoreApplication.translate('OptionsMenuController','\n\n\nTörléshez kattints\njobb gombbal!')
+        self.data[self.clicked]['description'] = predefined_action[0]
         self.ui.scrollCombo.hide()
         self.ui.scrollArea.setDisabled(False)
         self.sub_menu_active = False
@@ -200,7 +200,7 @@ class OptionsMenuController(BaseController):
             self.clicked = JSONkey
             self.ui.frameHide.show()
             self.setFocus()
-            self.ui.lblUserGuide.setText('Billentyűkombináció')
+            self.ui.lblUserGuide.setText(QApplication.translate('OptionsMenuController', 'Billentyűkombináció'))
 
     def keyPressEvent(self, event: QKeyEvent):
         if self.keycapture_active:
@@ -281,7 +281,7 @@ class OptionsMenuController(BaseController):
                 self.data[self.clicked]['description'] = f'{combination.replace(',', '+')
                                                             + (' + ' if combination else '') 
                                                             + (key_map[key][0] if (key in key_map and len(key_map[key]) == 2) else keystr)}'
-                self.data[self.clicked]['description'] += QCoreApplication.translate('OptionsMenuController','\n\n\nTörléshez kattints\njobb gombbal!')
+                self.data[self.clicked]['description']
                 self.data[self.clicked]['highlight'] = 1
 
                 print(f'{QCoreApplication.translate('OptionsMenuController', 'Billentyűkombináció')}\n {combination.replace(',', '+') + (' + ' if combination else '') + keystr}')
@@ -292,10 +292,6 @@ class OptionsMenuController(BaseController):
                 self.ui.frameHide.hide()
                 self.keycapture_active = False
                 self.updateEntries()
-
-    # def keyReleaseEvent(self, event):   <== lol ezt minek raktam ide
-    #     if self.keycapture_active:
-    #         self.ui.lblUserGuide.setText('Billentyűkombináció')
 #endregion
 
 #region Parancs megadása
@@ -318,7 +314,7 @@ class OptionsMenuController(BaseController):
         action = f'os.system(\'{self.ui.txtinputCommand.text()}\')'
         self.data[self.clicked]['action'] = action
         self.data[self.clicked]['highlight'] = 2
-        self.data[self.clicked]['description'] = self.ui.txtinputCommand.text() + QCoreApplication.translate('OptionsMenuController','\n\n\nTörléshez kattints\njobb gombbal!')
+        self.data[self.clicked]['description'] = self.ui.txtinputCommand.text()
         self.ui.txtinputCommand.clear()
         self.ui.txtinputCommand.hide()
         self.ui.btnCommandOk.hide()
@@ -357,7 +353,8 @@ class OptionsMenuController(BaseController):
 
     def showDescription(self, entry, hoveridx):
         if entry['highlight'] == hoveridx:
-            self.ui.lblDescription.setText(entry['description'])
+            self.ui.lblDescription.setText(QCoreApplication.translate('Predefined action', entry['description']) + 
+                                           QCoreApplication.translate('OptionsMenuController','\n\n\nTörléshez kattints\njobb gombbal!'))
         else:
             if hoveridx == 0:
                 self.ui.lblDescription.setText(QApplication.translate('OptionsMenuController', 'Előre definiált művelet'))

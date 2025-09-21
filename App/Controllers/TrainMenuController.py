@@ -180,9 +180,10 @@ class TrainMenuController(BaseController):
         info_widget = loading_page.findChild(QLabel, 'lblLoading')
 
         if self.ui.checkCloud.isChecked():
-            info_widget.setText('Várakozás a kiszolgálóra...<br><span style="font-size:20pt;">~1 perc</span>')
+            info_widget.setText(
+                QCoreApplication.translate('TrainMenuController', 'Várakozás a kiszolgálóra...<br><span style="font-size:20pt;">~1 perc</span>'))
         else:
-            info_widget.setText('Várakozás a kiszolgálóra...')
+            info_widget.setText(QCoreApplication.translate('TrainMenuController', 'Várakozás a kiszolgálóra...'))
         info_widget.setAlignment(Qt.AlignCenter)
         self.stacked_widget.setCurrentIndex(0)
 
@@ -253,7 +254,7 @@ class TrainMenuController(BaseController):
         self.ui.txtinputServer.setPlaceholderText('http://127.0.0.1:5000')
         self.ui.txtinputServer.setContextMenuPolicy(Qt.NoContextMenu)
         self.ui.lblDescription.setText(
-            self.textToHTML('Rögzíts új gesztusokat vagy törölj a meglévőkből, majd tanítsd újra a modellt!')
+            self.textToHTML(QCoreApplication.translate('TrainMenuController', 'Rögzíts új gesztusokat vagy törölj a meglévőkből, majd tanítsd újra a modellt!'))
         )
 
         self.ui.lblServer.setFixedHeight(30)

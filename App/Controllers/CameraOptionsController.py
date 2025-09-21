@@ -83,13 +83,13 @@ class CameraOptionsController(BaseController):
             self.timer.start(10)
             self.is_camera_on = True
             self.ui.btnStartCam.setStyleSheet(options_button_active_style + 'background-color: rgb(201, 97, 97)')
-            self.ui.btnStartCam.setText('Leállítás')
+            self.ui.btnStartCam.setText(QCoreApplication.translate('CameraOptionsController', 'Leállítás'))
         else:
             self.timer.stop()
             self.rec.cap.release()
             self.ui.lblCvImg.setPixmap(QPixmap('Resources/Icons/camera.png').scaled(100, 70, Qt.KeepAspectRatio, Qt.SmoothTransformation))
             self.is_camera_on = False
-            self.ui.btnStartCam.setText('Kamerateszt')
+            self.ui.btnStartCam.setText(QCoreApplication.translate('CameraOptionsController', 'Kamerateszt'))
             self.ui.btnStartCam.setStyleSheet(options_button_style)
 
     def updateFrame(self):
@@ -114,7 +114,7 @@ class CameraOptionsController(BaseController):
             resized_frame = cv2.resize(cropped_frame, (resize_width, resize_height), interpolation=cv2.INTER_AREA)
 
             if gesture is not None:
-                gesture_text = f"{self.gesturedata[gesture[0]]['gesture']}   {int(gesture[1])}%"
+                gesture_text = f'{QCoreApplication.translate('Pretrained gesture', self.gesturedata[gesture[0]]['gesture'])}   {int(gesture[1])}%'
             else:
                 gesture_text = ''
 
@@ -220,8 +220,8 @@ class CameraOptionsController(BaseController):
 
     def sliderDriftEnter(self, event):
         self.ui.lblDescription.setText(
-        self.textToHTML('A szürke körön belül finom mozgást végezhetsz az egérrel, '
-                        'míg a körön kívül sodródni fog a kurzor.'))
+        self.textToHTML(QCoreApplication.translate('CameraOptionsController' , 'A szürke körön belül finom mozgást végezhetsz az egérrel, '
+                        'míg a körön kívül sodródni fog a kurzor.')))
         self.overlay.show()
 
     def sliderDriftLeave(self, event):
@@ -252,39 +252,39 @@ class CameraOptionsController(BaseController):
         # QTranslator használata a magyar szövegekhez, fordítás .qm fájlból érkezik
 
         self.ui.comboCamera.enterEvent = lambda event: self.ui.lblDescription.setText(
-            self.textToHTML(QCoreApplication.translate("CameraOptions", "Válaszd ki a kamerát, amivel a gesztusokat tudja érzékelni a program!")))
+            self.textToHTML(QCoreApplication.translate('CameraOptionsController', 'Válaszd ki a kamerát, amivel a gesztusokat tudja érzékelni a program!')))
         self.ui.comboCamera.leaveEvent = lambda event: self.ui.lblDescription.setText('')
 
         self.ui.sliderHue.enterEvent = lambda event: self.ui.lblDescription.setText(
-            self.textToHTML(QCoreApplication.translate("CameraOptions", "A színek eltolásával beállíthatod, hogy kesztyűben is felismerje a kezedet a program. Kapcsold be a kamerát és állítsd be óvatosan a csúszkával!")))
+            self.textToHTML(QCoreApplication.translate('CameraOptionsController', 'A színek eltolásával beállíthatod, hogy kesztyűben is felismerje a kezedet a program. Kapcsold be a kamerát és állítsd be óvatosan a csúszkával!')))
         self.ui.sliderHue.leaveEvent = lambda event: self.ui.lblDescription.setText('')
 
         self.ui.sliderDistance.enterEvent = lambda event: self.ui.lblDescription.setText(
-            self.textToHTML(QCoreApplication.translate("CameraOptions", "A csúszka segítségével állítsd be a kezed távolságát a kamerától! Túl nagy távolság esetén előfordulhat, hogy más ember kezét érzékeli a GestureBoard.")))
+            self.textToHTML(QCoreApplication.translate('CameraOptionsController', 'A csúszka segítségével állítsd be a kezed távolságát a kamerától! Túl nagy távolság esetén előfordulhat, hogy más ember kezét érzékeli a GestureBoard.')))
         self.ui.sliderDistance.leaveEvent = lambda event: self.ui.lblDescription.setText('')
 
         self.ui.spinConfidence.enterEvent = lambda event: self.ui.lblDescription.setText(
-            self.textToHTML(QCoreApplication.translate("CameraOptions", "Növelésével csökkenthető a véletlen felismerések száma, de csökken a felismerés érzékenysége.")))
+            self.textToHTML(QCoreApplication.translate('CameraOptionsController', 'Növelésével csökkenthető a véletlen felismerések száma, de csökken a felismerés érzékenysége.')))
         self.ui.spinConfidence.leaveEvent = lambda event: self.ui.lblDescription.setText('')
 
         self.ui.spinFrameCnt.enterEvent = lambda event: self.ui.lblDescription.setText(
-            self.textToHTML(QCoreApplication.translate("CameraOptions", "A program ennyi képkockán keresztül figyeli a gesztust a művelet végrehajtása előtt. Növelésével pontosabb, de lassabb lesz a felismerés.")))
+            self.textToHTML(QCoreApplication.translate('CameraOptionsController', 'A program ennyi képkockán keresztül figyeli a gesztust a művelet végrehajtása előtt. Növelésével pontosabb, de lassabb lesz a felismerés.')))
         self.ui.spinFrameCnt.leaveEvent = lambda event: self.ui.lblDescription.setText('')
 
         self.ui.spinDelay.enterEvent = lambda event: self.ui.lblDescription.setText(
-            self.textToHTML(QCoreApplication.translate("CameraOptions", "Két gesztus közt eltelt idő másodpercben. Csökkentésével gyorsabban tudod kiadni a parancsokat.")))
+            self.textToHTML(QCoreApplication.translate('CameraOptionsController', 'Két gesztus közt eltelt idő másodpercben. Csökkentésével gyorsabban tudod kiadni a parancsokat.')))
         self.ui.spinDelay.leaveEvent = lambda event: self.ui.lblDescription.setText('')
 
         self.ui.checkFrameThrottling.enterEvent = lambda event: self.ui.lblDescription.setText(
-            self.textToHTML(QCoreApplication.translate("CameraOptions", "Dinamikus képkocka-korlátozás. Csökkenti a CPU használatot, de nagyban növelheti a reakcióidőt.")))
+            self.textToHTML(QCoreApplication.translate('CameraOptionsController', 'Dinamikus képkocka-korlátozás. Csökkenti a CPU használatot, de nagyban növelheti a reakcióidőt.')))
         self.ui.checkFrameThrottling.leaveEvent = lambda event: self.ui.lblDescription.setText('')
 
         self.ui.sliderSensitivity.enterEvent = lambda event: self.ui.lblDescription.setText(
-            self.textToHTML(QCoreApplication.translate("CameraOptions", "Az egérmutató érzékenysége a sodródásmentes zónán kívül. Minél nagyobb az érték, annál gyorsabban mozog az egérmutató.")))
+            self.textToHTML(QCoreApplication.translate('CameraOptionsController', 'Az egérmutató érzékenysége a sodródásmentes zónán kívül. Minél nagyobb az érték, annál gyorsabban mozog az egérmutató.')))
         self.ui.sliderSensitivity.leaveEvent = lambda event: self.ui.lblDescription.setText('')
 
         self.ui.checkInvertButtons.enterEvent = lambda event: self.ui.lblDescription.setText(
-            self.textToHTML(QCoreApplication.translate("CameraOptions", "Felcseréli a jobb és bal egérgombokat egérmódban.")))
+            self.textToHTML(QCoreApplication.translate('CameraOptionsController', 'Felcseréli a jobb és bal egérgombokat egérmódban.')))
         self.ui.checkInvertButtons.leaveEvent = lambda event: self.ui.lblDescription.setText('')
 
         self.ui.sliderDrift.enterEvent = lambda event: self.sliderDriftEnter(event)
@@ -297,14 +297,14 @@ class CameraOptionsController(BaseController):
         self.ui.comboCamera.clear()
         cameras = RecognizerHandler.getInstance().getCameras()
         if cameras == []:
-            self.ui.comboCamera.addItem('Nem található')
+            self.ui.comboCamera.addItem(QCoreApplication.translate('CameraOptionsController' , 'Nem található'))
             self.ui.comboCamera.setEnabled(False)
             self.ui.btnStartCam.setEnabled(False)
             return
         else:
             for cameraIDX in cameras:
                 if cameraIDX == 0:
-                    self.ui.comboCamera.addItem('Beépített kamera')
+                    self.ui.comboCamera.addItem(QCoreApplication.translate('CameraOptionsController' , 'Beépített kamera'))
                 else:
                     self.ui.comboCamera.addItem(f'{cameraIDX + 1}. kamera')
 

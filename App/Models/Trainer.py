@@ -2,7 +2,7 @@ import os
 from shutil import make_archive
 from time import sleep
 import requests
-from PySide6.QtCore import QThread, Signal
+from PySide6.QtCore import QThread, Signal, QCoreApplication
 from Models.RecognizerHandler import RecognizerHandler
 
 CHUNK_SIZE = 30 * 1024 * 1024  # 30 MB
@@ -29,25 +29,25 @@ class Trainer(QThread):
                     make_archive('Images', 'zip', 'Data/Samples')
                     
                     if self.upload_in_chunks(self.filename):
-                        self.progress.emit('Fájlok sikeresen feltöltve')
+                        self.progress.emit(QCoreApplication.translate('Trainer', 'Fájlok sikeresen feltöltve'))
                         sleep(1)
                         os.remove(self.filename)
                         self.train()
                     else:
-                        self.progress.emit('A kiszolgáló elutasította a fájlokat')
+                        self.progress.emit(QCoreApplication.translate('Trainer', 'A kiszolgáló elutasította a fájlokat'))
                         sleep(1)
                 else:
-                    self.progress.emit('A kiszolgáló elfoglalt')
+                    self.progress.emit(QCoreApplication.translate('Trainer', 'A kiszolgáló elfoglalt'))
                     sleep(1)
                     self.finished.emit()
             else:
-                self.progress.emit('Kiszolgálóhiba')
+                self.progress.emit(QCoreApplication.translate('Trainer', 'Kiszolgálóhiba'))
                 sleep(1)
                 self.finished.emit()
                 return
         except (requests.exceptions.ConnectionError , requests.exceptions.InvalidURL) as e:
             print(e)
-            self.progress.emit('Kiszolgáló nem elérhető')
+            self.progress.emit(QCoreApplication.translate('Trainer', 'Kiszolgáló nem elérhető'))
             sleep(1)
             self.finished.emit()
             return
@@ -65,10 +65,10 @@ class Trainer(QThread):
                     headers={'X-API-KEY': API_KEY},
                     files=files
                 )
-                self.progress.emit(f'Fájlok feltöltése {i + 1}/{total_chunks}')
+                self.progress.emit(QCoreApplication.translate('Trainer', 'Fájlok feltöltése {}/{}').format(i + 1, total_chunks))
                 
                 if response.status_code != 200:
-                    self.progress.emit(f"Hiba a {i}. szelet feltöltésekor")
+                    self.progress.emit(QCoreApplication.translate('Trainer', 'Hiba a {}. szelet feltöltésekor').format(i))
                     return
         
         response = requests.post(self.address + '/merge_chunks',
@@ -81,15 +81,15 @@ class Trainer(QThread):
         return True
 
     def train(self):
-        self.progress.emit('Tanítás folyamatban')
+        self.progress.emit(QCoreApplication.translate('Trainer', 'Tanítás folyamatban'))
         response = requests.get(self.address + '/train', headers={'X-API-KEY': API_KEY})
         if response.status_code == 200:
             with open('Config/gesture_recognizer.task', 'wb') as f:
                 f.write(response.content)
             RecognizerHandler.getInstance().reload()
-            self.progress.emit('Modell elmentve')
+            self.progress.emit(QCoreApplication.translate('Trainer', 'Modell elmentve'))
             sleep(1)
             self.trained = True
         else:
-            self.progress.emit('Hiba történt a modell letöltése közben')
+            self.progress.emit(QCoreApplication.translate('Trainer', 'Hiba történt a modell letöltése közben'))
             sleep(1)

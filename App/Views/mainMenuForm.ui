@@ -120,7 +120,7 @@
      <string notr="true"/>
     </property>
     <property name="text">
-     <string>Gesztusvezérlés elindítása</string>
+     <string>Gesztusvezérlés indítása</string>
     </property>
    </widget>
    <widget class="QPushButton" name="btnLanguage">

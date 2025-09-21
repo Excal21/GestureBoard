@@ -50,13 +50,13 @@ class MainMenuController(BaseController):
         layout.addSpacing(50)
         layout.addStretch()
 
-        self.ui.btnCameraOptions.setText(QCoreApplication.translate("MainMenu", "Kamera- és egérbeállítások"))
+        self.ui.btnCameraOptions.setText(QCoreApplication.translate('MainMenuController', 'Kamera- és egérbeállítások'))
 
         with open('Config/Locale.json', 'r', encoding='utf-8') as f:
             if json.load(f)['lang'] == 'hu':
-                self.ui.btnLanguage.setText("EN")
+                self.ui.btnLanguage.setText('EN')
             else:
-                self.ui.btnLanguage.setText("HU")
+                self.ui.btnLanguage.setText('HU')
 
     def showOptions(self):
         self.stacked_widget.setCurrentIndex(2)
@@ -67,20 +67,20 @@ class MainMenuController(BaseController):
 
     def switchLanguage(self):
         current_text = self.ui.btnLanguage.text()
-        if current_text == "EN":
-            lang = "en"
+        if current_text == 'EN':
+            lang = 'en'
         else:
-            lang = "hu"
+            lang = 'hu'
 
-        with open('Config/Locale.json', "w", encoding="utf-8") as f:
-            json.dump({"lang": lang}, f, ensure_ascii=False, indent=4)
+        with open('Config/Locale.json', 'w', encoding='utf-8') as f:
+            json.dump({'lang': lang}, f, ensure_ascii=False, indent=4)
 
         self.restartApp()
 
     def start(self):
         if not self.recognizer_active:
             self.recognizer_active = True
-            self.ui.btnStart.setText(QCoreApplication.translate("MainMenu", "Gesztusvezérlés kikapcsolása"))
+            self.ui.btnStart.setText(QCoreApplication.translate('MainMenuController', 'Gesztusvezérlés kikapcsolása'))
             self.ui.btnOptions.setEnabled(False)
             self.ui.btnCameraOptions.setEnabled(False)
             self.ui.btnOptions.setStyleSheet(button_style + disabled_style)
@@ -94,7 +94,7 @@ class MainMenuController(BaseController):
         else:
             self.recognizer_active = False
             self.recognizer.stop()
-            self.ui.btnStart.setText(QCoreApplication.translate("MainMenu", "Gesztusvezérlés indítása"))
+            self.ui.btnStart.setText(QCoreApplication.translate('MainMenuController', 'Gesztusvezérlés indítása'))
             self.ui.btnOptions.setEnabled(True)
             self.ui.btnCameraOptions.setEnabled(True)
             self.ui.btnStart.setStyleSheet(button_hover_style)
