@@ -1,0 +1,22 @@
+QCoreApplication.translate("Pretrained gesture", "Nyílt tenyér"),
+QCoreApplication.translate("Pretrained gesture", "Zárt ököl"),
+QCoreApplication.translate("Pretrained gesture", "Két ujjal balra"),
+QCoreApplication.translate("Pretrained gesture", "Felfelé mutatás")
+
+QCoreApplication.translate("Predefined action", "Egérmód ki/be"),
+QCoreApplication.translate("Predefined action", "Böngésző elindítása"),
+QCoreApplication.translate("Predefined action", "Feladatkezelő"),
+QCoreApplication.translate("Predefined action", "Képernyőkép készítése"),
+QCoreApplication.translate("Predefined action", "Számológép indítása"),
+QCoreApplication.translate("Predefined action", "Gmail megnyitása"),
+QCoreApplication.translate("Predefined action", "Lejátszás/ szünet"),
+QCoreApplication.translate("Predefined action", "Következő szám"),
+QCoreApplication.translate("Predefined action", "Előző szám"),
+QCoreApplication.translate("Predefined action", "Hangerő növelése"),
+QCoreApplication.translate("Predefined action", "Hangerő csökkentése"),
+QCoreApplication.translate("Predefined action", "Alt + Tab"),
+QCoreApplication.translate("Predefined action", "Asztal megjelenítése"),
+QCoreApplication.translate("Predefined action", "Windows + Jobbra"),
+QCoreApplication.translate("Predefined action", "Windows + Balra"),
+QCoreApplication.translate("Predefined action", "Windows + Fel"),
+QCoreApplication.translate("Predefined action", "Windows + Le")

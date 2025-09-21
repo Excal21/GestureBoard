@@ -1,5 +1,5 @@
 import cv2
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, QCoreApplication
 from PySide6.QtWidgets import QVBoxLayout, QLabel, QHBoxLayout
 from PySide6.QtGui import QPixmap, QShortcut, QIcon, QImage, QRegion, QPainterPath
 from PySide6.QtCore import QSize, QTimer
@@ -66,11 +66,10 @@ class NewGestureWizardController(BaseController):
             self.ui.btnNameOK.show()
             self.ui.txtinputGestureName.show()
             self.ui.txtinputGestureName.setFocus()
-            self.ui.lblInfo.setText("Új gesztus rögzítése")
+            self.ui.lblInfo.setText(QCoreApplication.translate('NewGestureWizardController', 'Új gesztus rögzítése'))
             self.thread = self.RecorderThread(self.rec, self.stacked_widget.widget(3))
-            self.thread.finished.connect(lambda: print("Recorder inicializálva háttérben"))
+            self.thread.finished.connect(lambda: print('Recorder inicializálva háttérben'))
             self.thread.start()
-        print(f'Index changed from {self.previous_index} to {index}')
         self.previous_index = index
 
 #region Record
@@ -94,7 +93,10 @@ class NewGestureWizardController(BaseController):
             self.lblImage.hide()
 
             self.ui.lblUserGuide.show()
-            self.ui.lblUserGuide.setText('Tartsd a kezed a kívánt gesztus pozíciójában, majd nyomj szőközt a másik kezeddel! A szóköz lenyomása lassan mozgasd a kezed!')
+            self.ui.lblUserGuide.setText(
+                QCoreApplication.translate('NewGestureWizardController',
+                'Tartsd a kezed a kívánt gesztus pozíciójában, majd nyomj szőközt a másik kezeddel! A szóköz lenyomása lassan mozgasd a kezed!'))
+            
             self.recording_stage = 1
             print('Elindítva!')
 
@@ -110,7 +112,7 @@ class NewGestureWizardController(BaseController):
         self.ui.txtinputGestureName.hide()
         self.ui.lblCvImg.hide()
         self.lblImage.show()
-        self.ui.lblInfo.setText('Új geszuts rögzítve!')
+        self.ui.lblInfo.setText(QCoreApplication.translate('NewGestureWizardController', 'Új geszuts rögzítve!'))
 
         gesture_entry = {'gesture' : self.gesture_name, 'action' : None, 'description': None, 'highlight': -1}
         self.rec.release()

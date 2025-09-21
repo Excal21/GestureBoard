@@ -61,7 +61,7 @@
     <property name="geometry">
      <rect>
       <x>50</x>
-      <y>250</y>
+      <y>230</y>
       <width>420</width>
       <height>80</height>
      </rect>
@@ -83,7 +83,7 @@
     <property name="geometry">
      <rect>
       <x>50</x>
-      <y>140</y>
+      <y>130</y>
       <width>420</width>
       <height>80</height>
      </rect>
@@ -120,7 +120,20 @@
      <string notr="true"/>
     </property>
     <property name="text">
-     <string>Gesztusvezérlés elindítása</string>
+     <string>Gesztusvezérlés indítása</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btnLanguage">
+    <property name="geometry">
+     <rect>
+      <x>460</x>
+      <y>360</y>
+      <width>41</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>EN</string>
     </property>
    </widget>
   </widget>
