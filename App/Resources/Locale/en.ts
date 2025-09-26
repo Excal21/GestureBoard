@@ -4,72 +4,77 @@
 <context>
     <name>CameraOptionsController</name>
     <message>
-        <location filename="../../Controllers/CameraOptionsController.py" line="86"/>
+        <location filename="../../Controllers/CameraOptionsController.py" line="87"/>
         <source>Leállítás</source>
         <translation>Stop camera</translation>
     </message>
     <message>
-        <location filename="../../Controllers/CameraOptionsController.py" line="92"/>
+        <location filename="../../Controllers/CameraOptionsController.py" line="93"/>
         <source>Kamerateszt</source>
         <translation>Test camera</translation>
     </message>
     <message>
-        <location filename="../../Controllers/CameraOptionsController.py" line="223"/>
+        <location filename="../../Controllers/CameraOptionsController.py" line="227"/>
         <source>A szürke körön belül finom mozgást végezhetsz az egérrel, míg a körön kívül sodródni fog a kurzor.</source>
         <translation>Inside the grey circle, you can make precise movements with the mouse, while outside the circle the cursor will drift.</translation>
     </message>
     <message>
-        <location filename="../../Controllers/CameraOptionsController.py" line="255"/>
+        <location filename="../../Controllers/CameraOptionsController.py" line="237"/>
+        <source>Függőlegesen eltolja a sodródásmentes zónát. Akkor hasznos, ha a kamera nem pontosan szemből látja a kezed.</source>
+        <translation>Shifts the drift-free zone vertically. This is useful when the camera doesn&apos;t have a direct frontal view of your hand.</translation>
+    </message>
+    <message>
+        <location filename="../../Controllers/CameraOptionsController.py" line="268"/>
         <source>Válaszd ki a kamerát, amivel a gesztusokat tudja érzékelni a program!</source>
         <translation>Select camera with which the software can detect your gestures!</translation>
     </message>
     <message>
-        <location filename="../../Controllers/CameraOptionsController.py" line="259"/>
+        <location filename="../../Controllers/CameraOptionsController.py" line="272"/>
         <source>A színek eltolásával beállíthatod, hogy kesztyűben is felismerje a kezedet a program. Kapcsold be a kamerát és állítsd be óvatosan a csúszkával!</source>
         <translation>By adjusting hue offset you will be able to use the software in colored gloves.</translation>
     </message>
     <message>
-        <location filename="../../Controllers/CameraOptionsController.py" line="263"/>
+        <location filename="../../Controllers/CameraOptionsController.py" line="276"/>
         <source>A csúszka segítségével állítsd be a kezed távolságát a kamerától! Túl nagy távolság esetén előfordulhat, hogy más ember kezét érzékeli a GestureBoard.</source>
         <translation>Adjust the distance of your hand from the camera. By choosing correct distance you can filter unwanted detections.</translation>
     </message>
     <message>
-        <location filename="../../Controllers/CameraOptionsController.py" line="267"/>
+        <location filename="../../Controllers/CameraOptionsController.py" line="280"/>
         <source>Növelésével csökkenthető a véletlen felismerések száma, de csökken a felismerés érzékenysége.</source>
         <translation>By adjusting this setting you can filter unwanted detections, but it can decrease detection sensitivity.</translation>
     </message>
     <message>
-        <location filename="../../Controllers/CameraOptionsController.py" line="271"/>
+        <location filename="../../Controllers/CameraOptionsController.py" line="284"/>
         <source>A program ennyi képkockán keresztül figyeli a gesztust a művelet végrehajtása előtt. Növelésével pontosabb, de lassabb lesz a felismerés.</source>
         <translation>Number of frames used to detect gestures before triggering the action. Higher values increase accuracy but reduce detection speed.</translation>
     </message>
     <message>
-        <location filename="../../Controllers/CameraOptionsController.py" line="275"/>
+        <location filename="../../Controllers/CameraOptionsController.py" line="288"/>
         <source>Két gesztus közt eltelt idő másodpercben. Csökkentésével gyorsabban tudod kiadni a parancsokat.</source>
         <translation>Time elapsed between two gestures in seconds. Reducing it allows you to issue commands faster.</translation>
     </message>
     <message>
-        <location filename="../../Controllers/CameraOptionsController.py" line="279"/>
+        <location filename="../../Controllers/CameraOptionsController.py" line="292"/>
         <source>Dinamikus képkocka-korlátozás. Csökkenti a CPU használatot, de nagyban növelheti a reakcióidőt.</source>
         <translation>Dynamic frame throttling. Reduces CPU usage but can significantly increase reaction time.</translation>
     </message>
     <message>
-        <location filename="../../Controllers/CameraOptionsController.py" line="283"/>
+        <location filename="../../Controllers/CameraOptionsController.py" line="296"/>
         <source>Az egérmutató érzékenysége a sodródásmentes zónán kívül. Minél nagyobb az érték, annál gyorsabban mozog az egérmutató.</source>
         <translation>Mouse pointer sensitivity outside the drift-free zone. The higher the value, the faster the pointer moves.</translation>
     </message>
     <message>
-        <location filename="../../Controllers/CameraOptionsController.py" line="287"/>
+        <location filename="../../Controllers/CameraOptionsController.py" line="300"/>
         <source>Felcseréli a jobb és bal egérgombokat egérmódban.</source>
         <translation>Inverts the left and right mouse buttons in mouse mode.</translation>
     </message>
     <message>
-        <location filename="../../Controllers/CameraOptionsController.py" line="300"/>
+        <location filename="../../Controllers/CameraOptionsController.py" line="317"/>
         <source>Nem található</source>
         <translation>Not found</translation>
     </message>
     <message>
-        <location filename="../../Controllers/CameraOptionsController.py" line="307"/>
+        <location filename="../../Controllers/CameraOptionsController.py" line="324"/>
         <source>Beépített kamera</source>
         <translation>Built-in camera</translation>
     </message>
@@ -80,7 +85,7 @@
         <location filename="../../Views/ui_trainOptionsForm.py" line="96"/>
         <location filename="../../Views/ui_newGestureWizardForm.py" line="75"/>
         <location filename="../../Views/ui_loadingForm.py" line="52"/>
-        <location filename="../../Views/ui_cameraOptionsForm.py" line="146"/>
+        <location filename="../../Views/ui_cameraOptionsForm.py" line="153"/>
         <location filename="../../Views/trainOptionsForm.ui" line="0"/>
         <location filename="../../Views/newGestureWizardForm.ui" line="0"/>
         <location filename="../../Views/loadingForm.ui" line="0"/>
@@ -92,7 +97,7 @@
         <location filename="../../Views/ui_trainOptionsForm.py" line="97"/>
         <location filename="../../Views/ui_newGestureWizardForm.py" line="81"/>
         <location filename="../../Views/ui_loadingForm.py" line="53"/>
-        <location filename="../../Views/ui_cameraOptionsForm.py" line="147"/>
+        <location filename="../../Views/ui_cameraOptionsForm.py" line="154"/>
         <location filename="../../Views/trainOptionsForm.ui" line="0"/>
         <location filename="../../Views/newGestureWizardForm.ui" line="0"/>
         <location filename="../../Views/loadingForm.ui" line="0"/>
@@ -102,7 +107,7 @@
     </message>
     <message>
         <location filename="../../Views/ui_trainOptionsForm.py" line="98"/>
-        <location filename="../../Views/ui_cameraOptionsForm.py" line="148"/>
+        <location filename="../../Views/ui_cameraOptionsForm.py" line="155"/>
         <location filename="../../Views/trainOptionsForm.ui" line="0"/>
         <location filename="../../Views/cameraOptionsForm.ui" line="0"/>
         <source>Leírás</source>
@@ -112,7 +117,7 @@
         <location filename="../../Views/ui_newGestureWizardForm.py" line="80"/>
         <location filename="../../Views/ui_newGestureWizardForm.py" line="77"/>
         <location filename="../../Views/ui_loadingForm.py" line="55"/>
-        <location filename="../../Views/ui_cameraOptionsForm.py" line="149"/>
+        <location filename="../../Views/ui_cameraOptionsForm.py" line="156"/>
         <location filename="../../Views/newGestureWizardForm.ui" line="0"/>
         <location filename="../../Views/newGestureWizardForm.ui" line="0"/>
         <location filename="../../Views/loadingForm.ui" line="0"/>
@@ -122,86 +127,92 @@
     </message>
     <message>
         <location filename="../../Views/ui_trainOptionsForm.py" line="106"/>
-        <location filename="../../Views/ui_cameraOptionsForm.py" line="150"/>
+        <location filename="../../Views/ui_cameraOptionsForm.py" line="157"/>
         <location filename="../../Views/trainOptionsForm.ui" line="0"/>
         <location filename="../../Views/cameraOptionsForm.ui" line="0"/>
         <source>Vissza</source>
         <translation>Back</translation>
     </message>
     <message>
-        <location filename="../../Views/ui_cameraOptionsForm.py" line="151"/>
+        <location filename="../../Views/ui_cameraOptionsForm.py" line="158"/>
         <location filename="../../Views/cameraOptionsForm.ui" line="0"/>
         <source>Mentés</source>
         <translation>Save</translation>
     </message>
     <message>
-        <location filename="../../Views/ui_cameraOptionsForm.py" line="152"/>
+        <location filename="../../Views/ui_cameraOptionsForm.py" line="159"/>
         <location filename="../../Views/cameraOptionsForm.ui" line="0"/>
         <source>Magabiztosság</source>
         <translation>Confidence</translation>
     </message>
     <message>
-        <location filename="../../Views/ui_cameraOptionsForm.py" line="153"/>
+        <location filename="../../Views/ui_cameraOptionsForm.py" line="160"/>
         <location filename="../../Views/cameraOptionsForm.ui" line="0"/>
         <source>Színeltolás</source>
         <translation>Hue offset</translation>
     </message>
     <message>
-        <location filename="../../Views/ui_cameraOptionsForm.py" line="154"/>
+        <location filename="../../Views/ui_cameraOptionsForm.py" line="161"/>
         <location filename="../../Views/cameraOptionsForm.ui" line="0"/>
         <source>Kamera</source>
         <translation>Camera</translation>
     </message>
     <message>
-        <location filename="../../Views/ui_cameraOptionsForm.py" line="155"/>
+        <location filename="../../Views/ui_cameraOptionsForm.py" line="162"/>
         <location filename="../../Views/cameraOptionsForm.ui" line="0"/>
         <source>Képkocka gesztusonként</source>
         <translation>Frame per gesture</translation>
     </message>
     <message>
-        <location filename="../../Views/ui_cameraOptionsForm.py" line="156"/>
+        <location filename="../../Views/ui_cameraOptionsForm.py" line="163"/>
         <location filename="../../Views/cameraOptionsForm.ui" line="0"/>
         <source>Szünet gesztusok között</source>
         <translation>Delay between gestures</translation>
     </message>
     <message>
-        <location filename="../../Views/ui_cameraOptionsForm.py" line="157"/>
+        <location filename="../../Views/ui_cameraOptionsForm.py" line="164"/>
         <location filename="../../Views/cameraOptionsForm.ui" line="0"/>
         <source>Érzékenység</source>
         <translation>Sensitivity</translation>
     </message>
     <message>
-        <location filename="../../Views/ui_cameraOptionsForm.py" line="158"/>
+        <location filename="../../Views/ui_cameraOptionsForm.py" line="165"/>
         <location filename="../../Views/cameraOptionsForm.ui" line="0"/>
         <source>Sodródásmentes zóna</source>
         <translation>Driftzone</translation>
     </message>
     <message>
-        <location filename="../../Views/ui_cameraOptionsForm.py" line="159"/>
+        <location filename="../../Views/ui_cameraOptionsForm.py" line="166"/>
         <location filename="../../Views/cameraOptionsForm.ui" line="0"/>
         <source>Távolság</source>
         <translation>Distance</translation>
     </message>
     <message>
-        <location filename="../../Views/ui_cameraOptionsForm.py" line="160"/>
+        <location filename="../../Views/ui_cameraOptionsForm.py" line="167"/>
         <location filename="../../Views/cameraOptionsForm.ui" line="0"/>
         <source>Takarékos mód</source>
         <translation>CPU friendly mode</translation>
     </message>
     <message>
-        <location filename="../../Views/ui_cameraOptionsForm.py" line="162"/>
+        <location filename="../../Views/ui_cameraOptionsForm.py" line="169"/>
         <location filename="../../Views/cameraOptionsForm.ui" line="0"/>
         <source>Gombok felcserélése</source>
         <translation>Invert buttons</translation>
     </message>
     <message>
-        <location filename="../../Views/ui_cameraOptionsForm.py" line="164"/>
+        <location filename="../../Views/ui_cameraOptionsForm.py" line="171"/>
         <location filename="../../Views/cameraOptionsForm.ui" line="0"/>
         <source>Egérmód beállításai</source>
         <translation>Mouse mode</translation>
     </message>
     <message>
-        <location filename="../../Views/ui_cameraOptionsForm.py" line="165"/>
+        <location filename="../../Views/ui_cameraOptionsForm.py" line="172"/>
+        <location filename="../../Views/cameraOptionsForm.ui" line="0"/>
+        <source>Y eltolás</source>
+        <translation>Y offset</translation>
+    </message>
+    <message>
+        <location filename="../../Views/ui_cameraOptionsForm.py" line="173"/>
         <location filename="../../Views/cameraOptionsForm.ui" line="0"/>
         <source>Kamerateszt</source>
         <translation>Test camera</translation>

@@ -37,6 +37,10 @@ class OverlayHandler(QWidget):
 
         return cls._instance
 
+    def setOffsetY(self, offset_y):
+        self.offset_y = offset_y
+        self.update()
+
     def setClickThrough(widget):
         #Azért kell, hogy az átlátszó körön keresztül menjen a kattintás
         #Leírás: https://learn.microsoft.com/en-us/windows/win32/winmsg/window-features
@@ -71,7 +75,7 @@ class OverlayHandler(QWidget):
         painter.setPen(pen)
         painter.setBrush(Qt.NoBrush)
         center_x = self.screen_width // 2
-        center_y = self.screen_height // 2
+        center_y = (self.screen_height // 2) - self.offset_y
         painter.drawEllipse(center_x - self.radius, center_y - self.radius, self.radius * 2, self.radius * 2)
 
         if not self.circle_only:

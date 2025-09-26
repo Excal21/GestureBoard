@@ -53,6 +53,7 @@ class CameraOptionsController(BaseController):
         self.ui.spinDelay.setDecimals(1)
         self.ui.sliderSensitivity.setRange(5, 30)
         self.ui.sliderDrift.setRange(100, 350)
+        self.ui.sliderDriftOffset.setRange(-250, 250)
 
         self.ui.lblCvImg.setAlignment(Qt.AlignCenter)
         self.ui.lblCvImg.setPixmap(QPixmap('Resources/Icons/camera.png').scaled(100, 70, Qt.KeepAspectRatio, Qt.SmoothTransformation))
@@ -170,6 +171,7 @@ class CameraOptionsController(BaseController):
                 (self.ui.lblMouseSettings, None),
                 (self.ui.lblSensitivity, self.ui.sliderSensitivity),
                 (self.ui.lblRadius, self.ui.sliderDrift),
+                (self.ui.lblDriftOffset, self.ui.sliderDriftOffset),
                 (self.ui.lblInvertButtons, self.ui.checkInvertButtons)
             ]
 
@@ -190,6 +192,7 @@ class CameraOptionsController(BaseController):
         self.ui.sliderDistance.setFixedWidth(200)
         self.ui.sliderSensitivity.setFixedWidth(200)
         self.ui.sliderDrift.setFixedWidth(200)
+        self.ui.sliderDriftOffset.setFixedWidth(200)
 
         self.ui.lblCamera.setFixedHeight(42)
         self.ui.comboCamera.setFixedHeight(42)
@@ -204,6 +207,7 @@ class CameraOptionsController(BaseController):
         self.ui.lblSensitivity.setFixedHeight(42)
         self.ui.lblRadius.setFixedHeight(42)
         self.ui.btnStartCam.setFixedHeight(42)
+        self.ui.lblDriftOffset.setFixedHeight(42)
         
         self.ui.checkFrameThrottling.setFixedHeight(40) #Ezek csak a placeholderek!! QSS állítja a valósat
         self.ui.checkFrameThrottling.setFixedWidth(50)
@@ -225,6 +229,15 @@ class CameraOptionsController(BaseController):
         self.overlay.show()
 
     def sliderDriftLeave(self, event):
+        self.ui.lblDescription.setText('')
+        self.overlay.hide()
+
+    def sliderDriftOffsetEnter(self, event):
+        self.ui.lblDescription.setText(
+        self.textToHTML(QCoreApplication.translate('CameraOptionsController' , 'Függőlegesen eltolja a sodródásmentes zónát. Akkor hasznos, ha a kamera nem pontosan szemből látja a kezed.')))
+        self.overlay.show()
+
+    def sliderDriftOffsetLeave(self, event):
         self.ui.lblDescription.setText('')
         self.overlay.hide()
     
@@ -290,6 +303,10 @@ class CameraOptionsController(BaseController):
         self.ui.sliderDrift.enterEvent = lambda event: self.sliderDriftEnter(event)
         self.ui.sliderDrift.leaveEvent = lambda event: self.sliderDriftLeave(event)
         self.ui.sliderDrift.valueChanged.connect(lambda value: self.overlay.setRadius(value))
+
+        self.ui.sliderDriftOffset.enterEvent = lambda event: self.sliderDriftOffsetEnter(event)
+        self.ui.sliderDriftOffset.leaveEvent = lambda event: self.sliderDriftOffsetLeave(event)
+        self.ui.sliderDriftOffset.valueChanged.connect(lambda value: self.overlay.setOffsetY(value))
 #endregion
 
 #region Beállítások kezelése
@@ -313,6 +330,8 @@ class CameraOptionsController(BaseController):
             self.loadCameraCombo()
         elif index == 5:
             self.overlay.setCircleOnly(True)
+            self.overlay.setRadius(self.ui.sliderDrift.value())
+            self.overlay.setOffsetY(self.ui.sliderDriftOffset.value())
             self.loadSettings()
 
     def loadSettings(self):
@@ -327,6 +346,7 @@ class CameraOptionsController(BaseController):
             self.ui.checkFrameThrottling.setChecked(self.data['FrameThrottling'])
             self.ui.sliderSensitivity.setValue(self.data['Sensitivity'])
             self.ui.sliderDrift.setValue(self.data['Drift'])
+            self.ui.sliderDriftOffset.setValue(self.data['DriftOffset'])
             self.ui.checkInvertButtons.setChecked(self.data['InvertButtons'])
 
 
@@ -341,6 +361,7 @@ class CameraOptionsController(BaseController):
         self.data['FrameThrottling'] = self.ui.checkFrameThrottling.isChecked()
         self.data['Sensitivity'] = self.ui.sliderSensitivity.value()
         self.data['Drift'] = self.ui.sliderDrift.value()
+        self.data['DriftOffset'] = self.ui.sliderDriftOffset.value()
         self.data['InvertButtons'] = self.ui.checkInvertButtons.isChecked()
 
         with open('Config/CameraSettings.json', 'w') as file:

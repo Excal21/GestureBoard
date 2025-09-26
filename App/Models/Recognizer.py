@@ -70,7 +70,7 @@ class Recognizer:
         )
         self.recognizer = python.vision.GestureRecognizer.create_from_options(self.options)
 
-    #region Markpont vizualicáció
+#region Markpont vizualicáció
     def draw_landmarks_on_image(self, rgb_image, detection_result):
         #FORRÁS: GOOGLE MEDIAPIPE HAND LANDMARKS VISUALIZATION UTILITIES
 
@@ -100,7 +100,7 @@ class Recognizer:
                 )
             )
         return annotated_image
-    #endregion
+#endregion
 
 #region Annotáció
     def annotateImage(self, image, gestures=False, distance=500):
@@ -155,8 +155,8 @@ class Recognizer:
             self.delay = data['Delay']
             self.framethrottling = data['FrameThrottling']
             self.mouse_processor.sensitivity = data['Sensitivity']
-            self.mouse_processor.overlay_circle.setRadius(data['Drift'])
             self.mouse_processor.radius = data['Drift']
+            self.mouse_processor.y_offset = data['DriftOffset']
             self.mouse_processor.invert = data['InvertButtons']
 #endregion
 

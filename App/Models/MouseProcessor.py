@@ -9,9 +9,10 @@ from Models.OverlayHandler import OverlayHandler
 
 #region Egérvezérlő
 class MouseProcessor:
-    def __init__(self, radius=250, sensitivity=15):
+    def __init__(self, radius=250, sensitivity=15, y_offset=-200):
         self.radius = radius
         self.sensitivity = sensitivity
+        self.y_offset = y_offset
         self.invert = False
         self.mouse = Controller()
         self.last_click_time = datetime.min
@@ -29,6 +30,8 @@ class MouseProcessor:
 
         self.prev_screen_x, self.prev_screen_y = None, None
         self.overlay_circle = OverlayHandler.getInstance()
+        self.overlay_circle.setOffsetY(self.y_offset)
+
 
     def hideOverlay(self):
         self.overlay_circle.hide()
@@ -119,7 +122,7 @@ class MouseProcessor:
         self.overlay_circle.updatePosition(lm08)
 
         center_x = self.screen_width // 2
-        center_y = self.screen_height // 2
+        center_y = self.screen_height // 2 - self.y_offset
         dist = math.hypot(screen_x - center_x, screen_y - center_y)
 
         if dist <= self.radius:
