@@ -265,7 +265,7 @@
     <message>
         <location filename="../../Controllers/MainMenuController.py" line="83"/>
         <source>Gesztusvezérlés kikapcsolása</source>
-        <translation>Stop  gesture recognition</translation>
+        <translation>Stop  gesture control</translation>
     </message>
     <message>
         <location filename="../../Controllers/MainMenuController.py" line="97"/>
