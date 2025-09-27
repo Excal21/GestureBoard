@@ -315,6 +315,8 @@ class Recognizer:
             self.framethrottling = False
             self.mouse_processor.init_state = True
             self.mouse_processor.overlay_circle.setCircleOnly(False)
+            self.mouse_processor.overlay_circle.setRadius(self.mouse_processor.radius)
+            self.mouse_processor.overlay_circle.setOffsetY(self.mouse_processor.y_offset)
             self.mouse_processor.showOverlay()
     #endregion
 
