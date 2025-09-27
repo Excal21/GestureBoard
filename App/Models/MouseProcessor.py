@@ -58,7 +58,7 @@ class MouseProcessor:
         lm00 = hand_landmarks[0]
 
         lm01 = hand_landmarks[1] #Hüvelykujj alja
-        lm04 = hand_landmarks[4] #Hüvelykujj vége
+        lm03 = hand_landmarks[3] #Hüvelykujj közepe
 
         lm05 = hand_landmarks[5]
         lm17 = hand_landmarks[17]
@@ -71,7 +71,7 @@ class MouseProcessor:
         v1 = (lm09.x - lm00.x, lm09.y - lm00.y, lm09.z - lm00.z)
         v2 = (lm012.x - lm010.x, lm012.y - lm010.y, lm012.z - lm010.z)
         
-        v3 = (lm04.x - lm01.x, lm04.y - lm01.y, lm04.z - lm01.z)
+        v3 = (lm03.x - lm01.x, lm03.y - lm01.y, lm03.z - lm01.z)
         v4 = (lm05.x - lm17.x, lm05.y - lm17.y, lm05.z - lm17.z)
 
         angle1 = self.calcAngle(v1, v2)
