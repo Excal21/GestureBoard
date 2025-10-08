@@ -51,7 +51,8 @@ class BaseController(QWidget):
                     widget.setStyleSheet(special_styles[attr_name])
                 else:
                     for prefix, style in prefix_styles.items():
-                        if attr_name.startswith(prefix) and not attr_name in special_styles:
+                        if (attr_name.startswith(prefix)
+                            and attr_name not in special_styles):
                             widget.setStyleSheet(style)
                             break
 

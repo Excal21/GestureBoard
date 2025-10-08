@@ -102,7 +102,7 @@ class MouseProcessor:
                 self.last_click_time = now
             return
 
-    #region EAM simítás
+    #region EMA simítás
         alpha = 0.2
 
         if not hasattr(self, "smooth_idx_x"):

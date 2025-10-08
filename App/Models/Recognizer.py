@@ -29,7 +29,7 @@ class Recognizer:
         self.mp_drawing_styles = solutions.drawing_styles
 
         # Modelfájl betöltése és beállítása
-        with open(self.__task_file_path, "rb") as model_file:
+        with open(self.__task_file_path, 'rb') as model_file:
             self.model_data = model_file.read()
         self.base_options = python.BaseOptions(model_asset_buffer=self.model_data)
 
@@ -59,7 +59,7 @@ class Recognizer:
         self.configpath = config_path
 
     def reloadModel(self):
-        with open(self.__task_file_path, "rb") as model_file:
+        with open(self.__task_file_path, 'rb') as model_file:
             self.model_data = model_file.read()
         self.base_options = python.BaseOptions(model_asset_buffer=self.model_data)
 
@@ -140,7 +140,7 @@ class Recognizer:
 
 #region Konfiguráció betöltők
     def loadGestures(self):
-        with open(self.configpath, "r", encoding='UTF-8') as file:
+        with open(self.configpath, 'r', encoding='UTF-8') as file:
             data = dict(json.load(file))
         return data
 
@@ -173,7 +173,7 @@ class Recognizer:
             cap.open(self.camera)
 
         if not cap.isOpened():
-            print("Nem sikerült megnyitni a kamerát")
+            print('Nem sikerült megnyitni a kamerát')
             self.error = True
             return
 
@@ -191,7 +191,10 @@ class Recognizer:
         #region Fő ciklus
         while not self.stop and not self.error:
             frame_index += 1
-            if self.framethrottling and not self.mouse_active and skip_frames and frame_index % 2 != 0:
+            if (self.framethrottling 
+                and not self.mouse_active 
+                and skip_frames 
+                and frame_index % 2 != 0):
                 cv2.waitKey(int(1000 / 30))
                 continue
 
@@ -231,7 +234,8 @@ class Recognizer:
                     self.mouse_active
                     and len(last_gestures) > 0
                     and last_gestures[-1][0] != mouse_gesture
-                    and distances[closest_hand][0] <= self.distance
+                    and (distances[closest_hand][0] <= self.distance 
+                        or distances[closest_hand][1] <= self.distance)
                 ):
                     self.mouse_processor.process(result.hand_landmarks[closest_hand])
 
@@ -245,13 +249,13 @@ class Recognizer:
                                     distances[closest_hand][1] <= self.distance):
                                 last_gestures.append((name, score))
                                 gesture_detected = True
-                                #print(f"Gesture: {name}, Score: {score:.2f}, Distance: {distance_09}, 5-17 Distance: {distance_517}")
+                                #print(f'Gesture: {name}, Score: {score:.2f}, Distance: {distance_09}, 5-17 Distance: {distance_517}')
                         else:
-                            last_gestures.append(("NONE", 0.0))
+                            last_gestures.append(('NONE', 0.0))
                     else:
-                        last_gestures.append(("NONE", 0.0))
+                        last_gestures.append(('NONE', 0.0))
                 else:
-                    last_gestures.append(("NONE", 0.0))
+                    last_gestures.append(('NONE', 0.0))
             #endregion
 
             #region Majority voting
@@ -271,13 +275,15 @@ class Recognizer:
                         if majority_gesture in gesture_mappings.keys():
                             print(majority_gesture)
                             try:
-                                if self.mouse_active and gesture_mappings[majority_gesture]['action'] == 'self.toggleMouseMode()':
+                                if (self.mouse_active 
+                                    and gesture_mappings[majority_gesture]['action'] 
+                                    == 'self.toggleMouseMode()'):
                                     self.toggleMouseMode()
                                 elif not self.mouse_active:
                                     exec(gesture_mappings[majority_gesture]['action'])
                             except Exception as e:
-                                print("Hiba történt a parancs végrehajtásakor: ", e)
-                            print(f"last_gesture: {majority_gesture}, avg confidence: {avg_confidence:.2f}")
+                                print('Hiba történt a parancs végrehajtásakor: ', e)
+                            print(f'last_gesture: {majority_gesture}, avg confidence: {avg_confidence:.2f}')
                         last_gesture_time = datetime.now()
 
                 last_gestures.clear()
@@ -323,8 +329,8 @@ class Recognizer:
 #endregion
 
 if __name__ == '__main__':
-    taskFile = "gesture_recognizer.task"
-    recognizer = Recognizer("gesture_recognizer.task", "Config/Gestures.json")
+    taskFile = 'gesture_recognizer.task'
+    recognizer = Recognizer('gesture_recognizer.task', 'Config/Gestures.json')
 
     recognizer.confidence = 0.6
     recognizer.camera = 0

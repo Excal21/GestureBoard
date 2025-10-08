@@ -107,13 +107,13 @@ class OptionsMenuController(BaseController):
 
             #Gombeventek
             btnCombo.enterEvent = lambda event, entry = entry: self.showDescription(entry, 0)
-            btnCombo.leaveEvent = lambda event: self.ui.lblDescription.setText('')
+            btnCombo.leaveEvent = lambda event: self.hideDescription()
 
             btnKey.enterEvent = lambda event, entry = entry: self.showDescription(entry, 1)
-            btnKey.leaveEvent = lambda event: self.ui.lblDescription.setText('')
+            btnKey.leaveEvent = lambda event: self.hideDescription()
 
             btnConsole.enterEvent = lambda event, entry = entry: self.showDescription(entry, 2)
-            btnConsole.leaveEvent = lambda event: self.ui.lblDescription.setText('')
+            btnConsole.leaveEvent = lambda event: self.hideDescription()
 
             btnCombo.clicked.connect(lambda event, key=key: self.showSubSelection(key))
             btnKey.clicked.connect(lambda event, key=key: self.startKeyCapture(key))
@@ -362,6 +362,12 @@ class OptionsMenuController(BaseController):
                 self.ui.lblDescription.setText(QApplication.translate('OptionsMenuController', 'Billentyűkombináció'))
             elif hoveridx == 2:
                 self.ui.lblDescription.setText(QApplication.translate('OptionsMenuController', 'Parancs'))
+        
+        QApplication.setOverrideCursor(Qt.CursorShape.PointingHandCursor)
+    
+    def hideDescription(self):
+        self.ui.lblDescription.setText('')
+        QApplication.restoreOverrideCursor()
 
     def showOptions(self):
         self.stacked_widget.setCurrentIndex(1)
