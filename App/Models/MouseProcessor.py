@@ -86,7 +86,7 @@ class MouseProcessor:
 
 
         now = datetime.now()
-        #Mutatóujj
+        #Középsőujj
         if angle1 > 45:
             if now - self.last_click_time > timedelta(seconds=0.4):
                 self.mouse.press(Button.left if self.invert else Button.right)
@@ -105,14 +105,14 @@ class MouseProcessor:
     #region EMA simítás
         alpha = 0.2
 
-        if not hasattr(self, "smooth_idx_x"):
-            self.smooth_idx_x, self.smooth_idx_y = lm08.x, lm08.y
+        if not hasattr(self, 'ema_x'):
+            self.ema_x, self.ema_y = lm08.x, lm08.y
         else:
-            self.smooth_idx_x = alpha * lm08.x + (1 - alpha) * self.smooth_idx_x
-            self.smooth_idx_y = alpha * lm08.y + (1 - alpha) * self.smooth_idx_y
+            self.ema_x = alpha * lm08.x + (1 - alpha) * self.ema_x
+            self.ema_y = alpha * lm08.y + (1 - alpha) * self.ema_y
 
-        lm08.x = 1 - self.smooth_idx_x   # tükörflip
-        lm08.y = self.smooth_idx_y
+        lm08.x = 1 - self.ema_x   # tükörflip
+        lm08.y = self.ema_y
 
         screen_x = int(lm08.x * self.screen_width)
         screen_y = int(lm08.y * self.screen_height)
@@ -130,20 +130,17 @@ class MouseProcessor:
                 dx = screen_x - self.prev_screen_x
                 dy = screen_y - self.prev_screen_y
 
-                screen_dx = int((dx / self.screen_width) * self.screen_width)
-                screen_dy = int((dy / self.screen_height) * self.screen_height)
-
-                self.mouse.move(screen_dx, screen_dy)
+                self.mouse.move(dx, dy)
 
             self.prev_screen_x, self.prev_screen_y = screen_x, screen_y
         else:
-            dx = screen_x - center_x
-            dy = screen_y - center_y
+            x_offset = screen_x - center_x
+            y_offset = screen_y - center_y
 
-            move_x = int((dx / self.radius) * self.sensitivity)
-            move_y = int((dy / self.radius) * self.sensitivity)
+            dx = int((x_offset / self.radius) * self.sensitivity)
+            dy = int((y_offset / self.radius) * self.sensitivity)
 
-            self.mouse.move(move_x, move_y)
+            self.mouse.move(dx, dy)
             self.prev_screen_x, self.prev_screen_y = None, None
 
 #endregion

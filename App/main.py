@@ -13,7 +13,7 @@ import Controllers.NewGestureWizardController
 
 import Controllers.CameraOptionsController
 from Models.RecognizerHandler import *
-from Models.MediaPipeHandler import ImportHandler
+from Models.MediaPipeHandler import MediaPipeHandler
 from Models.Recorder import Recorder
 from Models.OverlayHandler import OverlayHandler
 
@@ -45,7 +45,7 @@ class MainWindow(QMainWindow):
 
         self.overlay = OverlayHandler.getInstance()
 
-        self.ml = ImportHandler()
+        self.ml = MediaPipeHandler()
         self.rl = RecognizerHandler.getInstance()
 
         self.ml.finished.connect(self.rl.start)
