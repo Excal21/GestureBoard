@@ -95,7 +95,7 @@ class MouseProcessor:
             return
       
         #Hüvelykujj
-        if angle2 > 70:
+        if angle2 > 67:
             if now - self.last_click_time > timedelta(seconds=0.4):
                 self.mouse.press(Button.right if self.invert else Button.left)
                 self.mouse.release(Button.right if self.invert else Button.left)
