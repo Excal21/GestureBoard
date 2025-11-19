@@ -130,6 +130,7 @@ class OptionsMenuController(BaseController):
         self.data[key]['action'] = None
         self.data[key]['highlight'] = -1
         self.data[key]['description'] = None
+        QApplication.restoreOverrideCursor()
         self.updateEntries()
 
 #endregion
@@ -281,7 +282,6 @@ class OptionsMenuController(BaseController):
                 self.data[self.clicked]['description'] = f'{combination.replace(',', '+')
                                                             + (' + ' if combination else '') 
                                                             + (key_map[key][0] if (key in key_map and len(key_map[key]) == 2) else keystr)}'
-                self.data[self.clicked]['description']
                 self.data[self.clicked]['highlight'] = 1
 
                 print(f'{QCoreApplication.translate('OptionsMenuController', 'Billentyűkombináció')}\n {combination.replace(',', '+') + (' + ' if combination else '') + keystr}')

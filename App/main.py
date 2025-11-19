@@ -3,7 +3,7 @@ import sys
 import json
 
 from PySide6.QtWidgets import QApplication, QMainWindow, QStackedWidget
-from PySide6.QtCore import Qt, QThread, Signal, QTranslator
+from PySide6.QtCore import QTranslator
 from PySide6 import QtGui
 import Controllers.MainMenuController
 import Controllers.OptionsMenuController
@@ -14,7 +14,6 @@ import Controllers.NewGestureWizardController
 import Controllers.CameraOptionsController
 from Models.RecognizerHandler import *
 from Models.MediaPipeHandler import MediaPipeHandler
-from Models.Recorder import Recorder
 from Models.OverlayHandler import OverlayHandler
 
 

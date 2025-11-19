@@ -4,9 +4,9 @@ from Resources.Stylesheets.styles import *
 from Views.ui_mainMenuForm import Ui_MainWindow
 from Models.RecognizerHandler import *
 from Controllers.BaseController import BaseController
-import os
 import json
 import subprocess
+import sys
 
 class MainMenuController(BaseController):
     def __init__(self, stacked_widget):

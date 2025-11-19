@@ -89,9 +89,9 @@
         <location filename="../../Views/trainOptionsForm.ui" line="0"/>
         <location filename="../../Views/newGestureWizardForm.ui" line="0"/>
         <location filename="../../Views/loadingForm.ui" line="0"/>
-        <location filename="../../Views/cameraOptionsForm.ui" line="0"/>
+        <location filename="../../Views/cameraOptionsform.ui" line="0"/>
         <source>Form</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../Views/ui_trainOptionsForm.py" line="97"/>
@@ -101,17 +101,17 @@
         <location filename="../../Views/trainOptionsForm.ui" line="0"/>
         <location filename="../../Views/newGestureWizardForm.ui" line="0"/>
         <location filename="../../Views/loadingForm.ui" line="0"/>
-        <location filename="../../Views/cameraOptionsForm.ui" line="0"/>
+        <location filename="../../Views/cameraOptionsform.ui" line="0"/>
         <source>GestureBoard</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../Views/ui_trainOptionsForm.py" line="98"/>
         <location filename="../../Views/ui_cameraOptionsForm.py" line="155"/>
         <location filename="../../Views/trainOptionsForm.ui" line="0"/>
-        <location filename="../../Views/cameraOptionsForm.ui" line="0"/>
+        <location filename="../../Views/cameraOptionsform.ui" line="0"/>
         <source>Leírás</source>
-        <translation></translation>
+        <translation type="unfinished">Description</translation>
     </message>
     <message>
         <location filename="../../Views/ui_newGestureWizardForm.py" line="80"/>
@@ -121,99 +121,99 @@
         <location filename="../../Views/newGestureWizardForm.ui" line="0"/>
         <location filename="../../Views/newGestureWizardForm.ui" line="0"/>
         <location filename="../../Views/loadingForm.ui" line="0"/>
-        <location filename="../../Views/cameraOptionsForm.ui" line="0"/>
+        <location filename="../../Views/cameraOptionsform.ui" line="0"/>
         <source>TextLabel</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../Views/ui_trainOptionsForm.py" line="106"/>
         <location filename="../../Views/ui_cameraOptionsForm.py" line="157"/>
         <location filename="../../Views/trainOptionsForm.ui" line="0"/>
-        <location filename="../../Views/cameraOptionsForm.ui" line="0"/>
+        <location filename="../../Views/cameraOptionsform.ui" line="0"/>
         <source>Vissza</source>
         <translation>Back</translation>
     </message>
     <message>
         <location filename="../../Views/ui_cameraOptionsForm.py" line="158"/>
-        <location filename="../../Views/cameraOptionsForm.ui" line="0"/>
+        <location filename="../../Views/cameraOptionsform.ui" line="0"/>
         <source>Mentés</source>
         <translation>Save</translation>
     </message>
     <message>
         <location filename="../../Views/ui_cameraOptionsForm.py" line="159"/>
-        <location filename="../../Views/cameraOptionsForm.ui" line="0"/>
+        <location filename="../../Views/cameraOptionsform.ui" line="0"/>
         <source>Magabiztosság</source>
         <translation>Confidence</translation>
     </message>
     <message>
         <location filename="../../Views/ui_cameraOptionsForm.py" line="160"/>
-        <location filename="../../Views/cameraOptionsForm.ui" line="0"/>
+        <location filename="../../Views/cameraOptionsform.ui" line="0"/>
         <source>Színeltolás</source>
         <translation>Hue offset</translation>
     </message>
     <message>
         <location filename="../../Views/ui_cameraOptionsForm.py" line="161"/>
-        <location filename="../../Views/cameraOptionsForm.ui" line="0"/>
+        <location filename="../../Views/cameraOptionsform.ui" line="0"/>
         <source>Kamera</source>
         <translation>Camera</translation>
     </message>
     <message>
         <location filename="../../Views/ui_cameraOptionsForm.py" line="162"/>
-        <location filename="../../Views/cameraOptionsForm.ui" line="0"/>
+        <location filename="../../Views/cameraOptionsform.ui" line="0"/>
         <source>Képkocka gesztusonként</source>
         <translation>Frame per gesture</translation>
     </message>
     <message>
         <location filename="../../Views/ui_cameraOptionsForm.py" line="163"/>
-        <location filename="../../Views/cameraOptionsForm.ui" line="0"/>
+        <location filename="../../Views/cameraOptionsform.ui" line="0"/>
         <source>Szünet gesztusok között</source>
         <translation>Delay between gestures</translation>
     </message>
     <message>
         <location filename="../../Views/ui_cameraOptionsForm.py" line="164"/>
-        <location filename="../../Views/cameraOptionsForm.ui" line="0"/>
+        <location filename="../../Views/cameraOptionsform.ui" line="0"/>
         <source>Érzékenység</source>
         <translation>Sensitivity</translation>
     </message>
     <message>
         <location filename="../../Views/ui_cameraOptionsForm.py" line="165"/>
-        <location filename="../../Views/cameraOptionsForm.ui" line="0"/>
+        <location filename="../../Views/cameraOptionsform.ui" line="0"/>
         <source>Sodródásmentes zóna</source>
         <translation>Driftzone</translation>
     </message>
     <message>
         <location filename="../../Views/ui_cameraOptionsForm.py" line="166"/>
-        <location filename="../../Views/cameraOptionsForm.ui" line="0"/>
+        <location filename="../../Views/cameraOptionsform.ui" line="0"/>
         <source>Távolság</source>
         <translation>Distance</translation>
     </message>
     <message>
         <location filename="../../Views/ui_cameraOptionsForm.py" line="167"/>
-        <location filename="../../Views/cameraOptionsForm.ui" line="0"/>
+        <location filename="../../Views/cameraOptionsform.ui" line="0"/>
         <source>Takarékos mód</source>
         <translation>CPU friendly mode</translation>
     </message>
     <message>
         <location filename="../../Views/ui_cameraOptionsForm.py" line="169"/>
-        <location filename="../../Views/cameraOptionsForm.ui" line="0"/>
+        <location filename="../../Views/cameraOptionsform.ui" line="0"/>
         <source>Gombok felcserélése</source>
         <translation>Invert buttons</translation>
     </message>
     <message>
         <location filename="../../Views/ui_cameraOptionsForm.py" line="171"/>
-        <location filename="../../Views/cameraOptionsForm.ui" line="0"/>
+        <location filename="../../Views/cameraOptionsform.ui" line="0"/>
         <source>Egérmód beállításai</source>
         <translation>Mouse mode</translation>
     </message>
     <message>
         <location filename="../../Views/ui_cameraOptionsForm.py" line="172"/>
-        <location filename="../../Views/cameraOptionsForm.ui" line="0"/>
+        <location filename="../../Views/cameraOptionsform.ui" line="0"/>
         <source>Y eltolás</source>
         <translation>Y offset</translation>
     </message>
     <message>
         <location filename="../../Views/ui_cameraOptionsForm.py" line="173"/>
-        <location filename="../../Views/cameraOptionsForm.ui" line="0"/>
+        <location filename="../../Views/cameraOptionsform.ui" line="0"/>
         <source>Kamerateszt</source>
         <translation>Test camera</translation>
     </message>
@@ -292,7 +292,7 @@
         <location filename="../../Views/mainMenuForm.ui" line="0"/>
         <location filename="../../Views/mainMenuForm.ui" line="0"/>
         <source>GestureBoard</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../Views/ui_mainMenuForm.py" line="71"/>
@@ -316,7 +316,7 @@
         <location filename="../../Views/ui_mainMenuForm.py" line="74"/>
         <location filename="../../Views/mainMenuForm.ui" line="0"/>
         <source>EN</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -343,7 +343,7 @@
         <location filename="../../Views/ui_optionsForm.py" line="91"/>
         <location filename="../../Views/optionsForm.ui" line="0"/>
         <source>Form</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../Views/ui_optionsForm.py" line="92"/>
@@ -379,33 +379,33 @@
         <location filename="../../Views/ui_optionsForm.py" line="97"/>
         <location filename="../../Views/optionsForm.ui" line="0"/>
         <source>TextLabel</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../Views/ui_optionsForm.py" line="98"/>
         <location filename="../../Views/optionsForm.ui" line="0"/>
         <source>PushButton</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>OptionsMenuController</name>
     <message>
-        <location filename="../../Controllers/OptionsMenuController.py" line="362"/>
-        <location filename="../../Controllers/OptionsMenuController.py" line="289"/>
-        <location filename="../../Controllers/OptionsMenuController.py" line="287"/>
+        <location filename="../../Controllers/OptionsMenuController.py" line="361"/>
+        <location filename="../../Controllers/OptionsMenuController.py" line="288"/>
+        <location filename="../../Controllers/OptionsMenuController.py" line="286"/>
         <location filename="../../Controllers/OptionsMenuController.py" line="269"/>
         <location filename="../../Controllers/OptionsMenuController.py" line="203"/>
         <source>Billentyűkombináció</source>
         <translation>Key combination</translation>
     </message>
     <message>
-        <location filename="../../Controllers/OptionsMenuController.py" line="311"/>
+        <location filename="../../Controllers/OptionsMenuController.py" line="310"/>
         <source>Parancs megadása</source>
         <translation>Command</translation>
     </message>
     <message>
-        <location filename="../../Controllers/OptionsMenuController.py" line="357"/>
+        <location filename="../../Controllers/OptionsMenuController.py" line="356"/>
         <source>
 
 
@@ -418,12 +418,12 @@ Click with the right
 mouse button to delete.</translation>
     </message>
     <message>
-        <location filename="../../Controllers/OptionsMenuController.py" line="360"/>
+        <location filename="../../Controllers/OptionsMenuController.py" line="359"/>
         <source>Előre definiált művelet</source>
         <translation>Predefined action</translation>
     </message>
     <message>
-        <location filename="../../Controllers/OptionsMenuController.py" line="364"/>
+        <location filename="../../Controllers/OptionsMenuController.py" line="363"/>
         <source>Parancs</source>
         <translation>Command</translation>
     </message>
@@ -452,7 +452,7 @@ mouse button to delete.</translation>
     </message>
     <message>
         <location filename="TranslationStrings.py" line="10"/>
-        <source>Számológép indítása</source>
+        <source>Számológép</source>
         <translation>Calculator</translation>
     </message>
     <message>
@@ -488,7 +488,7 @@ mouse button to delete.</translation>
     <message>
         <location filename="TranslationStrings.py" line="17"/>
         <source>Alt + Tab</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="TranslationStrings.py" line="18"/>
@@ -514,6 +514,10 @@ mouse button to delete.</translation>
         <location filename="TranslationStrings.py" line="22"/>
         <source>Windows + Le</source>
         <translation>Windows + Down</translation>
+    </message>
+    <message>
+        <source>Számológép indítása</source>
+        <translation type="vanished">Calculator</translation>
     </message>
 </context>
 <context>
