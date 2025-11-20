@@ -47,7 +47,7 @@ def test_predefinedAction(app: MainWindow, qtbot):
     sub_btn = options_menu.ui.scrollComboWidgetContents.layout().itemAt(1).widget() #Böngi
     qtbot.mouseClick(sub_btn, Qt.LeftButton)
     qtbot.wait(500)
-    assert options_menu.data['1']['description'] == 'Böngésző elindítása\n\n\nTörléshez kattints\njobb gombbal!'
+    assert options_menu.data['1']['description'] == 'Böngésző elindítása'
     assert options_menu.data['1']['highlight'] == 0
 
 
@@ -80,24 +80,24 @@ def test_keyCapture(app: MainWindow, qtbot):
 
     qtbot.mouseClick(btn_key, Qt.LeftButton)
     qtbot.keyPress(btn_key, Qt.Key_K)
-    assert options_menu.data['1']['description'] == 'K\n\n\nTörléshez kattints\njobb gombbal!'
+    assert options_menu.data['1']['description'] == 'K'
     assert options_menu.data['1']['action'] == "pyautogui.hotkey('k')"
 
     qtbot.mouseClick(btn_key, Qt.LeftButton)
     qtbot.keyPress(btn_key, Qt.Key_F, modifier=Qt.ControlModifier | Qt.ShiftModifier)
-    assert options_menu.data['1']['description'] == 'ctrl + shift + F\n\n\nTörléshez kattints\njobb gombbal!'
+    assert options_menu.data['1']['description'] == 'ctrl + shift + F'
     assert options_menu.data['1']['action'] == "pyautogui.hotkey('ctrl', 'shift', 'f')"
     assert options_menu.data['1']['highlight'] == 1
 
     qtbot.mouseClick(btn_key, Qt.LeftButton)
     qtbot.keyPress(btn_key, Qt.Key_Aacute)
-    assert options_menu.data['1']['description'] == 'Á\n\n\nTörléshez kattints\njobb gombbal!'
+    assert options_menu.data['1']['description'] == 'Á'
     assert options_menu.data['1']['action'] == "pyautogui.hotkey('á')"
     assert options_menu.data['1']['highlight'] == 1
 
     qtbot.mouseClick(btn_key, Qt.LeftButton)
     qtbot.keyPress(btn_key, Qt.Key_Q, modifier=Qt.AltModifier)
-    assert options_menu.data['1']['description'] == 'alt + Q\n\n\nTörléshez kattints\njobb gombbal!'
+    assert options_menu.data['1']['description'] == 'alt + Q'
     assert options_menu.data['1']['action'] == "pyautogui.hotkey('alt', 'q')"
     assert options_menu.data['1']['highlight'] == 1
 
@@ -136,7 +136,7 @@ def test_commandInput(app: MainWindow, qtbot):
     qtbot.wait(500)
     assert options_menu.data['1']['action'] == "os.system('Test Command')"
     assert options_menu.data['1']['highlight'] == 2
-    assert options_menu.data['1']['description'] == 'Test Command\n\n\nTörléshez kattints\njobb gombbal!'
+    assert options_menu.data['1']['description'] == 'Test Command'
 
     gesture_entry = options_menu.scroll_layout.itemAt(0).widget()
     btn_container = gesture_entry.findChildren(QWidget)[1]

@@ -13,9 +13,15 @@ class OverlayHandler(QWidget):
         self.index_finger_pos = QPoint(0, 0)
         self.circle_only = False
 
-        self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint | Qt.Tool)
+        self.setWindowFlags(
+                            Qt.FramelessWindowHint |
+                            Qt.WindowStaysOnTopHint |
+                            Qt.Tool |
+                            Qt.WindowTransparentForInput
+                        )
         self.setAttribute(Qt.WA_TranslucentBackground)
         self.setAttribute(Qt.WA_TransparentForMouseEvents)
+        self.setFocusPolicy(Qt.NoFocus)
 
         screen = QApplication.primaryScreen()
         size = screen.size()
@@ -30,6 +36,10 @@ class OverlayHandler(QWidget):
             cls._instance = OverlayHandler()
 
         return cls._instance
+
+    def setOffsetY(self, offset_y):
+        self.offset_y = offset_y
+        self.update()
 
     def setClickThrough(widget):
         #Azért kell, hogy az átlátszó körön keresztül menjen a kattintás
@@ -65,7 +75,7 @@ class OverlayHandler(QWidget):
         painter.setPen(pen)
         painter.setBrush(Qt.NoBrush)
         center_x = self.screen_width // 2
-        center_y = self.screen_height // 2
+        center_y = (self.screen_height // 2) - self.offset_y
         painter.drawEllipse(center_x - self.radius, center_y - self.radius, self.radius * 2, self.radius * 2)
 
         if not self.circle_only:

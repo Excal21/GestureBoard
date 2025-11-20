@@ -38,7 +38,7 @@ class Ui_MainWindow(object):
         self.frameButtons.setFrameShadow(QFrame.Shadow.Raised)
         self.btnCameraOptions = QPushButton(self.frameButtons)
         self.btnCameraOptions.setObjectName(u"btnCameraOptions")
-        self.btnCameraOptions.setGeometry(QRect(50, 250, 420, 80))
+        self.btnCameraOptions.setGeometry(QRect(50, 230, 420, 80))
         font = QFont()
         font.setFamilies([u"Calibri"])
         font.setPointSize(20)
@@ -46,7 +46,7 @@ class Ui_MainWindow(object):
         self.btnCameraOptions.setStyleSheet(u"")
         self.btnOptions = QPushButton(self.frameButtons)
         self.btnOptions.setObjectName(u"btnOptions")
-        self.btnOptions.setGeometry(QRect(50, 140, 420, 80))
+        self.btnOptions.setGeometry(QRect(50, 130, 420, 80))
         self.btnOptions.setFont(font)
         self.btnOptions.setStyleSheet(u"")
         self.btnStart = QPushButton(self.frameButtons)
@@ -54,6 +54,9 @@ class Ui_MainWindow(object):
         self.btnStart.setGeometry(QRect(50, 30, 420, 80))
         self.btnStart.setFont(font)
         self.btnStart.setStyleSheet(u"")
+        self.btnLanguage = QPushButton(self.frameButtons)
+        self.btnLanguage.setObjectName(u"btnLanguage")
+        self.btnLanguage.setGeometry(QRect(460, 360, 41, 31))
         self.frameButtons.raise_()
         self.frameBlue.raise_()
 
@@ -67,6 +70,7 @@ class Ui_MainWindow(object):
         self.lblTitle.setText(QCoreApplication.translate("MainWindow", u"GestureBoard", None))
         self.btnCameraOptions.setText(QCoreApplication.translate("MainWindow", u"Kamera- \u00e9s eg\u00e9rbe\u00e1ll\u00edt\u00e1sok", None))
         self.btnOptions.setText(QCoreApplication.translate("MainWindow", u"Be\u00e1ll\u00edt\u00e1sok", None))
-        self.btnStart.setText(QCoreApplication.translate("MainWindow", u"Gesztusvez\u00e9rl\u00e9s elind\u00edt\u00e1sa", None))
+        self.btnStart.setText(QCoreApplication.translate("MainWindow", u"Gesztusvez\u00e9rl\u00e9s ind\u00edt\u00e1sa", None))
+        self.btnLanguage.setText(QCoreApplication.translate("MainWindow", u"EN", None))
     # retranslateUi
 

@@ -19,7 +19,6 @@ __pycache__
 *.so.*
 *_pch.h.cpp
 *_resource.rc
-*.qm
 .#*
 *.*#
 core

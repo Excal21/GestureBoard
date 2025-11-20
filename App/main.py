@@ -1,9 +1,9 @@
 import os
 import sys
-import time
+import json
 
 from PySide6.QtWidgets import QApplication, QMainWindow, QStackedWidget
-from PySide6.QtCore import Qt, QThread, Signal
+from PySide6.QtCore import QTranslator
 from PySide6 import QtGui
 import Controllers.MainMenuController
 import Controllers.OptionsMenuController
@@ -13,13 +13,8 @@ import Controllers.NewGestureWizardController
 
 import Controllers.CameraOptionsController
 from Models.RecognizerHandler import *
-from Models.MediaPipeHandler import ImportHandler
-from Models.Recorder import Recorder
+from Models.MediaPipeHandler import MediaPipeHandler
 from Models.OverlayHandler import OverlayHandler
-
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'Controllers')))
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'Models')))
-
 
 
 class MainWindow(QMainWindow):
@@ -49,7 +44,7 @@ class MainWindow(QMainWindow):
 
         self.overlay = OverlayHandler.getInstance()
 
-        self.ml = ImportHandler()
+        self.ml = MediaPipeHandler()
         self.rl = RecognizerHandler.getInstance()
 
         self.ml.finished.connect(self.rl.start)
@@ -65,6 +60,16 @@ class MainWindow(QMainWindow):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
+    translator = None
+    lang_file = None
+    with open('Config/Locale.json', 'r', encoding='utf-8') as f:
+        translator = QTranslator()
+        
+        lang_file = f'Resources/Locale/{json.load(f)['lang']}.qm'
+        translator.load(lang_file)
+
+        app.installTranslator(translator)
+
     window = MainWindow()
     window.show()
     QApplication.processEvents()

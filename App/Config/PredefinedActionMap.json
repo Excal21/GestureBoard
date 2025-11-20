@@ -3,8 +3,12 @@
     "Böngésző elindítása": "os.system('start http://www.google.com')",
     "Feladatkezelő": "os.system('start taskmgr')",
     "Képernyőkép készítése": "pyautogui.press('printscreen')",
-    "Számológép indítása": "os.system('start calc')",
-    "Gmail megnyitása": "os.system('start http://www.gmail.com')",
+    "Számológép": "os.system('start calc')",
+    "Gmail": "os.system('start http://www.gmail.com')",
+    "YouTube": "os.system('start http://www.youtube.com')",
+    "YouTube Music": "os.system('start http://music.youtube.com')",
+    "Google Maps": "os.system('start http://maps.google.com')",
+    "OneDrive": "os.system('start https://onedrive.live.com')",
     "Lejátszás/ szünet": "pyautogui.press('playpause')",
     "Következő szám": "pyautogui.press('nexttrack')",
     "Előző szám": "pyautogui.press('prevtrack')",
@@ -15,7 +19,5 @@
     "Windows + Jobbra": "pyautogui.hotkey('win', 'right')",
     "Windows + Balra": "pyautogui.hotkey('win', 'left')",
     "Windows + Fel": "pyautogui.hotkey('win', 'up')",
-    "Windows + Le": "pyautogui.hotkey('win', 'down')",
-    "Windows + Shift + Jobbra": "pyautogui.hotkey('win', 'shift', 'right')",
-    "Windows + Shift + Balra": "pyautogui.hotkey('win', 'shift', 'left')"
+    "Windows + Le": "pyautogui.hotkey('win', 'down')"
 }

@@ -3,7 +3,7 @@ import json
 import shutil
 import stat
 
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, QCoreApplication
 from PySide6.QtWidgets import QVBoxLayout, QLabel, QPushButton, QHBoxLayout
 from Resources.Stylesheets.styles import *
 from Views.ui_trainOptionsForm import Ui_Form
@@ -55,6 +55,7 @@ class TrainMenuController(BaseController):
                 self.ui.btnTrain.leaveEvent = lambda event: None
        
             print('USerSettings JSON betöltve a TrainMenuController-be')
+            self.backup()
             self.updateList()
         elif index == 3 and self.previous_page == 4:
             self.updateList()
@@ -81,7 +82,7 @@ class TrainMenuController(BaseController):
                     child.widget().deleteLater()
             if len(self.data) > 0:
                 for key, value in self.data.items():
-                    entry = QPushButton(value['gesture'])
+                    entry = QPushButton(QCoreApplication.translate('Pretrained gesture', value['gesture']))
                     entry.setStyleSheet(predefined_label_style + noborder)
                     entry.setFont(FontLoader.getFont())
                     entry.setFixedHeight(32)
@@ -179,9 +180,10 @@ class TrainMenuController(BaseController):
         info_widget = loading_page.findChild(QLabel, 'lblLoading')
 
         if self.ui.checkCloud.isChecked():
-            info_widget.setText('Várakozás a kiszolgálóra...<br><span style="font-size:20pt;">~1 perc</span>')
+            info_widget.setText(
+                QCoreApplication.translate('TrainMenuController', 'Várakozás a kiszolgálóra...<br><span style="font-size:20pt;">~1 perc</span>'))
         else:
-            info_widget.setText('Várakozás a kiszolgálóra...')
+            info_widget.setText(QCoreApplication.translate('TrainMenuController', 'Várakozás a kiszolgálóra...'))
         info_widget.setAlignment(Qt.AlignCenter)
         self.stacked_widget.setCurrentIndex(0)
 
@@ -252,7 +254,7 @@ class TrainMenuController(BaseController):
         self.ui.txtinputServer.setPlaceholderText('http://127.0.0.1:5000')
         self.ui.txtinputServer.setContextMenuPolicy(Qt.NoContextMenu)
         self.ui.lblDescription.setText(
-            self.textToHTML('Rögzíts új gesztusokat vagy törölj a meglévőkből, majd tanítsd újra a modellt!')
+            self.textToHTML(QCoreApplication.translate('TrainMenuController', 'Rögzíts új gesztusokat vagy törölj a meglévőkből, majd tanítsd újra a modellt!'))
         )
 
         self.ui.lblServer.setFixedHeight(30)

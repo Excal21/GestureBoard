@@ -1,9 +1,9 @@
 import pytest
 import sys
-from App.Models.MediaPipeHandler import ImportHandler
+from App.Models.MediaPipeHandler import MediaPipeHandler
 
 def test_module_imports():
-    loader = ImportHandler()
+    loader = MediaPipeHandler()
     loader.run()
 
     assert 'os' in sys.modules

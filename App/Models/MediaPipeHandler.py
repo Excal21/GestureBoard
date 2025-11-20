@@ -1,6 +1,6 @@
 from PySide6.QtCore import QThread
 
-class ImportHandler(QThread):
+class MediaPipeHandler(QThread):
     def run(self):
         print('Mediapipe betöltése...')
         import os

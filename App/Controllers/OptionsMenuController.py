@@ -3,7 +3,7 @@ from time import sleep
 
 
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout
-from PySide6.QtCore import Qt, QSize
+from PySide6.QtCore import Qt, QSize, QCoreApplication
 from PySide6.QtGui import QIcon, QKeyEvent
 from PySide6.QtWidgets import QApplication
 
@@ -51,7 +51,7 @@ class OptionsMenuController(BaseController):
             gesture_entry_layout.setContentsMargins(0, 0, 0, 0)
             gesture_entry.setFixedHeight(75)
 
-            label = QLabel(entry['gesture'])
+            label = QLabel(QCoreApplication.translate('Pretrained gesture', entry['gesture']))
             label.setStyleSheet(entry_label_style)
             label.setFont(FontLoader.getFont())
 
@@ -107,13 +107,13 @@ class OptionsMenuController(BaseController):
 
             #Gombeventek
             btnCombo.enterEvent = lambda event, entry = entry: self.showDescription(entry, 0)
-            btnCombo.leaveEvent = lambda event: self.ui.lblDescription.setText('')
+            btnCombo.leaveEvent = lambda event: self.hideDescription()
 
             btnKey.enterEvent = lambda event, entry = entry: self.showDescription(entry, 1)
-            btnKey.leaveEvent = lambda event: self.ui.lblDescription.setText('')
+            btnKey.leaveEvent = lambda event: self.hideDescription()
 
             btnConsole.enterEvent = lambda event, entry = entry: self.showDescription(entry, 2)
-            btnConsole.leaveEvent = lambda event: self.ui.lblDescription.setText('')
+            btnConsole.leaveEvent = lambda event: self.hideDescription()
 
             btnCombo.clicked.connect(lambda event, key=key: self.showSubSelection(key))
             btnKey.clicked.connect(lambda event, key=key: self.startKeyCapture(key))
@@ -127,10 +127,10 @@ class OptionsMenuController(BaseController):
         self.scroll_layout.addStretch()
 
     def resetEntry(self, key):
-        print('Resetting entry for key:', key)
         self.data[key]['action'] = None
         self.data[key]['highlight'] = -1
         self.data[key]['description'] = None
+        QApplication.restoreOverrideCursor()
         self.updateEntries()
 
 #endregion
@@ -161,7 +161,7 @@ class OptionsMenuController(BaseController):
             predefined_actions_data = dict(json.load(file))
 
         for predefined_action in predefined_actions_data.items():
-            combo_entry = QPushButton(predefined_action[0])
+            combo_entry = QPushButton(QApplication.translate('Predefined action', predefined_action[0]))
             combo_entry.setFixedHeight(30)
             combo_entry.setFixedWidth(220)
             combo_entry.setStyleSheet(predefined_label_style)
@@ -180,7 +180,7 @@ class OptionsMenuController(BaseController):
     def saveSubSelection(self, predefined_action):
         self.data[self.clicked]['action'] = predefined_action[1]
         self.data[self.clicked]['highlight'] = 0
-        self.data[self.clicked]['description'] = predefined_action[0] + '\n\n\nTörléshez kattints\njobb gombbal!'
+        self.data[self.clicked]['description'] = predefined_action[0]
         self.ui.scrollCombo.hide()
         self.ui.scrollArea.setDisabled(False)
         self.sub_menu_active = False
@@ -201,7 +201,7 @@ class OptionsMenuController(BaseController):
             self.clicked = JSONkey
             self.ui.frameHide.show()
             self.setFocus()
-            self.ui.lblUserGuide.setText('Billentyűkombináció')
+            self.ui.lblUserGuide.setText(QApplication.translate('OptionsMenuController', 'Billentyűkombináció'))
 
     def keyPressEvent(self, event: QKeyEvent):
         if self.keycapture_active:
@@ -267,7 +267,7 @@ class OptionsMenuController(BaseController):
                     keystr = chr(key)
             
             print('Keystring: ', keystr)
-            self.ui.lblUserGuide.setText(f'Billentyűkombináció\n {combination.replace(',', '+') + (' + ' if combination else '') + keystr}')
+            self.ui.lblUserGuide.setText(f'{QCoreApplication.translate('OptionsMenuController', 'Billentyűkombináció')}\n {combination.replace(',', '+') + (' + ' if combination else '') + keystr}')
             
             if valid:
                 key_command = 'pyautogui.hotkey('
@@ -282,21 +282,16 @@ class OptionsMenuController(BaseController):
                 self.data[self.clicked]['description'] = f'{combination.replace(',', '+')
                                                             + (' + ' if combination else '') 
                                                             + (key_map[key][0] if (key in key_map and len(key_map[key]) == 2) else keystr)}'
-                self.data[self.clicked]['description'] += '\n\n\nTörléshez kattints\njobb gombbal!'
                 self.data[self.clicked]['highlight'] = 1
 
-                print(f'Billentyűkombináció\n {combination.replace(',', '+') + (' + ' if combination else '') + keystr}')
+                print(f'{QCoreApplication.translate('OptionsMenuController', 'Billentyűkombináció')}\n {combination.replace(',', '+') + (' + ' if combination else '') + keystr}')
                 # self.ui.lblUserGuide.setText(f'Billentyűkombináció\n {combination.replace(',', '+') + (' + ' if combination else '') + keystr}')
-                self.ui.lblUserGuide.setText(f'Billentyűkombináció\n {self.data[self.clicked]["description"]}')
+                self.ui.lblUserGuide.setText(f'{QCoreApplication.translate('OptionsMenuController', 'Billentyűkombináció')}\n {self.data[self.clicked]["description"]}')
                 QApplication.processEvents()
                 sleep(0.5)
                 self.ui.frameHide.hide()
                 self.keycapture_active = False
                 self.updateEntries()
-
-    # def keyReleaseEvent(self, event):   <== lol ezt minek raktam ide
-    #     if self.keycapture_active:
-    #         self.ui.lblUserGuide.setText('Billentyűkombináció')
 #endregion
 
 #region Parancs megadása
@@ -313,13 +308,13 @@ class OptionsMenuController(BaseController):
             self.ui.txtinputCommand.show()
             self.ui.btnCommandOk.show()
             self.ui.txtinputCommand.setFocus()
-            self.ui.lblUserGuide.setText('Parancs megadása')
+            self.ui.lblUserGuide.setText(QCoreApplication.translate('OptionsMenuController', 'Parancs megadása'))
 
     def saveCommand(self):
         action = f'os.system(\'{self.ui.txtinputCommand.text()}\')'
         self.data[self.clicked]['action'] = action
         self.data[self.clicked]['highlight'] = 2
-        self.data[self.clicked]['description'] = self.ui.txtinputCommand.text() + '\n\n\nTörléshez kattints\njobb gombbal!'
+        self.data[self.clicked]['description'] = self.ui.txtinputCommand.text()
         self.ui.txtinputCommand.clear()
         self.ui.txtinputCommand.hide()
         self.ui.btnCommandOk.hide()
@@ -358,14 +353,21 @@ class OptionsMenuController(BaseController):
 
     def showDescription(self, entry, hoveridx):
         if entry['highlight'] == hoveridx:
-            self.ui.lblDescription.setText(entry['description'])
+            self.ui.lblDescription.setText(QCoreApplication.translate('Predefined action', entry['description']) + 
+                                           QCoreApplication.translate('OptionsMenuController','\n\n\nTörléshez kattints\njobb gombbal!'))
         else:
             if hoveridx == 0:
-                self.ui.lblDescription.setText('Előre definiált művelet')
+                self.ui.lblDescription.setText(QApplication.translate('OptionsMenuController', 'Előre definiált művelet'))
             elif hoveridx == 1:
-                self.ui.lblDescription.setText('Billentyűkombináció')
+                self.ui.lblDescription.setText(QApplication.translate('OptionsMenuController', 'Billentyűkombináció'))
             elif hoveridx == 2:
-                self.ui.lblDescription.setText('Parancs')
+                self.ui.lblDescription.setText(QApplication.translate('OptionsMenuController', 'Parancs'))
+        
+        QApplication.setOverrideCursor(Qt.CursorShape.PointingHandCursor)
+    
+    def hideDescription(self):
+        self.ui.lblDescription.setText('')
+        QApplication.restoreOverrideCursor()
 
     def showOptions(self):
         self.stacked_widget.setCurrentIndex(1)

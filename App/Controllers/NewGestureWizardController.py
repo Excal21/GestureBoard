@@ -1,5 +1,5 @@
 import cv2
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, QCoreApplication
 from PySide6.QtWidgets import QVBoxLayout, QLabel, QHBoxLayout
 from PySide6.QtGui import QPixmap, QShortcut, QIcon, QImage, QRegion, QPainterPath
 from PySide6.QtCore import QSize, QTimer
@@ -10,8 +10,14 @@ from Models.Recorder import Recorder
 from Models.RecognizerHandler import RecognizerHandler
 from Controllers.BaseController import BaseController
 
+from PySide6.QtCore import QThread, Signal
+
+
+
 
 class NewGestureWizardController(BaseController):
+
+
     def __init__(self, stacked_widget):
         super().__init__()
         self.stacked_widget = stacked_widget
@@ -24,32 +30,58 @@ class NewGestureWizardController(BaseController):
         self.setEventHandlers()
 
         self.recording_stage = 0
-        self.__cap = None
         self.rec = Recorder()
-        
 
-        self.timer = QTimer(self)
-        
+        self.image_count = 0
+        self.save = False
+
+        self.timer = None
+        self.previous_index = None
         self.ui.btnNameOK.clicked.connect(self.record)
 
         shortcut = QShortcut(Qt.Key_Space, self)
         shortcut.setContext(Qt.ApplicationShortcut)
-        shortcut.activated.connect(self.record)
+    
+        shortcut.activated.connect(self.startRecording)
+
+    def startRecording(self):
+        self.save = True
+
+
+    class RecorderThread(QThread):
+        finished = Signal()
+        def __init__(self, rec, widget):
+            super().__init__()
+            self.rec = rec
+            self.widget = widget
+
+        def run(self):
+            self.rec.load()
+            self.rec.cap.set(cv2.CAP_PROP_BUFFERSIZE, 1)
+            self.rec.cap.set(cv2.CAP_PROP_FPS, 60)
+
+    def onReturn(self, index):
+        if self.previous_index == 3 and index == 4:
+            self.ui.lblGestureInputLabel.show()
+            self.ui.btnNameOK.show()
+            self.ui.txtinputGestureName.show()
+            self.ui.txtinputGestureName.setFocus()
+            self.ui.lblInfo.setText(QCoreApplication.translate('NewGestureWizardController', 'Új gesztus rögzítése'))
+            self.thread = self.RecorderThread(self.rec, self.stacked_widget.widget(3))
+            self.thread.finished.connect(lambda: print('Recorder inicializálva háttérben'))
+            self.thread.start()
+        self.previous_index = index
 
 #region Record
 
     def record(self):
-        self.rec.load(self.stacked_widget.widget(3).data)
-        self.rec.cap.set(cv2.CAP_PROP_BUFFERSIZE, 1)
-        self.rec.cap.set(cv2.CAP_PROP_FPS, 60)
+        self.timer = QTimer(self)
+        
         print('Train meghívva')
-        self.__gesture_id = max(map(int, self.stacked_widget.widget(3).data.keys())) + 1 if self.stacked_widget.widget(3).data else 0
+        self.gesture_id = max(map(int, self.stacked_widget.widget(3).data.keys())) + 1 if self.stacked_widget.widget(3).data else 0
         if self.recording_stage == 0:
             self.gesture_name = self.ui.txtinputGestureName.text()
 
-            self.timer = QTimer(self)
-                    # QTimer használata while True helyett
-            sleep(1)
             self.timer.timeout.connect(self.updateFrame)
             self.timer.start(10)
             self.lblImage.hide()
@@ -61,49 +93,46 @@ class NewGestureWizardController(BaseController):
             self.lblImage.hide()
 
             self.ui.lblUserGuide.show()
-            self.ui.lblUserGuide.setText('Tartsd a kezed a kívánt gesztus pozíciójában, majd nyomj szőközt a másik kezeddel! A szóköz lenyomása után ne mozdítsd el a kezed!')
+            self.ui.lblUserGuide.setText(
+                QCoreApplication.translate('NewGestureWizardController',
+                'Tartsd a kezed a kívánt gesztus pozíciójában, majd nyomj szőközt a másik kezeddel! A szóköz lenyomása lassan mozgasd a kezed!'))
+            
             self.recording_stage = 1
             print('Elindítva!')
 
-        elif self.recording_stage == 1:
-            print('Első rész')
-            self.rec.record_batch(self.__gesture_id, 20)
-            print('Első szakasz rögzítve!')
-            self.ui.lblUserGuide.setText('Most picit mozdítsd el ugyanebben a pozícióban a kezed, majd nyomj szőközt a másik kezeddel! A szóköz lenyomása után ne mozdítsd el a kezed!')
-            self.recording_stage = 2
 
-        elif self.recording_stage == 2:
-            self.rec.record_batch(self.__gesture_id, 20)
-            print('Második szakasz rögzítve!')
-            self.rec.release()
-            print('Mentve!')
-            self.recording_stage = 0
-            self.ui.lblUserGuide.setText('')
-            self.ui.lblUserGuide.hide()
-            
-            self.ui.lblGestureInputLabel.show()
-            self.ui.txtinputGestureName.show()
-            self.ui.btnNameOK.show()
-            self.ui.lblCvImg.hide()
-            self.timer.stop()
-            self.lblImage.show()
+    def finishRecording(self):
+        self.timer.stop()
+        print('Mentve!')
+        self.recording_stage = 0
+        self.lblImage.setPixmap(QPixmap('Resources/Icons/hand.png').scaled(100, 100, Qt.KeepAspectRatio))
+        self.ui.lblUserGuide.setText('')
+        self.ui.lblUserGuide.hide()
+        
+        self.ui.txtinputGestureName.hide()
+        self.ui.lblCvImg.hide()
+        self.lblImage.show()
+        self.ui.lblInfo.setText(QCoreApplication.translate('NewGestureWizardController', 'Új geszuts rögzítve!'))
+
+        gesture_entry = {'gesture' : self.gesture_name, 'action' : None, 'description': None, 'highlight': -1}
+        self.rec.release()
+        self.stacked_widget.widget(3).data[str(self.gesture_id)] = gesture_entry
 
 
-            gesture_entry = {'gesture' : self.gesture_name, 'action' : None, 'description': None, 'highlight': -1}
-            self.stacked_widget.widget(3).data[str(self.__gesture_id)] = gesture_entry
-
-            self.ui.btnNameOK.clearFocus()
-            self.ui.txtinputGestureName.setText('')
-            self.stacked_widget.setCurrentIndex(3)
+        self.ui.btnNameOK.clearFocus()
+        self.ui.txtinputGestureName.setText('')
+        QTimer.singleShot(1000, lambda: self.stacked_widget.setCurrentIndex(3))
+        self.timer = None
 
 
 #endregion
 
 #region Kamerakép
     def updateFrame(self):
-        frame, gesture = RecognizerHandler.getInstance().annotate(self.rec.getFrame())
-        if frame is not None:
-            h, w, _ = frame.shape
+        frame = self.rec.getFrame()
+        annotated_frame, gesture = RecognizerHandler.getInstance().annotate(frame)
+        if annotated_frame is not None:
+            h, w, _ = annotated_frame.shape
 
             crop_width, crop_height = 500, 300
             resize_width, resize_height = 270, 170
@@ -113,12 +142,23 @@ class NewGestureWizardController(BaseController):
             x1, x2 = center_x - crop_width // 2, center_x + crop_width // 2
             y1, y2 = center_y - crop_height // 2, center_y + crop_height // 2
 
-            cropped_frame = frame[y1:y2, x1:x2].copy()  # C-contiguous hiba elkerülése miatt
+            cropped_frame = annotated_frame[y1:y2, x1:x2].copy()  # C-contiguous hiba elkerülése miatt
 
             resized_frame = cv2.resize(cropped_frame, (resize_width, resize_height), interpolation=cv2.INTER_AREA)
 
             h, w, ch = resized_frame.shape
             bytes_per_line = ch * w
+
+            if self.save:
+                center = (resize_width - 20, 30)
+                radius = 10
+                color_fill = (0, 0, 220)
+                color_outline = (67, 41, 36)
+                thickness_outline = 1
+
+                cv2.circle(resized_frame, center, radius, color_fill, -1, lineType=cv2.LINE_AA)
+                cv2.circle(resized_frame, center, radius, color_outline, thickness_outline, lineType=cv2.LINE_AA)
+       
             q_image = QImage(resized_frame.data, w, h, bytes_per_line, QImage.Format_RGB888).rgbSwapped()
 
 
@@ -131,6 +171,16 @@ class NewGestureWizardController(BaseController):
             self.ui.lblCvImg.setMask(region)
             self.ui.lblCvImg.setPixmap(QPixmap.fromImage(q_image))
 
+            print(self.save)
+            if self.save:
+                self.rec.save(frame, self.gesture_id)
+                if self.rec.saved_images >= 50:
+                    self.save = False
+                    self.rec.saved_images = 0
+                    self.rec.frame_counter = 0
+                    print('Kész a rögzítés!')
+                    self.finishRecording()
+
 
 #endregion
 
@@ -138,6 +188,9 @@ class NewGestureWizardController(BaseController):
     def setEventHandlers(self):
         self.ui.btnNameOK.enterEvent = lambda event: self.ui.btnNameOK.setStyleSheet(options_button_hover_style)
         self.ui.btnNameOK.leaveEvent = lambda event: self.ui.btnNameOK.setStyleSheet(options_button_style)
+
+        self.stacked_widget.currentChanged.connect(self.onReturn)
+
 
 #endregion
 

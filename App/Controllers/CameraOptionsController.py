@@ -16,6 +16,7 @@ from Models.OverlayHandler import OverlayHandler
 from time import sleep
 from Controllers.BaseController import BaseController
 from Resources.Fonts.FontLoader import FontLoader
+from PySide6.QtCore import QCoreApplication
 
 class CameraOptionsController(BaseController):
     def __init__(self, stacked_widget):
@@ -52,6 +53,7 @@ class CameraOptionsController(BaseController):
         self.ui.spinDelay.setDecimals(1)
         self.ui.sliderSensitivity.setRange(5, 30)
         self.ui.sliderDrift.setRange(100, 350)
+        self.ui.sliderDriftOffset.setRange(-250, 250)
 
         self.ui.lblCvImg.setAlignment(Qt.AlignCenter)
         self.ui.lblCvImg.setPixmap(QPixmap('Resources/Icons/camera.png').scaled(100, 70, Qt.KeepAspectRatio, Qt.SmoothTransformation))
@@ -82,13 +84,13 @@ class CameraOptionsController(BaseController):
             self.timer.start(10)
             self.is_camera_on = True
             self.ui.btnStartCam.setStyleSheet(options_button_active_style + 'background-color: rgb(201, 97, 97)')
-            self.ui.btnStartCam.setText('Leállítás')
+            self.ui.btnStartCam.setText(QCoreApplication.translate('CameraOptionsController', 'Leállítás'))
         else:
             self.timer.stop()
             self.rec.cap.release()
             self.ui.lblCvImg.setPixmap(QPixmap('Resources/Icons/camera.png').scaled(100, 70, Qt.KeepAspectRatio, Qt.SmoothTransformation))
             self.is_camera_on = False
-            self.ui.btnStartCam.setText('Kamerateszt')
+            self.ui.btnStartCam.setText(QCoreApplication.translate('CameraOptionsController', 'Kamerateszt'))
             self.ui.btnStartCam.setStyleSheet(options_button_style)
 
     def updateFrame(self):
@@ -113,7 +115,7 @@ class CameraOptionsController(BaseController):
             resized_frame = cv2.resize(cropped_frame, (resize_width, resize_height), interpolation=cv2.INTER_AREA)
 
             if gesture is not None:
-                gesture_text = f"{self.gesturedata[gesture[0]]['gesture']}   {int(gesture[1])}%"
+                gesture_text = f'{QCoreApplication.translate('Pretrained gesture', self.gesturedata[gesture[0]]['gesture'])}   {int(gesture[1])}%'
             else:
                 gesture_text = ''
 
@@ -169,6 +171,7 @@ class CameraOptionsController(BaseController):
                 (self.ui.lblMouseSettings, None),
                 (self.ui.lblSensitivity, self.ui.sliderSensitivity),
                 (self.ui.lblRadius, self.ui.sliderDrift),
+                (self.ui.lblDriftOffset, self.ui.sliderDriftOffset),
                 (self.ui.lblInvertButtons, self.ui.checkInvertButtons)
             ]
 
@@ -189,6 +192,7 @@ class CameraOptionsController(BaseController):
         self.ui.sliderDistance.setFixedWidth(200)
         self.ui.sliderSensitivity.setFixedWidth(200)
         self.ui.sliderDrift.setFixedWidth(200)
+        self.ui.sliderDriftOffset.setFixedWidth(200)
 
         self.ui.lblCamera.setFixedHeight(42)
         self.ui.comboCamera.setFixedHeight(42)
@@ -203,6 +207,7 @@ class CameraOptionsController(BaseController):
         self.ui.lblSensitivity.setFixedHeight(42)
         self.ui.lblRadius.setFixedHeight(42)
         self.ui.btnStartCam.setFixedHeight(42)
+        self.ui.lblDriftOffset.setFixedHeight(42)
         
         self.ui.checkFrameThrottling.setFixedHeight(40) #Ezek csak a placeholderek!! QSS állítja a valósat
         self.ui.checkFrameThrottling.setFixedWidth(50)
@@ -219,11 +224,20 @@ class CameraOptionsController(BaseController):
 
     def sliderDriftEnter(self, event):
         self.ui.lblDescription.setText(
-        self.textToHTML('A szürke körön belül finom mozgást végezhetsz az egérrel, '
-                        'míg a körön kívül sodródni fog a kurzor.'))
+        self.textToHTML(QCoreApplication.translate('CameraOptionsController' , 'A szürke körön belül finom mozgást végezhetsz az egérrel, '
+                        'míg a körön kívül sodródni fog a kurzor.')))
         self.overlay.show()
 
     def sliderDriftLeave(self, event):
+        self.ui.lblDescription.setText('')
+        self.overlay.hide()
+
+    def sliderDriftOffsetEnter(self, event):
+        self.ui.lblDescription.setText(
+        self.textToHTML(QCoreApplication.translate('CameraOptionsController' , 'Függőlegesen eltolja a sodródásmentes zónát. Akkor hasznos, ha a kamera nem pontosan szemből látja a kezed.')))
+        self.overlay.show()
+
+    def sliderDriftOffsetLeave(self, event):
         self.ui.lblDescription.setText('')
         self.overlay.hide()
     
@@ -248,45 +262,51 @@ class CameraOptionsController(BaseController):
 
 
 
+        # QTranslator használata a magyar szövegekhez, fordítás .qm fájlból érkezik
+
         self.ui.comboCamera.enterEvent = lambda event: self.ui.lblDescription.setText(
-            self.textToHTML('Válaszd ki a kamerát, amivel a gesztusokat tudja érzékelni a program!'))
+            self.textToHTML(QCoreApplication.translate('CameraOptionsController', 'Válaszd ki a kamerát, amivel a gesztusokat tudja érzékelni a program!')))
         self.ui.comboCamera.leaveEvent = lambda event: self.ui.lblDescription.setText('')
 
         self.ui.sliderHue.enterEvent = lambda event: self.ui.lblDescription.setText(
-            self.textToHTML('A színek eltolásával beállíthatod, hogy kesztyűben is felismerje a kezedet a program. Kapcsold be a kamerát és állítsd be óvatosan a csúszkával!'))
+            self.textToHTML(QCoreApplication.translate('CameraOptionsController', 'A színek eltolásával beállíthatod, hogy kesztyűben is felismerje a kezedet a program. Kapcsold be a kamerát és állítsd be óvatosan a csúszkával!')))
         self.ui.sliderHue.leaveEvent = lambda event: self.ui.lblDescription.setText('')
 
         self.ui.sliderDistance.enterEvent = lambda event: self.ui.lblDescription.setText(
-            self.textToHTML('A csúszka segítségével állítsd be a kezed távolságát a kamerától! Túl nagy távolság esetén előfordulhat, hogy más ember kezét érzékeli a GestureBoard.'))
+            self.textToHTML(QCoreApplication.translate('CameraOptionsController', 'A csúszka segítségével állítsd be a kezed távolságát a kamerától! Túl nagy távolság esetén előfordulhat, hogy más ember kezét érzékeli a GestureBoard.')))
         self.ui.sliderDistance.leaveEvent = lambda event: self.ui.lblDescription.setText('')
 
         self.ui.spinConfidence.enterEvent = lambda event: self.ui.lblDescription.setText(
-            self.textToHTML('Növelésével csökkenthető a véletlen felismerések száma, de csökken a felismerés érzékenysége.'))
+            self.textToHTML(QCoreApplication.translate('CameraOptionsController', 'Növelésével csökkenthető a véletlen felismerések száma, de csökken a felismerés érzékenysége.')))
         self.ui.spinConfidence.leaveEvent = lambda event: self.ui.lblDescription.setText('')
 
         self.ui.spinFrameCnt.enterEvent = lambda event: self.ui.lblDescription.setText(
-            self.textToHTML('A program ennyi képkockán keresztül figyeli a gesztust a művelet végrehajtása előtt. Növelésével pontosabb, de lassabb lesz a felismerés.'))
+            self.textToHTML(QCoreApplication.translate('CameraOptionsController', 'A program ennyi képkockán keresztül figyeli a gesztust a művelet végrehajtása előtt. Növelésével pontosabb, de lassabb lesz a felismerés.')))
         self.ui.spinFrameCnt.leaveEvent = lambda event: self.ui.lblDescription.setText('')
 
         self.ui.spinDelay.enterEvent = lambda event: self.ui.lblDescription.setText(
-            self.textToHTML('Két gesztus közt eltelt idő másodpercben. Csökkentésével gyorsabban tudod kiadni a parancsokat.'))
+            self.textToHTML(QCoreApplication.translate('CameraOptionsController', 'Két gesztus közt eltelt idő másodpercben. Csökkentésével gyorsabban tudod kiadni a parancsokat.')))
         self.ui.spinDelay.leaveEvent = lambda event: self.ui.lblDescription.setText('')
 
         self.ui.checkFrameThrottling.enterEvent = lambda event: self.ui.lblDescription.setText(
-            self.textToHTML('Dinamikus képkocka-korlátozás. Csökkenti a CPU használatot, de nagyban növelheti a reakcióidőt.'))
+            self.textToHTML(QCoreApplication.translate('CameraOptionsController', 'Dinamikus képkocka-korlátozás. Csökkenti a CPU használatot, de nagyban növelheti a reakcióidőt.')))
         self.ui.checkFrameThrottling.leaveEvent = lambda event: self.ui.lblDescription.setText('')
 
         self.ui.sliderSensitivity.enterEvent = lambda event: self.ui.lblDescription.setText(
-            self.textToHTML('Az egérmutató érzékenysége a sodródásmentes zónán kívül. Minél nagyobb az érték, annál gyorsabban mozog az egérmutató.'))
+            self.textToHTML(QCoreApplication.translate('CameraOptionsController', 'Az egérmutató érzékenysége a sodródásmentes zónán kívül. Minél nagyobb az érték, annál gyorsabban mozog az egérmutató.')))
         self.ui.sliderSensitivity.leaveEvent = lambda event: self.ui.lblDescription.setText('')
 
         self.ui.checkInvertButtons.enterEvent = lambda event: self.ui.lblDescription.setText(
-            self.textToHTML('Felcseréli a jobb és bal egérgombokat egérmódban.'))
+            self.textToHTML(QCoreApplication.translate('CameraOptionsController', 'Felcseréli a jobb és bal egérgombokat egérmódban.')))
         self.ui.checkInvertButtons.leaveEvent = lambda event: self.ui.lblDescription.setText('')
 
         self.ui.sliderDrift.enterEvent = lambda event: self.sliderDriftEnter(event)
         self.ui.sliderDrift.leaveEvent = lambda event: self.sliderDriftLeave(event)
         self.ui.sliderDrift.valueChanged.connect(lambda value: self.overlay.setRadius(value))
+
+        self.ui.sliderDriftOffset.enterEvent = lambda event: self.sliderDriftOffsetEnter(event)
+        self.ui.sliderDriftOffset.leaveEvent = lambda event: self.sliderDriftOffsetLeave(event)
+        self.ui.sliderDriftOffset.valueChanged.connect(lambda value: self.overlay.setOffsetY(value))
 #endregion
 
 #region Beállítások kezelése
@@ -294,14 +314,14 @@ class CameraOptionsController(BaseController):
         self.ui.comboCamera.clear()
         cameras = RecognizerHandler.getInstance().getCameras()
         if cameras == []:
-            self.ui.comboCamera.addItem('Nem található')
+            self.ui.comboCamera.addItem(QCoreApplication.translate('CameraOptionsController' , 'Nem található'))
             self.ui.comboCamera.setEnabled(False)
             self.ui.btnStartCam.setEnabled(False)
             return
         else:
             for cameraIDX in cameras:
                 if cameraIDX == 0:
-                    self.ui.comboCamera.addItem('Beépített kamera')
+                    self.ui.comboCamera.addItem(QCoreApplication.translate('CameraOptionsController' , 'Beépített kamera'))
                 else:
                     self.ui.comboCamera.addItem(f'{cameraIDX + 1}. kamera')
 
@@ -310,6 +330,8 @@ class CameraOptionsController(BaseController):
             self.loadCameraCombo()
         elif index == 5:
             self.overlay.setCircleOnly(True)
+            self.overlay.setRadius(self.ui.sliderDrift.value())
+            self.overlay.setOffsetY(self.ui.sliderDriftOffset.value())
             self.loadSettings()
 
     def loadSettings(self):
@@ -324,6 +346,7 @@ class CameraOptionsController(BaseController):
             self.ui.checkFrameThrottling.setChecked(self.data['FrameThrottling'])
             self.ui.sliderSensitivity.setValue(self.data['Sensitivity'])
             self.ui.sliderDrift.setValue(self.data['Drift'])
+            self.ui.sliderDriftOffset.setValue(self.data['DriftOffset'])
             self.ui.checkInvertButtons.setChecked(self.data['InvertButtons'])
 
 
@@ -338,6 +361,7 @@ class CameraOptionsController(BaseController):
         self.data['FrameThrottling'] = self.ui.checkFrameThrottling.isChecked()
         self.data['Sensitivity'] = self.ui.sliderSensitivity.value()
         self.data['Drift'] = self.ui.sliderDrift.value()
+        self.data['DriftOffset'] = self.ui.sliderDriftOffset.value()
         self.data['InvertButtons'] = self.ui.checkInvertButtons.isChecked()
 
         with open('Config/CameraSettings.json', 'w') as file:
