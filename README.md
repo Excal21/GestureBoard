@@ -41,6 +41,16 @@ docker compose build
 docker compose up -d
 ```
 
+
+
+## Követelmények
+A szoftver megköveteli a legfrissebb Microsoft C++ Redistributable meglétét.
+
+Amennyiben a programot nem az elkészített futtatható állományból szeretnéd indítani, a Python függőségek a következő parancsokkal telepíthetők:
+```bash
+pip install -r requirements.txt
+```
+
 ## Tippek
 <details>
   <summary>Kattints a kibontáshoz/összecsukáshoz</summary>
@@ -55,14 +65,6 @@ docker compose up -d
 
 </details>
 
-
-## Követelmények
-A szoftver megköveteli a legfrissebb Microsoft C++ Redistributable meglétét.
-
-Amennyiben a programot nem az elkészített futtatható állományból szeretnéd indítani, a Python függőségek a következő parancsokkal telepíthetők:
-```bash
-pip install -r requirements.txt
-```
 
 ## Köszönet az ikonok készítőinek
 <details>

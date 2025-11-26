@@ -41,6 +41,17 @@ docker compose build
 docker compose up -d
 ```
 
+
+
+
+## Requirements
+The software requires the latest Microsoft C++ Redistributable to be installed.
+
+If you don't want to run the program from the prepared executable file, the Python dependencies can be installed with the following commands:
+```bash
+pip install -r requirements.txt
+```
+
 ## Tips
 <details>
   <summary>Click to expand/collapse</summary>
@@ -54,14 +65,6 @@ docker compose up -d
 - Try to choose hand positions where your fingers don't cover each other, or only minimally! If the program isn't accurate enough after training, it's recommended to run the training process again and re-recording the samples if necessary.
 </details>
 
-
-## Requirements
-The software requires the latest Microsoft C++ Redistributable to be installed.
-
-If you don't want to run the program from the prepared executable file, the Python dependencies can be installed with the following commands:
-```bash
-pip install -r requirements.txt
-```
 
 ## Credits to Icon Creators
 <details>
