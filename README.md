@@ -1,11 +1,11 @@
-# GestureBoard
+# GestureBoard [![English](https://img.shields.io/badge/lang-EN-blue)](README_EN.md)
 A GestureBoard egy innovatív alkalmazás, amely lehetővé teszi, hogy kézmozdulataidhoz számítógépes műveleteket rendelj, mindezt egy intuitív grafikus felhasználói felületen keresztül.
 
 A gesztusfelismerés és a kézpozíciók megtanulása neurális háló segítségével történik, amit a [<i>Google MediaPipe</i>](https://ai.google.dev/edge/mediapipe/solutions/vision/gesture_recognizer) valósít meg.
 
 
 ## Futtatás
-A kliens futtatható a release verziókban található futtathatók segítségével, vagy közvetlen a <i>UI</i> mappában található main.pyw elindításával.
+A kliens futtatható a release verziókban található futtathatók segítségével, vagy közvetlen a <i>App</i> mappában található main.py elindításával.
 
 
 ## Alapgesztusok
@@ -34,21 +34,12 @@ A felhőalapú tanítás használatakor a tanítási folyamat akár 1-2 percet i
 
 
 ### Tanítószerver létrehozása
-A tanítószerver könnyedén elkészíthető és elindítható [Docker](https://www.docker.com/) segítségével. A Docker telepítése után a projekt <i>docker</i> mappájába navigálva add ki a következő parancsokat:
+A tanítószerver könnyedén elkészíthető és elindítható [<i>Docker</i>](https://www.docker.com/) segítségével. A Docker telepítése után a projekt <i>docker</i> mappájába navigálva add ki a következő parancsokat:
 
 ```bash
 docker compose build
 docker compose up -d
 ```
-
-## Tippek
-- Akkor fog a <i>GestureBoard</i> a legjobban működni, hogyha a kezed lazán tartod.
-
-- Használat előtt a kamera-beállításokban próbáld ki a gesztusokat! A kameraképen látni fogod, hogy a program hogyan érzékeli a kezedet, és milyen gesztusokat ismer fel. 
-
-- A program azokat a gesztusokat fogja a legjobban, legpontosabban felismerni, amiket Te tanítasz meg neki.
-
--  Próbálj olyan kéztartásokat választani, ahol az ujjaid nem fedik egymást, vagy csak kis mértékben! Ha a program nem elég pontos a tanítás után, javasolt a tanítási folyamat újbóli futtatása, szükség esetén a minták újbóli felvétele.
 
 
 
@@ -60,7 +51,26 @@ Amennyiben a programot nem az elkészített futtatható állományból szeretné
 pip install -r requirements.txt
 ```
 
+## Tippek
+<details>
+  <summary>Kattints a kibontáshoz/összecsukáshoz</summary>
+
+- Akkor fog a <i>GestureBoard</i> a legjobban működni, hogyha a kezed lazán tartod.
+
+- Használat előtt a kamera-beállításokban próbáld ki a gesztusokat! A kameraképen látni fogod, hogy a program hogyan érzékeli a kezedet, és milyen gesztusokat ismer fel. 
+
+- A program azokat a gesztusokat fogja a legjobban, legpontosabban felismerni, amiket Te tanítasz meg neki.
+
+-  Próbálj olyan kéztartásokat választani, ahol az ujjaid nem fedik egymást, vagy csak kis mértékben! Ha a program nem elég pontos a tanítás után, javasolt a tanítási folyamat újbóli futtatása, szükség esetén a minták újbóli felvétele.
+
+</details>
+
+
 ## Köszönet az ikonok készítőinek
+<details>
+  <summary>Kattints a kibontáshoz/összecsukáshoz</summary>
+<br>
+
 A GestureBoard a [flaticon](flaticon.com) ingyenes ikonjait használja. Köszönet illeti a következő alkotókat:
 - joalfa - [Konzol ikon](https://www.flaticon.com/free-icons/command)
 - juicy_fish - [Billentyűzet ikon](https://www.flaticon.com/free-icons/hardware)
@@ -69,3 +79,5 @@ A GestureBoard a [flaticon](flaticon.com) ingyenes ikonjait használja. Köszön
 - Dixit Lakhani_02 - [Pipa](https://www.flaticon.com/free-icons/tick)
 
 - Good Ware - [Kamera ikon](https://www.flaticon.com/free-icons/camera)
+
+</details>
